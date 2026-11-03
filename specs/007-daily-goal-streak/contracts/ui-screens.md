@@ -21,7 +21,7 @@ Below the course banner, above the Practice row.
 | State | Content |
 |-------|---------|
 | Not met today | label `Daily goal`; text `0 / 1 session today`; progress bar empty |
-| Met today | label `Daily goal`; text `Done for today`; progress bar full |
+| Met today | label `Daily goal`; text `1 / 1 session today`; progress bar full |
 | Always, when `B` ≥ 1 | `Best streak: B days` (`1 day` singular) |
 
 The progress bar has `role="progressbar"`, `aria-valuemin=0`, `aria-valuemax=1`,

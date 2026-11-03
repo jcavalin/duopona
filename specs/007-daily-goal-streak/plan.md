@@ -12,7 +12,7 @@ goal, and keep a streak of consecutive goal days. A new `streak` Redux slice hol
 existing finish thunk (`continueAndRecord`) records the goal for every session kind and flags
 the session when it was the one that met today's goal, so the summary can say "Daily goal
 met". The home screen gains a streak counter in the top bar and a small daily-goal card
-(today 0/1 or 1/1, best streak). Day arithmetic is a small pure module on `YYYY-MM-DD` strings.
+(today 0 / 1 or 1 / 1, best streak). Day arithmetic is a small pure module on `YYYY-MM-DD` strings.
 Lesson progress, word records and their storage are untouched.
 
 ## Technical Context
@@ -28,7 +28,7 @@ vite-plugin-pwa 2; **no new dependencies**
 **Testing**: Vitest + React Testing Library with fake timers (`vi.setSystemTime`) for dates.
 New unit tests for day helpers, the streak slice and its selectors, streak storage; new
 integration test `tests/integration/streakFlow.test.tsx`; lesson and practice flow suites must
-pass (summary gains content only when the goal is met). Manual checks per quickstart S1–S8,
+pass (summary gains content only when the goal is met). Manual checks per quickstart S1–S9,
 S-D1
 
 **Target Platform**: iOS Safari and Android Chrome (browser and installed); desktop browsers
@@ -70,7 +70,7 @@ specs/007-daily-goal-streak/
 ├── plan.md
 ├── research.md                 # R1–R7
 ├── data-model.md               # streak record, transitions, derived values
-├── quickstart.md               # automated coverage, S1–S8, S-D1
+├── quickstart.md               # automated coverage, S1–S9, S-D1
 ├── contracts/
 │   ├── ui-screens.md           # top-bar counter, goal card, summary block
 │   └── streak-storage.md       # duopona:streak v1

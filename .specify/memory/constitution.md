@@ -47,10 +47,16 @@ not anticipated.
   precached, the manifest is valid), and (2) a written manual check in the feature's quickstart,
   whose results are recorded in tasks.md before the feature is marked done. Everything the test
   environment can simulate MUST still have automated tests.
+- **Owner waiver of manual checks**: the project owner MAY waive a written manual check (all of
+  it or named rows). A waiver MUST be recorded in tasks.md under the check's task, marked `[~]`,
+  with the date and "owner decision", and the waived check MUST be named in the spec's
+  **Status** line. Automated tests and automated build-output checks MUST NOT be waived.
 
 **Rationale**: Writing tests after keeps iteration fast, while the "before done" gate keeps
 regressions out. A full browser-automation stack for a few platform checks would cost more
 complexity (Principle I) than it saves; recorded manual checks keep that behavior verified.
+A recorded waiver keeps a solo owner from being blocked by device access while leaving a visible
+trail of what was not verified.
 
 ### V. Mobile-First Progressive Web App
 
@@ -63,7 +69,8 @@ complexity (Principle I) than it saves; recorded manual checks keep that behavio
 - Interactive targets MUST be at least 44×44 CSS px, and content MUST respect device safe areas
   (notches, home indicators).
 - Every feature MUST work on current iOS Safari and Android Chrome, in the browser and when
-  installed.
+  installed. Its device verification follows Principle IV (manual checks, which the owner MAY
+  waive as recorded there).
 
 **Rationale**: Language practice happens in short sessions on phones; an installable, offline
 app makes Duopona feel native while keeping it backend-free (Principle II).
@@ -94,4 +101,4 @@ app makes Duopona feel native while keeping it backend-free (Principle II).
   for at most one further feature, provided the plan's Complexity Tracking records the gap and
   ROADMAP.md lists the fix as the next feature. New gaps MUST NOT be introduced.
 
-**Version**: 1.3.0 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-03
+**Version**: 1.4.0 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-03

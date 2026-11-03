@@ -103,7 +103,7 @@ unchanged (quickstart P1, P3, P4, P9)
 
 ### Validation for User Story 1
 
-- [X] T017 [US1] With the user running the dev server, check quickstart P1 (Practice part), P3, P4, P9 and P10 in Chrome (360×740 where possible). Fix failures in T009–T013's files. Record each row's result under this task
+- [~] T017 [US1] With the user running the dev server, check quickstart P1 (Practice part), P3, P4, P9 and P10 in Chrome (360×740 where possible). Fix failures in T009–T013's files. Record each row's result under this task
   - **Won't do (owner decision 2026-11-03)**: remaining P9 (360 px) and P10 (offline) DevTools checks not run
   - **Partial (2026-11-03)**: Chrome against `npm run preview`, window 500×800 (Chrome's minimum width; DevTools device mode not available to the extension). The old service worker served the previous build until it was unregistered on localhost. P1 pass: both buttons muted, hint "Finish a lesson to unlock practice.", click does nothing. P3 pass: first exercise at once, "1/10". P4 pass for the session itself: missed exercise repeated at the end, "Practice complete!", "Practice", "9 / 10", Continue → home, progress unchanged. **Finding:** Review stayed muted after P4, because later first-try correct answers in the same session cleared the missed words (see T027). At 500 px both buttons are side by side, 80 px tall ("Review weak words" wraps to two lines), no horizontal scroll. Not run here: P9 at 360×740 and P10 offline (need DevTools); owner to check. P4 re-checked after the T027 change: Review becomes active after a session with a miss
 
@@ -191,7 +191,7 @@ answering them right first time makes the review unavailable (quickstart P2, P6)
 - [X] T036 [P] Update README.md: mention Practice and Review weak words among the features, and the second `localStorage` key `duopona:words` wherever saved data is described
 - [X] T037 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the test count (vs T001's baseline) under this task
   - **Result (2026-11-03)**: `npm test` 498 passed (baseline 444, +54; re-run after the T027 change), lint clean, build OK (precache 12 entries, 486.42 KiB, unchanged count), `npm run test:pwa` 26 passed
-- [X] T038 Ask the user to run quickstart P-D1 on an iPhone (Safari) and an Android phone (Chrome), in the browser and installed, ideally together with 003's open T014–T021 and 004's T027/T030. Record device, OS/browser versions and results under this task; fix failures in the files of T013/T031 and re-run T037
+- [~] T038 Ask the user to run quickstart P-D1 on an iPhone (Safari) and an Android phone (Chrome), in the browser and installed, ideally together with 003's open T014–T021 and 004's T027/T030. Record device, OS/browser versions and results under this task; fix failures in the files of T013/T031 and re-run T037
   - **Won't do (owner decision 2026-11-03)**: remaining phone check P-D1 on iPhone and Android not run
 - [X] T039 Set spec.md **Status** to `Implemented` (or `Implemented (pending: …)` naming open manual checks); update ROADMAP.md: move "Practice session & review weak words" to **Done** as `**006 – Practice & weak words**: Practice and Review weak words buttons, per-word mistake tracking (\`specs/006-practice-weak-words/\`).` only when T017, T027, T035 and T038 are recorded, otherwise update its status line with what remains
   - **Result (2026-11-03)**: spec status `Implemented`; open manual checks (T017 P9/P10, T038) closed as won't do by the owner; ROADMAP moved to Done

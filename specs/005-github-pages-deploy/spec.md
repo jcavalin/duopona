@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-03
 
-**Status**: Draft
+**Status**: Implemented (pipeline checks G1, G2, G4, G5, G6 and phone check W6 skipped by owner decision, tasks T010a, T014, T015, T017, T017a, T018)
 
 **Input**: User description: "Add a GitHub Actions pipeline that tests, builds and deploys Duopona to GitHub Pages"
 

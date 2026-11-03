@@ -71,7 +71,7 @@ starts from zero the next day.
 1. **Given** a new day, **When** the learner views the home screen, **Then** today's progress
    shows 0 towards the goal.
 2. **Given** the learner finishes a session, **When** they return home, **Then** today's
-   progress has increased by that session's contribution.
+   today's progress shows "1 / 1".
 3. **Given** a finished session brings today's progress to the goal, **When** its summary
    appears, **Then** it says the daily goal is met and shows the updated streak.
 4. **Given** the goal is already met today, **When** the learner finishes another session,
@@ -143,7 +143,8 @@ starts from zero the next day.
 
 ### Key Entities
 
-- **Practice day**: a local calendar date plus the progress made towards the goal on it.
+- **Practice day**: a local calendar date on which the goal was met; derived from the streak
+  record, not stored separately.
 - **Streak record**: the last date the goal was met, the current streak length on that date,
   and the best streak ever reached.
 - **Daily goal**: fixed at 1 finished session per day.

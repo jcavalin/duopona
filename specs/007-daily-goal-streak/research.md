@@ -72,7 +72,7 @@ sessions, fixed at 1/day). These are the design decisions.
   counter: orange (new `--streak` token, e.g. `#ff9600`, next to the existing `--gold`
   tokens in src/index.css; gold already means "lesson/unlocked") when met today,
   `--icon-muted` when not yet today or 0. Text contrast checked against `--bg` (≥ 4.5:1). Daily-goal card below
-  the course banner: label "Daily goal", text "0 / 1 session today" or "Done for today", a
+  the course banner: label "Daily goal", text "0 / 1 session today" or "1 / 1 session today", a
   thin progress bar, and "Best streak: N days". Summary: a third stat card "Streak" with
   "N days" in the streak colour. Styles reuse existing card/label classes. No new mockup; the
   owner reviews in the browser (quickstart S1–S3).
