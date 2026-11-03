@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Duopona icon: a smiling speech bubble ("talk" + "good"). Original artwork.
+       Full-bleed background so the maskable variant fills any shape; the mark stays
+       inside the central circle of radius 205 (80 % safe zone). -->
+  <rect width="512" height="512" fill="#2da44e"/>
+  <path d="M196 146h120a60 60 0 0 1 60 60v60a60 60 0 0 1-60 60h-80l-70 50 14-52a60 60 0 0 1-44-58v-60a60 60 0 0 1 60-60z" fill="#ffffff"/>
+  <circle cx="216" cy="222" r="16" fill="#2da44e"/>
+  <circle cx="296" cy="222" r="16" fill="#2da44e"/>
+  <path d="M206 266q50 40 100 0" fill="none" stroke="#2da44e" stroke-width="16" stroke-linecap="round"/>
+</svg>

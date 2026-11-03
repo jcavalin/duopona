@@ -40,9 +40,17 @@ not anticipated.
 - A feature is NOT complete until its user-facing behavior and its state logic (reducers,
   selectors, persistence) are covered by automated tests that pass.
 - Tests MUST target behavior, not implementation details.
+- **Exception — browser/device-only behavior**: behavior that only exists in a real browser or
+  device and cannot be simulated by the project's test environment (e.g. service-worker offline
+  use, installation, home-screen appearance, safe areas) MAY instead be covered by both:
+  (1) automated checks of the build output that make the behavior possible (e.g. files are
+  precached, the manifest is valid), and (2) a written manual check in the feature's quickstart,
+  whose results are recorded in tasks.md before the feature is marked done. Everything the test
+  environment can simulate MUST still have automated tests.
 
 **Rationale**: Writing tests after keeps iteration fast, while the "before done" gate keeps
-regressions out.
+regressions out. A full browser-automation stack for a few platform checks would cost more
+complexity (Principle I) than it saves; recorded manual checks keep that behavior verified.
 
 ### V. Mobile-First Progressive Web App
 
@@ -86,4 +94,4 @@ app makes Duopona feel native while keeping it backend-free (Principle II).
   for at most one further feature, provided the plan's Complexity Tracking records the gap and
   ROADMAP.md lists the fix as the next feature. New gaps MUST NOT be introduced.
 
-**Version**: 1.2.0 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-03
+**Version**: 1.3.0 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-03
