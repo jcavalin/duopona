@@ -6,7 +6,7 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 ## In progress
 
 - **Daily goal / streak**: encourage a little practice every day.
-  Spec: `specs/007-daily-goal-streak/`. Status: specified.
+  Spec: `specs/007-daily-goal-streak/`. Status: planned.
 
 ## Next
 

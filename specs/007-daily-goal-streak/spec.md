@@ -75,7 +75,7 @@ starts from zero the next day.
 3. **Given** a finished session brings today's progress to the goal, **When** its summary
    appears, **Then** it says the daily goal is met and shows the updated streak.
 4. **Given** the goal is already met today, **When** the learner finishes another session,
-   **Then** progress keeps counting but the summary does not announce the goal again.
+   **Then** progress stays at "1 / 1" and the summary does not announce the goal again.
 5. **Given** a learner views the home screen at a new day, **When** the screen appears,
    **Then** today's progress starts from zero.
 
