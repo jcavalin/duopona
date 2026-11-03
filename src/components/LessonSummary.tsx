@@ -2,7 +2,11 @@ import { StarIcon } from './icons'
 import styles from './Exercise.module.css'
 
 interface Props {
-  lessonTitle: string
+  /** Defaults to the lesson texts; practice passes its own (006 contract S5) */
+  heading?: string
+  replayLabel?: string
+  /** Lesson title, or the practice kind */
+  subtitle: string
   /** Title of the lesson after this one; absent for the last lesson */
   nextLessonTitle?: string
   firstTryCorrect: number
@@ -11,8 +15,17 @@ interface Props {
   onReplay: () => void
 }
 
-/** Lesson complete (mockup 07, contract S5). */
-export default function LessonSummary({ lessonTitle, nextLessonTitle, firstTryCorrect, total, onContinue, onReplay }: Props) {
+/** Lesson or practice complete (mockup 07, contract S5). */
+export default function LessonSummary({
+  heading = 'Lesson complete!',
+  replayLabel = 'Replay lesson',
+  subtitle,
+  nextLessonTitle,
+  firstTryCorrect,
+  total,
+  onContinue,
+  onReplay,
+}: Props) {
   return (
     <div className="screen">
       <div className={`screen-body ${styles.summary}`}>
@@ -21,8 +34,8 @@ export default function LessonSummary({ lessonTitle, nextLessonTitle, firstTryCo
             <StarIcon size={44} />
           </span>
         </div>
-        <h1 className={styles.summaryTitle}>Lesson complete!</h1>
-        <p className={styles.summaryLesson}>{lessonTitle}</p>
+        <h1 className={styles.summaryTitle}>{heading}</h1>
+        <p className={styles.summaryLesson}>{subtitle}</p>
         <div className={styles.stats}>
           <div className={`${styles.stat} ${styles.statCorrect}`}>
             <p className={`label ${styles.statLabel}`}>Correct</p>
@@ -43,7 +56,7 @@ export default function LessonSummary({ lessonTitle, nextLessonTitle, firstTryCo
           Continue
         </button>
         <button type="button" className="text-button" onClick={onReplay}>
-          Replay lesson
+          {replayLabel}
         </button>
       </div>
     </div>

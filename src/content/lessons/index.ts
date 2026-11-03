@@ -1,4 +1,4 @@
-import type { Lesson } from '../types'
+import type { Exercise, Lesson } from '../types'
 import wordsAndSentences from './01-words-and-sentences'
 import nounsAndAdjectives from './02-nouns-and-adjectives'
 import youAndI from './03-you-and-i'
@@ -45,4 +45,16 @@ export function getLesson(id: string): Lesson | undefined {
 /** Where a lesson comes from, as shown to the learner: a book chapter, or the extra dictionary lessons. */
 export function sourceLabel(lesson: Lesson): string {
   return lesson.chapter === 'Dictionary' ? 'Extra: dictionary words' : `Book: ${lesson.chapter}`
+}
+
+/** Identifies an exercise across the course: exercise ids are only unique within a lesson. */
+export function exerciseKey(lessonId: string, exerciseId: string): string {
+  return `${lessonId}/${exerciseId}`
+}
+
+/** The exercise for a key from `exerciseKey()`, or undefined if it does not exist. */
+export function getExercise(key: string): Exercise | undefined {
+  const slash = key.indexOf('/')
+  if (slash < 0) return undefined
+  return getLesson(key.slice(0, slash))?.exercises.find((e) => e.id === key.slice(slash + 1))
 }

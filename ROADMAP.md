@@ -20,7 +20,7 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## Next
 
-- (none)
+- **Daily goal / streak**: encourage a little practice every day.
 
 ## Done
 
@@ -30,14 +30,9 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 - **005 – GitHub Pages deployment**: checks on every push, `main` published to
   https://jcavalin.github.io/duopona/ (`specs/005-github-pages-deploy/`). The pipeline's
   failure, pull-request, manual-run and overlap checks were skipped by owner decision.
-
-## Later
-
-- **Practice session**: a "Practice" button that builds a ~10-exercise session mixed from all
-  completed lessons, using the existing lesson flow. Small; reuses current exercises.
-- **Review weak words**: practice that favours words the learner got wrong before. Needs
-  per-word mistake tracking (builds on Practice session).
-- **Daily goal / streak**: encourage a little practice every day.
+- **006 – Practice & weak words**: Practice and Review weak words buttons, per-word mistake
+  tracking (`specs/006-practice-weak-words/`). The 360 px, offline and phone checks were skipped
+  by owner decision.
 
 ## Ideas (not yet evaluated)
 

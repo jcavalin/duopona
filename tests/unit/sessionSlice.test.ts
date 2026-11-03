@@ -1,4 +1,4 @@
-import { lessons } from '../../src/content/lessons'
+import { exerciseKey, getExercise, getLesson, lessons } from '../../src/content/lessons'
 import type { Exercise, MultipleChoiceExercise, WordBankExercise } from '../../src/content/types'
 import reducer, {
   continueLesson,
@@ -7,13 +7,15 @@ import reducer, {
   selectFirstTryCorrect,
   selectPosition,
   startLesson,
+  startPractice,
   submitAnswer,
   type LessonSession,
 } from '../../src/store/sessionSlice'
 
 const lesson = lessons[0]
-const ids = lesson.exercises.map((e) => e.id)
+const ids = lesson.exercises.map((e) => exerciseKey(lesson.id, e.id))
 const first = lesson.exercises[0] as MultipleChoiceExercise
+const firstKey = exerciseKey(lesson.id, first.id)
 const firstWrong = first.options.find((o) => o !== first.answer)!
 const firstWrong2 = first.options.filter((o) => o !== first.answer)[1]
 const wordBank = lesson.exercises.find((e): e is WordBankExercise => e.type === 'wordBank')!
@@ -43,6 +45,9 @@ describe('sessionSlice', () => {
   it('starts with all exercises queued in order', () => {
     const s = run(null, startLesson(lesson.id))!
     expect(s.queue).toEqual(ids)
+    expect(s.kind).toBe('lesson')
+    expect(s.lessonId).toBe(lesson.id)
+    expect(s.total).toBe(ids.length)
     expect(s.status).toBe('answering')
     expect(selectPosition(view(s))).toEqual({ done: 0, total: ids.length })
   })
@@ -64,11 +69,11 @@ describe('sessionSlice', () => {
   it('wrong answer records the miss once and moves the exercise to the end on continue', () => {
     let s = run(null, startLesson(lesson.id), submitAnswer(firstWrong))!
     expect(s.feedback).toEqual({ correct: false, correctAnswer: first.answer })
-    expect(s.missedOnce).toEqual([first.id])
+    expect(s.missedOnce).toEqual([firstKey])
     // Feedback still refers to the current exercise
     expect(selectCurrentExercise(view(s))?.id).toBe(first.id)
     s = run(s, continueLesson())!
-    expect(s.queue).toEqual([...ids.slice(1), first.id])
+    expect(s.queue).toEqual([...ids.slice(1), firstKey])
   })
 
   it('word bank: order matters, case does not; correctAnswer is joined', () => {
@@ -89,11 +94,11 @@ describe('sessionSlice', () => {
       s = run(s, submitAnswer(correctAnswerFor(s)), continueLesson())
     }
     expect(s!.status).toBe('answering')
-    expect(s!.queue).toEqual([first.id])
+    expect(s!.queue).toEqual([firstKey])
     // Missing it again keeps it in the queue
     s = run(s, submitAnswer(firstWrong2), continueLesson())
     expect(s!.status).toBe('answering')
-    expect(s!.missedOnce).toEqual([first.id])
+    expect(s!.missedOnce).toEqual([firstKey])
     s = run(s, submitAnswer(first.answer), continueLesson())
     expect(s!.status).toBe('finished')
     expect(selectFirstTryCorrect(view(s))).toBe(ids.length - 1)
@@ -118,5 +123,39 @@ describe('sessionSlice', () => {
 
   it('quitLesson resets to null', () => {
     expect(run(null, startLesson(lesson.id), quitLesson())).toBeNull()
+  })
+})
+
+describe('sessionSlice: practice sessions (006)', () => {
+  // The same exercise id exists in two lessons; keys tell them apart.
+  const keys = ['verbs/toki', 'greetings-and-feelings/toki', exerciseKey(lesson.id, first.id)]
+
+  it('starts nothing for an empty key list', () => {
+    expect(run(null, startPractice({ kind: 'practice', keys: [] }))).toBeNull()
+  })
+
+  it('runs exercises from several lessons with the lesson retry rule', () => {
+    let s = run(null, startPractice({ kind: 'review', keys }))!
+    expect(s).toMatchObject({ kind: 'review', lessonId: null, queue: keys, total: 3, status: 'answering' })
+    expect(selectPosition(view(s))).toEqual({ done: 0, total: 3 })
+    expect(selectCurrentExercise(view(s))).toBe(getLesson('verbs')!.exercises.find((e) => e.id === 'toki'))
+
+    s = run(s, submitAnswer(wrongAnswerFor(selectCurrentExercise(view(s))!)), continueLesson())!
+    expect(s.missedOnce).toEqual(['verbs/toki'])
+    expect(s.queue).toEqual([keys[1], keys[2], keys[0]])
+    expect(selectCurrentExercise(view(s))).toBe(getLesson('greetings-and-feelings')!.exercises.find((e) => e.id === 'toki'))
+
+    s = answerAllCorrectly(s)!
+    expect(s.status).toBe('finished')
+    expect(selectFirstTryCorrect(view(s))).toBe(2)
+  })
+})
+
+describe('getExercise', () => {
+  it('resolves keys and rejects anything else', () => {
+    expect(getExercise(exerciseKey(lesson.id, first.id))).toBe(first)
+    expect(getExercise('nope/toki')).toBeUndefined()
+    expect(getExercise(`${lesson.id}/nope`)).toBeUndefined()
+    expect(getExercise('toki')).toBeUndefined()
   })
 })

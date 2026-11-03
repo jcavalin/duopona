@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { getLesson } from '../content/lessons'
+import { exerciseKey, getExercise, getLesson } from '../content/lessons'
 import type { Exercise } from '../content/types'
 
 export interface Feedback {
@@ -7,12 +7,18 @@ export interface Feedback {
   correctAnswer: string
 }
 
+export type SessionKind = 'lesson' | 'practice' | 'review'
+
 export interface LessonSession {
-  lessonId: string
-  /** Exercise ids still to answer correctly; head = current exercise */
+  kind: SessionKind
+  /** Set only when kind is 'lesson' */
+  lessonId: string | null
+  /** Exercise keys (lessonId/exerciseId) still to answer correctly; head = current exercise */
   queue: string[]
-  /** Exercise ids answered wrong at least once */
+  /** Exercise keys answered wrong at least once */
   missedOnce: string[]
+  /** Number of exercises in the session */
+  total: number
   feedback: Feedback | null
   status: 'answering' | 'feedback' | 'finished'
   /** Increments on every new exercise shown, so retries get fresh UI state */
@@ -20,10 +26,6 @@ export interface LessonSession {
 }
 
 type SessionState = LessonSession | null
-
-function findExercise(lessonId: string, exerciseId: string): Exercise | undefined {
-  return getLesson(lessonId)?.exercises.find((e) => e.id === exerciseId)
-}
 
 export function isCorrectAnswer(exercise: Exercise, answer: string | string[]): boolean {
   if (exercise.type === 'multipleChoice') {
@@ -37,6 +39,19 @@ function formatAnswer(exercise: Exercise): string {
   return exercise.type === 'multipleChoice' ? exercise.answer : exercise.answer.join(' ')
 }
 
+function newSession(kind: SessionKind, lessonId: string | null, keys: string[]): LessonSession {
+  return {
+    kind,
+    lessonId,
+    queue: [...keys],
+    missedOnce: [],
+    total: keys.length,
+    feedback: null,
+    status: 'answering',
+    step: 0,
+  }
+}
+
 const sessionSlice = createSlice({
   name: 'session',
   initialState: null as SessionState,
@@ -44,22 +59,26 @@ const sessionSlice = createSlice({
     startLesson(_state, action: PayloadAction<string>) {
       const lesson = getLesson(action.payload)
       if (!lesson) return null
-      return {
-        lessonId: lesson.id,
-        queue: lesson.exercises.map((e) => e.id),
-        missedOnce: [],
-        feedback: null,
-        status: 'answering',
-        step: 0,
-      }
+      return newSession(
+        'lesson',
+        lesson.id,
+        lesson.exercises.map((e) => exerciseKey(lesson.id, e.id)),
+      )
+    },
+    /** Exercises chosen from several lessons (feature 006); an empty list starts nothing. */
+    startPractice(_state, action: PayloadAction<{ kind: 'practice' | 'review'; keys: string[] }>) {
+      const { kind, keys } = action.payload
+      if (keys.length === 0) return null
+      return newSession(kind, null, keys)
     },
     submitAnswer(state, action: PayloadAction<string | string[]>) {
       if (!state || state.status !== 'answering') return
-      const exercise = findExercise(state.lessonId, state.queue[0])
+      const key = state.queue[0]
+      const exercise = getExercise(key)
       if (!exercise) return
       const correct = isCorrectAnswer(exercise, action.payload)
-      if (!correct && !state.missedOnce.includes(exercise.id)) {
-        state.missedOnce.push(exercise.id)
+      if (!correct && !state.missedOnce.includes(key)) {
+        state.missedOnce.push(key)
       }
       state.feedback = { correct, correctAnswer: formatAnswer(exercise) }
       state.status = 'feedback'
@@ -78,22 +97,24 @@ const sessionSlice = createSlice({
   },
 })
 
-export const { startLesson, submitAnswer, continueLesson, quitLesson } = sessionSlice.actions
+export const { startLesson, startPractice, submitAnswer, continueLesson, quitLesson } = sessionSlice.actions
 export default sessionSlice.reducer
 
 type WithSession = { session: SessionState }
 
 export const selectSession = (state: WithSession) => state.session
 
+export function selectCurrentKey(state: WithSession): string | undefined {
+  return state.session?.queue[0]
+}
+
 export function selectCurrentExercise(state: WithSession): Exercise | undefined {
-  const s = state.session
-  if (!s || s.queue.length === 0) return undefined
-  return findExercise(s.lessonId, s.queue[0])
+  const key = selectCurrentKey(state)
+  return key === undefined ? undefined : getExercise(key)
 }
 
 export function selectTotal(state: WithSession): number {
-  const s = state.session
-  return s ? (getLesson(s.lessonId)?.exercises.length ?? 0) : 0
+  return state.session?.total ?? 0
 }
 
 /** done = exercises answered correctly so far */
