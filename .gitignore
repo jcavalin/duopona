@@ -13,3 +13,4 @@ Thumbs.db
 .idea/
 *.tsbuildinfo
 resources/
+!tests/build/

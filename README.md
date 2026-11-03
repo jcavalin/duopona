@@ -1,7 +1,9 @@
 # Duopona
 
 A Duolingo-style web app for learning **Toki Pona**. It runs entirely in the browser:
-no account, no backend, and progress is saved on your device (`localStorage`).
+no account, no backend, and progress is saved on your device (`localStorage`). It can be
+installed to the home screen (browser menu → "Install app" / "Add to Home Screen") and works
+offline after the first visit, including every lesson.
 
 ## The course
 
@@ -24,7 +26,22 @@ npm run dev      # start the dev server, open the printed URL
 npm test         # run the test suite once (npm run test:watch to keep watching)
 npm run lint     # lint
 npm run build    # production build into dist/ (static files, host anywhere)
+npm run preview  # serve dist/ at http://localhost:4173 — offline support and install work here
+npm run test:pwa # after a build: checks dist/ (manifest, icons, offline file list)
 ```
+
+The service worker (offline copy) only exists in production builds; `npm run dev` never
+registers one, so there is no stale cache during development. A new version is downloaded in
+the background and used from the next launch, after every Duopona window is closed.
+
+## Hosting
+
+`dist/` is static and can go on any static host, as long as:
+
+- it is served over **HTTPS** (browsers allow installing and offline use only on HTTPS or
+  `localhost`);
+- `index.html`, `sw.js` and `manifest.webmanifest` are served with `Cache-Control: no-cache`
+  so updates are found; the hashed files in `assets/` can be cached for a year.
 
 ## Project layout
 
@@ -34,6 +51,11 @@ npm run build    # production build into dist/ (static files, host anywhere)
   `tests/unit/courseContent.test.ts`; see `specs/002-book-course/contracts/lesson-content.md`
 - `src/store/` — Redux state: current lesson session, saved progress, persistence
 - `src/components/`, `src/routes/` — UI and pages (`#/` lesson list, `#/lesson/:id`)
-- `tests/` — unit and integration tests (Vitest + React Testing Library)
+- `public/` — app icons (`icon.svg` is the source; regenerate the PNGs with
+  `npx @vite-pwa/assets-generator@2`, config in `pwa-assets.config.mjs`)
+- `vite.config.ts` — build, PWA manifest and service-worker settings
+  (see `specs/003-pwa-offline-mobile/contracts/`)
+- `tests/` — unit and integration tests (Vitest + React Testing Library); `tests/build/` checks
+  the production build (`npm run test:pwa`)
 - `specs/` — Spec Kit feature specs, plans and tasks
 - `.specify/memory/constitution.md` — project principles

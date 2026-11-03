@@ -5,16 +5,20 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-(none)
-
-## Next
-
 - **PWA & mobile compliance** (required by Constitution Principle V; allowed to slip past 002
   only under Governance "Transitional compliance", v1.2.0, so it MUST be the next feature): web
   app manifest and icons (installable), service worker for full offline use including all lesson
   content, checked on iOS Safari and Android Chrome, installed and in the browser. (Safe-area
   insets and 44×44 px touch targets were done in 002.)
-  `/speckit-specify Make Duopona an installable, offline-capable PWA that is fully usable on phones`
+  Spec: `specs/003-pwa-offline-mobile/`. Status: built and checked in desktop Chrome; remaining:
+  desktop install check and real iPhone/Android checks (tasks T014, T016–T021).
+
+## Next
+
+- **UI redesign: Duolingo-style, dark mode** (after PWA): restyle all screens to the approved
+  mockups: lesson path, intro, exercises, feedback sheets, summary. Reference, tokens and open
+  points: [docs/design/ui-redesign.md](docs/design/ui-redesign.md).
+  `/speckit-specify Restyle Duopona to the dark Duolingo-style design in docs/design/ui-redesign.md`
 
 ## Done
 
