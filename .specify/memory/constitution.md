@@ -1,15 +1,3 @@
-<!--
-Sync Impact Report
-- Version change: 1.1.0 → 1.2.0 (MINOR: new governance rule added)
-- Modified principles: none
-- Added sections: Governance → "Transitional compliance" rule
-- Removed sections: none
-- Templates: none changed (plan template's Constitution Check already covers all principles)
-- Deferred TODOs: none. Applies now to the Principle V installability/offline gap: allowed for
-  feature 002-book-course (recorded in its plan's Complexity Tracking), fixed by the next
-  feature ("PWA & mobile compliance" in ROADMAP.md "Next").
--->
-
 # Duopona Constitution
 
 Duopona is a Duolingo-style web application dedicated exclusively to teaching Toki Pona.
