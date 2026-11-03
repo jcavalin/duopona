@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-03
 
-**Status**: Draft
+**Status**: Implemented (phone check S-D1 skipped by owner decision, task T030)
 
 **Input**: User description: "Daily goal / streak: encourage a little practice every day.
 Learners see a streak of consecutive days on which they practised, and a small daily goal they

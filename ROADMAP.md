@@ -5,8 +5,7 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-- **Daily goal / streak**: encourage a little practice every day.
-  Spec: `specs/007-daily-goal-streak/`. Status: planned.
+(none)
 
 ## Next
 
@@ -28,6 +27,8 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 - **006 – Practice & weak words**: Practice and Review weak words buttons, per-word mistake
   tracking (`specs/006-practice-weak-words/`). The 360 px, offline and phone checks were skipped
   by owner decision.
+- **007 – Daily goal & streak**: one finished session a day, streak and best streak on the home
+  screen (`specs/007-daily-goal-streak/`). The phone check was skipped by owner decision.
 
 ## Ideas (not yet evaluated)
 

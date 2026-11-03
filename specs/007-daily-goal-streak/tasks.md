@@ -147,11 +147,14 @@ next day the card is back to "0 / 1 session today".
 ## Phase 5: Polish & Cross-Cutting Concerns
 
 - [X] T028 [P] Update README.md: in the course section mention the daily goal (one finished lesson, practice or review a day) and the streak; next to `duopona:progress`/`duopona:words` add that the streak is saved under `duopona:streak`
-- [ ] T029 Quickstart S9 (offline) with the user running `npm run build && npm run preview`: one online load, then offline in DevTools, finish a session; record under this task
+- [X] T029 Quickstart S9 (offline) with the user running `npm run build && npm run preview`: one online load, then offline in DevTools, finish a session; record under this task
+  - **Result (2026-11-03)**: `npm run preview`; after closing the old tab the new worker took over (streak UI shown, 12 precached entries). Owner stopped the server (a fetch to the server failed), page reloaded from the cache, lesson 2 finished offline → "Daily goal met", Streak "1 day"; home "1 day streak, practised today", "1 / 1 session today", `duopona:streak` saved
 - [~] T030 Ask the user to run quickstart S-D1 on iPhone (Safari) and Android (Chrome), installed; record results under this task (the owner may waive it under the constitution's recorded-waiver rule, Principle IV; then mark `[~]` with the owner-decision note and name the waived check in spec.md **Status**)
   - **Won't do (2026-11-03)**: owner decision (constitution IV waiver); phone check S-D1 not run
-- [ ] T031 Set spec.md **Status** to `Implemented` (or `Implemented (…)` naming skipped or open manual checks); tick checklists/requirements.md if anything changed; update ROADMAP.md: move the item from **In progress** to **Done** as `**007 – Daily goal & streak**: one finished session a day, streak and best streak on the home screen (\`specs/007-daily-goal-streak/\`).`, leaving **In progress** as `(none)`
-- [ ] T032 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the test count vs. T001's baseline under this task
+- [X] T031 Set spec.md **Status** to `Implemented` (or `Implemented (…)` naming skipped or open manual checks); tick checklists/requirements.md if anything changed; update ROADMAP.md: move the item from **In progress** to **Done** as `**007 – Daily goal & streak**: one finished session a day, streak and best streak on the home screen (\`specs/007-daily-goal-streak/\`).`, leaving **In progress** as `(none)`
+  - **Result (2026-11-03)**: Status `Implemented (phone check S-D1 skipped by owner decision, task T030)`; requirements checklist unchanged (14/14); ROADMAP updated
+- [X] T032 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the test count vs. T001's baseline under this task
+  - **Result (2026-11-03)**: `npm test` 546 passed (baseline 498, +48); lint clean; build ok (precache 12 entries, 490.69 KiB); `npm run test:pwa` 26 passed
 
 ---
 
