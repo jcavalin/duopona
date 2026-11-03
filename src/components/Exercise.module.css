@@ -329,7 +329,7 @@
   width: 100%;
 }
 
-/* Equal columns; a third card (007 Streak) wraps to its own full-width row when narrow */
+/* Correct and Unlocked share a row; the Streak card (007) always takes its own full row */
 .stat {
   flex: 1 1 120px;
   min-width: 0;
@@ -388,6 +388,7 @@
 }
 
 .statStreak {
+  flex-basis: 100%;
   border-color: var(--streak);
 }
 

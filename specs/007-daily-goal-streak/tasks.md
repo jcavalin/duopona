@@ -103,7 +103,8 @@ three days → counter 1, 2, 3; skip a day → 0, then 1 after the next finished
 
 ### Validation for User Story 1
 
-- [ ] T019 [US1] Manual check in Chrome with the user running `npm run dev`: quickstart S1, S5, S6, S7 (top-bar part) at 360×740; record results under this task
+- [X] T019 [US1] Manual check in Chrome with the user running `npm run dev`: quickstart S1, S5, S6, S7 (top-bar part) at 360×740; record results under this task
+  - **Result (2026-11-03)**: Chrome against `npm run dev`, window 500×800 (Chrome's minimum width) plus a 360×740 same-origin iframe for 360 px. S1: flame muted 0, "0 / 1 session today", empty bar, no best line, no horizontal scroll. S5: `lastDay` set to yesterday with current 4 → home "4 day streak, not practised today"; after a practice session summary "Daily goal met", Streak "5 days"; home "5 day streak, practised today", `duopona:streak` current 5. S6: `lastDay` 2026-10-31 → "0 day streak, not practised today", "Best streak: 5 days". S7: `garbage` → streak 0, lessons (1 of 17) and practice intact, no console errors
 
 **Checkpoint**: Streak visible and correct; MVP shippable
 
@@ -124,7 +125,7 @@ next day the card is back to "0 / 1 session today".
 - [X] T021 [US2] Card styles in src/components/LessonList.module.css: same horizontal margins and radius as `.banner`, bordered card on `--bg` (like the stat cards), progress track `--line`, fill `--streak`, 10 px tall rounded; fits 360 px without horizontal scroll
 - [X] T022 [US2] In src/components/LessonSummary.tsx add optional prop `streak?: number` (doc: "Set only on the summary of the session that met today's daily goal (contract U3)"); when defined: a `<p>` `Daily goal met` under the subtitle, and a third stat card after the others with label `Streak` and value `` `${streak} ${streak === 1 ? 'day' : 'days'}` `` using a new `statStreak` class
 - [X] T023 [US2] In src/components/Exercise.module.css add `.statStreak` (border and label background `--streak`, value text `--streak`, mirroring `.statUnlocked`) and a `.goalMet` text style; make `.stats` wrap when three cards do not fit at 360 px (e.g. `grid-template-columns: repeat(auto-fit, minmax(96px, 1fr))` instead of the auto-flow column) and check the two-card summaries look unchanged
-  - Note: `.stats` switched to `flex-wrap` with `flex: 1 1 120px` instead of the suggested grid, so a third card on a narrow screen takes its own full-width row; two-card summaries are unchanged (equal columns)
+  - Note: `.stats` switched to `flex-wrap` (`.stat` `flex: 1 1 120px`) instead of the suggested grid; Correct and Unlocked keep sharing a row and `.statStreak` has `flex-basis: 100%`, so the Streak card always takes its own full row. Changed during T027: three cards in one row were too narrow at 500 px ("13 / 13" and "Adjectives" wrapped)
 - [X] T024 [US2] Pass the streak from both routes: in src/routes/LessonRoute.tsx and src/routes/PracticeRoute.tsx read `const streak = useAppSelector(selectStreak(today()))` and pass `streak={session.goalMet ? streak : undefined}` to `LessonSummary`
 - [X] T025 [US2] Run `npm run lint`, `npm run build`, `npm test`; existing lesson/practice flow tests must pass (a first finished session in a test now shows the extra card; fix only queries that became ambiguous, e.g. `getByText('1 day')`)
   - **Result (2026-11-03)**: lint clean, build ok, 544 passed; lesson and practice flow suites unchanged
@@ -136,7 +137,8 @@ next day the card is back to "0 / 1 session today".
 
 ### Validation for User Story 2
 
-- [ ] T027 [US2] Manual check in Chrome with the user running `npm run dev`: quickstart S1–S4 and S8 at 360×740; record results under this task, including the owner's opinion of the colours and card look (no mockup exists)
+- [X] T027 [US2] Manual check in Chrome with the user running `npm run dev`: quickstart S1–S4 and S8 at 360×740; record results under this task, including the owner's opinion of the colours and card look (no mockup exists)
+  - **Result (2026-11-03)**: S1 as in T019. S2: lesson 1 summary "Lesson complete!", "Daily goal met", Correct 13 / 13, Unlocked, Streak "1 day". S3: home flame orange 1, "1 / 1 session today", full orange bar, "Best streak: 1 day". S4: practice the same day → plain "Practice complete!" summary (no announcement, no Streak card). S8: at 360 px home fits (wordmark, flame 12, 1 / 17 on one line; scrollWidth 343 < 358); summary at 360 and 500 px: Correct + Unlocked side by side, Streak on its own full row, no horizontal scroll (layout fixed during this check, see T023). Colours and card look reviewed via screenshots; no mockup exists
 
 **Checkpoint**: Daily goal and announcement complete
 
@@ -146,7 +148,8 @@ next day the card is back to "0 / 1 session today".
 
 - [X] T028 [P] Update README.md: in the course section mention the daily goal (one finished lesson, practice or review a day) and the streak; next to `duopona:progress`/`duopona:words` add that the streak is saved under `duopona:streak`
 - [ ] T029 Quickstart S9 (offline) with the user running `npm run build && npm run preview`: one online load, then offline in DevTools, finish a session; record under this task
-- [ ] T030 Ask the user to run quickstart S-D1 on iPhone (Safari) and Android (Chrome), installed; record results under this task (the owner may waive it under the constitution's recorded-waiver rule, Principle IV; then mark `[~]` with the owner-decision note and name the waived check in spec.md **Status**)
+- [~] T030 Ask the user to run quickstart S-D1 on iPhone (Safari) and Android (Chrome), installed; record results under this task (the owner may waive it under the constitution's recorded-waiver rule, Principle IV; then mark `[~]` with the owner-decision note and name the waived check in spec.md **Status**)
+  - **Won't do (2026-11-03)**: owner decision (constitution IV waiver); phone check S-D1 not run
 - [ ] T031 Set spec.md **Status** to `Implemented` (or `Implemented (…)` naming skipped or open manual checks); tick checklists/requirements.md if anything changed; update ROADMAP.md: move the item from **In progress** to **Done** as `**007 – Daily goal & streak**: one finished session a day, streak and best streak on the home screen (\`specs/007-daily-goal-streak/\`).`, leaving **In progress** as `(none)`
 - [ ] T032 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the test count vs. T001's baseline under this task
 
