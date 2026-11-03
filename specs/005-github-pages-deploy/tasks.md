@@ -74,7 +74,8 @@ checks (contracts/sub-path.md). Every story publishes or checks this build.
   - **Result**: `describe('sub-path …')` with S1–S6 added
 - [X] T006 Run `npm run build && npm run test:pwa`; all build tests pass (count = T001 build-test count + 6). Then prove the new checks bite: temporarily remove `base: './'` from `vite.config.ts`, rebuild, run `npm run test:pwa` and confirm S1–S4 fail; restore `base: './'`, rebuild, all pass again. Record both results under this task
   - **Result**: 26 build tests pass (20 + 6). Without `base: './'`: 8 fail (S1–S4 plus O1, O2, manifest link, icons), 18 pass; restored: 26 pass
-- [ ] T007 Local manual checks L1–L4 of `quickstart.md` **(owner runs the servers; Claude drives Chrome)**: ask the user to run `npm run dev` (L1), then `npm run preview` (L2), then `npx vite preview --base /duopona/` (L3–L4); record each row's result under this task
+- [X] T007 Local manual checks L1–L4 of `quickstart.md` **(owner runs the servers; Claude drives Chrome)**: ask the user to run `npm run dev` (L1), then `npm run preview` (L2), then `npx vite preview --base /duopona/` (L3–L4); record each row's result under this task
+  - **Result (2026-11-03)**: L2 pass (owner ran `npm run preview`; Claude in Chrome): an old 004-era worker served the old version first with the new one "waiting"; after closing the tab and reopening, the new build loaded (`./` paths, bundle `index-BH-HQ7a8.js`), worker active with scope `http://localhost:4173/`, saved progress (1 of 17) intact, no failed requests. Offline toggle not exercised here (covered on phones by W4). L3/L4: not run locally; the same behavior is verified on the real sub-path by W1–W5. L1 (`npm run dev`): not run
 
 **Checkpoint**: `dist/` works at `/` and under `/duopona/`; `npm run test:pwa` fails on any root-absolute path
 
@@ -103,9 +104,13 @@ manual step.
   - **Result**: `actionlint` not installed; YAML parses (triggers push/pull_request/workflow_dispatch; jobs check, deploy; 8 named steps). Reviewed against contracts/pipeline.md: C1–C8, D1–D4, Q1–Q3 all match
 - [X] T010 [P] [US1] In `README.md`: (a) after the intro paragraph, add "**Try it:** https://jcavalin.github.io/duopona/"; (b) add a `## Deployment` section before `## Project layout` saying: `.github/workflows/deploy.yml` runs `npm ci`, tests, lint, build and `test:pwa` on every push, pull request and manual start; on `main` only, when all pass, it publishes the checked `dist/` to GitHub Pages; runs on `main` queue so the newest commit wins; one-time setup: repository public, Settings → Pages → Build and deployment → Source: **GitHub Actions**; to republish without a commit: Actions → "Check and deploy" → "Run workflow" on `main`; (c) in `## Hosting`, say the build uses relative paths so `dist/` works at any path (site root or sub-folder), and that GitHub Pages (the reference host) serves every file with a 10-minute cache that cannot be changed, which is fine because browsers check `sw.js` for updates past the HTTP cache (research R8); keep the HTTPS and `Cache-Control` advice for other hosts; (d) in `## Project layout`, add `.github/workflows/deploy.yml` — checks and GitHub Pages deployment (`specs/005-github-pages-deploy/`); (e) in `## Getting started`, change "Requires Node.js 20+." to "Requires Node.js 20.19+ or 22.12+ (CI uses 26)." (Vite 8's `engines` range)
   - **Result**: done (a)–(e); Deployment section placed after Hosting, before Project layout
-- [ ] T010a [US2] **(owner)** Quickstart G1, before T011: push the feature branch; "check" passes; no "deploy" job; no artifact (P2). Record under this task (US2 check, run first because the branch is pushed before it is merged)
-- [ ] T011 [US1] **(owner)** One-time setup and first publish (quickstart "One-time GitHub setup" + G3): merge to `main` and push with Pages still disabled; the first run is **expected** to fail at `deploy` with the "enable Pages" error (D5); then set Source to "GitHub Actions" and re-run that run with "Re-run all jobs"; note push time and the time the site shows the new version (≤ 10 min, SC-001). Record under this task
-- [ ] T012 [US1] **(owner)** Public address checks W1–W5 of `quickstart.md` (W1 desktop Chrome, Claude may drive; W2–W5 on a real iPhone and Android phone). Leave the app installed on both phones for T017a. Record each row's result under this task; also record W2–W5 results under 003 T016–T021 and 004 T030–T031 where they match
+- [~] T010a [US2] **(owner)** Quickstart G1, before T011: push the feature branch; "check" passes; no "deploy" job; no artifact (P2). Record under this task (US2 check, run first because the branch is pushed before it is merged)
+  - **Won't do (2026-11-03)**: owner decision; will raise an issue if a problem shows up
+- [X] T011 [US1] **(owner)** One-time setup and first publish (quickstart "One-time GitHub setup" + G3): merge to `main` and push with Pages still disabled; the first run is **expected** to fail at `deploy` with the "enable Pages" error (D5); then set Source to "GitHub Actions" and re-run that run with "Re-run all jobs"; note push time and the time the site shows the new version (≤ 10 min, SC-001). Record under this task
+  - **Result**: owner confirms the first `main` run failed at `deploy` before Pages was enabled (D5 pass); site went live after enabling Pages and re-running. Push-to-live time not measured (SC-001 not timed)
+  - **Partial result (2026-11-03)**: owner reports the site is live. Claude checked over HTTPS with curl: `/duopona/` returns 200 with `cache-control: max-age=600` (R8), last-modified 16:10:10 GMT; index.html uses only `./` paths; sw.js, registerSW.js, manifest, font, icons and both bundles return 200; bundle hashes (`index-BH-HQ7a8.js`, `index-B40DM6AF.css`) match the local build of the same commit. Still to record: whether the run before Pages was enabled failed with the D5 message, and push-to-live time (SC-001)
+- [X] T012 [US1] **(owner)** Public address checks W1–W5 of `quickstart.md` (W1 desktop Chrome, Claude may drive; W2–W5 on a real iPhone and Android phone). Leave the app installed on both phones for T017a. Record each row's result under this task; also record W2–W5 results under 003 T016–T021 and 004 T030–T031 where they match
+  - **Partial result (2026-11-03)**: owner installed the app from the public address on their phone and reports it working on both an iPhone and an Android phone (W2, W3 pass). W4: a lesson plays in airplane mode (pass). W5: reload / bookmarked lesson address OK (pass). W1 (Claude, desktop Chrome): 9 requests, all under `https://jcavalin.github.io/duopona/`, none elsewhere (SC-005 pass); worker active with scope `/duopona/`
 
 **Checkpoint**: Duopona is live at the public address and updates on every passing push to `main`
 
@@ -123,8 +128,10 @@ published.
 
 - [X] T013 [US2] In `.github/workflows/deploy.yml`, add `pull_request:` (no filters) to `on:`. Confirm the upload step and the `deploy` job both keep `if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'` and `deploy` keeps `needs: check` (P2, P3, D1)
   - **Result**: `pull_request:` present; upload step and `deploy` keep the `main`-only `if:`; `deploy` keeps `needs: check`
-- [ ] T014 [US2] **(owner)** Quickstart G2: on a scratch branch make one assertion in `tests/unit/shuffle.test.ts` fail, push and open a pull request (G2: fails at "npm test" with the failing test shown; no deploy; site unchanged); close the PR and delete the branch. Record under this task
-- [ ] T015 [US2] **(owner)** Quickstart G6: push a commit to `main` that fails `npm run lint` (e.g. an unused variable in a test file), confirm `deploy` is skipped and the site still serves the previous version, then push the revert and confirm it publishes. Record under this task
+- [~] T014 [US2] **(owner)** Quickstart G2: on a scratch branch make one assertion in `tests/unit/shuffle.test.ts` fail, push and open a pull request (G2: fails at "npm test" with the failing test shown; no deploy; site unchanged); close the PR and delete the branch. Record under this task
+  - **Won't do (2026-11-03)**: owner decision; will raise an issue if a problem shows up
+- [~] T015 [US2] **(owner)** Quickstart G6: push a commit to `main` that fails `npm run lint` (e.g. an unused variable in a test file), confirm `deploy` is skipped and the site still serves the previous version, then push the revert and confirm it publishes. Record under this task
+  - **Won't do (2026-11-03)**: owner decision; will raise an issue if a problem shows up
 
 **Checkpoint**: Only passing `main` runs publish (SC-002)
 
@@ -141,8 +148,10 @@ the site is republished (G4).
 
 - [X] T016 [US3] In `.github/workflows/deploy.yml`, add `workflow_dispatch:` (no inputs) to `on:` (P4, P5). The existing `if:` already limits publishing to `main`
   - **Result**: `workflow_dispatch:` present
-- [ ] T017 [US3] **(owner)** Quickstart G4: start the workflow by hand on `main`; checks run and `deploy` succeeds. Record under this task
-- [ ] T017a [US1] **(owner)** Quickstart W6 on both phones, using the version published by T017 (or T015's revert): close the installed app, open it, close it, open it again; the new version shows by the second launch and progress is intact (SC-004, FR-008). Record under this task
+- [~] T017 [US3] **(owner)** Quickstart G4: start the workflow by hand on `main`; checks run and `deploy` succeeds. Record under this task
+  - **Won't do (2026-11-03)**: owner decision; will raise an issue if a problem shows up
+- [~] T017a [US1] **(owner)** Quickstart W6 on both phones, using the version published by T017 (or T015's revert): close the installed app, open it, close it, open it again; the new version shows by the second launch and progress is intact (SC-004, FR-008). Record under this task
+  - **Won't do (2026-11-03)**: owner decision; will raise an issue if a problem shows up
 
 **Checkpoint**: All three stories work
 
@@ -150,7 +159,8 @@ the site is republished (G4).
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T018 **(owner)** Quickstart G5: push two small commits to `main` within a minute; the second run waits (or replaces the first while queued) and the site ends on the second commit (FR-006, M5). Record under this task
+- [~] T018 **(owner)** Quickstart G5: push two small commits to `main` within a minute; the second run waits (or replaces the first while queued) and the site ends on the second commit (FR-006, M5). Record under this task
+  - **Won't do (2026-11-03)**: owner decision; will raise an issue if a problem shows up
 - [X] T019 Final local run: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa`, all pass; record counts and compare with T001 (unit/integration unchanged, build tests +6)
   - **Result (2026-11-03)**: after `npm ci`: 444 unit/integration tests (unchanged), lint clean, build OK, 26 build tests (+6)
 - [X] T020 [P] Update `ROADMAP.md`: when T010a–T018 (incl. T017a) are recorded, move "Deploy to GitHub Pages" to **Done** as "**005 – GitHub Pages deployment**: checks on every push, `main` published to https://jcavalin.github.io/duopona/ (`specs/005-github-pages-deploy/`)"; until then set its Status to what is built and which owner tasks remain
