@@ -1,7 +1,8 @@
 /// <reference types="node" />
 /*
  * Checks dist/ against specs/003-pwa-offline-mobile/contracts (rows marked "auto")
- * and specs/004-ui-redesign/contracts/app-identity-changes.md.
+ * and specs/004-ui-redesign/contracts/app-identity-changes.md,
+ * and the path rules of specs/005-github-pages-deploy/contracts/sub-path.md (relative base './').
  * Run `npm run build` first; `npm run test:pwa` runs this file.
  *
  * Patterns in the generated (minified) dist/sw.js, vite-plugin-pwa 2.0.0 / Workbox 7:
@@ -38,6 +39,7 @@ const precache = [...sw.matchAll(/\{url:"([^"]+)",revision:(null|"[^"]*")\}/g)].
   revision: m[2] === 'null' ? null : m[2].slice(1, -1),
 }))
 const precachedUrls = precache.map((entry) => entry.url)
+const manifest = JSON.parse(read('manifest.webmanifest')) as Record<string, unknown>
 
 describe('offline copy (contracts/offline-and-updates.md)', () => {
   it('finds a precache list in sw.js', () => {
@@ -45,11 +47,11 @@ describe('offline copy (contracts/offline-and-updates.md)', () => {
   })
 
   it('O1: the built page registers the worker', () => {
-    expect(indexHtml).toMatch(/<script[^>]+src="\/registerSW\.js"/)
+    expect(indexHtml).toMatch(/<script[^>]+src="\.\/registerSW\.js"/)
   })
 
   it('O2: registration does not block the first render', () => {
-    const tag = indexHtml.match(/<script[^>]+src="\/registerSW\.js"[^>]*>/)?.[0] ?? ''
+    const tag = indexHtml.match(/<script[^>]+src="\.\/registerSW\.js"[^>]*>/)?.[0] ?? ''
     expect(tag).toMatch(/\b(defer|async|type="module")\b/)
   })
 
@@ -107,13 +109,11 @@ describe('offline copy (contracts/offline-and-updates.md)', () => {
 })
 
 describe('app identity (contracts/app-identity.md)', () => {
-  const manifestLink = indexHtml.match(/<link rel="manifest" href="\/([^"]+)"/)?.[1]
+  const manifestLink = indexHtml.match(/<link rel="manifest" href="\.\/([^"]+)"/)?.[1]
 
   it('the page links the manifest', () => {
     expect(manifestLink).toBe('manifest.webmanifest')
   })
-
-  const manifest = JSON.parse(read('manifest.webmanifest')) as Record<string, unknown>
 
   it('has the Duopona name, description, start URL and scope', () => {
     expect(manifest.name).toBe('Duopona')
@@ -167,10 +167,51 @@ describe('app identity (contracts/app-identity.md)', () => {
   })
 
   it('has the iOS home-screen icon and title, and an SVG favicon', () => {
-    expect(indexHtml).toContain('<link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />')
+    expect(indexHtml).toContain('<link rel="apple-touch-icon" href="./apple-touch-icon-180x180.png" />')
     expect(existsSync(join(DIST, 'apple-touch-icon-180x180.png'))).toBe(true)
     expect(indexHtml).toContain('<meta name="apple-mobile-web-app-title" content="Duopona" />')
-    expect(indexHtml).toContain('<link rel="icon" href="/icon.svg" type="image/svg+xml" />')
+    expect(indexHtml).toContain('<link rel="icon" href="./icon.svg" type="image/svg+xml" />')
     expect(existsSync(join(DIST, 'icon.svg'))).toBe(true)
+  })
+})
+
+describe('sub-path (specs/005-github-pages-deploy/contracts/sub-path.md)', () => {
+  it('S1: index.html references nothing from the site root', () => {
+    expect(indexHtml).not.toMatch(/\s(src|href)="\/(?!\/)/)
+  })
+
+  it('S2: index.html loads every app file with a ./ path', () => {
+    for (const ref of [
+      'src="./registerSW.js"',
+      'href="./manifest.webmanifest"',
+      'href="./icon.svg"',
+      'href="./apple-touch-icon-180x180.png"',
+    ]) {
+      expect(indexHtml).toContain(ref)
+    }
+    expect(indexHtml).toMatch(/<script type="module" crossorigin src="\.\/assets\/index-[^"]+\.js">/)
+    expect(indexHtml).toMatch(/<link rel="stylesheet" crossorigin href="\.\/assets\/index-[^"]+\.css">/)
+  })
+
+  it('S3: no built CSS file loads anything from the site root', () => {
+    const cssFiles = distFiles.filter((f) => f.endsWith('.css'))
+    expect(cssFiles.length).toBeGreaterThan(0)
+    for (const file of cssFiles) expect(read(file), file).not.toMatch(/url\(\s*['"]?\/(?!\/)/)
+  })
+
+  it('S4: the worker is registered relative to the page', () => {
+    expect(read('registerSW.js')).toContain("register('./sw.js', { scope: './' })")
+  })
+
+  it('S5: no precache URL starts with /', () => {
+    for (const url of precachedUrls) expect(url.startsWith('/'), url).toBe(false)
+  })
+
+  it('S6: manifest start URL, scope and icons are relative', () => {
+    expect(manifest.start_url).toBe('.')
+    expect(manifest.scope).toBe('.')
+    for (const icon of manifest.icons as { src: string }[]) {
+      expect(icon.src.startsWith('/'), icon.src).toBe(false)
+    }
   })
 })

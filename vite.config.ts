@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  // Relative paths: same build works at / and under /duopona/ (specs/005-github-pages-deploy/research.md R1)
+  base: './',
   plugins: [
     react(),
     // Offline copy + updates: specs/003-pwa-offline-mobile/contracts/offline-and-updates.md.

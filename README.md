@@ -5,6 +5,8 @@ no account, no backend, and progress is saved on your device (`localStorage`). I
 installed to the home screen (browser menu → "Install app" / "Add to Home Screen") and works
 offline after the first visit, including every lesson.
 
+**Try it:** https://jcavalin.github.io/duopona/
+
 ## The course
 
 17 lessons that follow the chapter order of *Toki Pona: The Language of Good* by Sonja Lang
@@ -22,7 +24,7 @@ lists and grammar topics follow the book.
 
 ## Getting started
 
-Requires Node.js 20+.
+Requires Node.js 20.19+ or 22.12+ (CI uses 26).
 
 ```bash
 npm install
@@ -40,12 +42,31 @@ the background and used from the next launch, after every Duopona window is clos
 
 ## Hosting
 
-`dist/` is static and can go on any static host, as long as:
+The build uses relative paths, so `dist/` works at any path: a site root or a sub-folder such
+as `/duopona/`. It is static and can go on any static host, as long as:
 
 - it is served over **HTTPS** (browsers allow installing and offline use only on HTTPS or
   `localhost`);
-- `index.html`, `sw.js` and `manifest.webmanifest` are served with `Cache-Control: no-cache`
-  so updates are found; the hashed files in `assets/` can be cached for a year.
+- ideally, `index.html`, `sw.js` and `manifest.webmanifest` are served with
+  `Cache-Control: no-cache` so updates are found quickly; the hashed files in `assets/` can be
+  cached for a year.
+
+GitHub Pages, the reference host, serves every file with a fixed 10-minute cache that cannot
+be changed. That is fine: browsers check `sw.js` for a new version past the HTTP cache, so
+learners still get a new version within two launches.
+
+## Deployment
+
+`.github/workflows/deploy.yml` runs `npm ci`, the tests, lint, the build and `test:pwa` on
+every push, pull request and manual start. On `main` only, when all of them pass, it publishes
+the checked `dist/` to GitHub Pages at https://jcavalin.github.io/duopona/. Nothing is
+published from other branches, pull requests or failing runs. Runs on `main` queue, so the
+newest commit always ends up published.
+
+One-time setup: the repository must be public, and Settings → Pages → Build and deployment →
+Source must be **GitHub Actions** (until then, the deploy step fails with a message saying so).
+
+To publish again without a commit: Actions → "Check and deploy" → "Run workflow" on `main`.
 
 ## Project layout
 
@@ -65,5 +86,7 @@ the background and used from the next launch, after every Duopona window is clos
   (see `specs/003-pwa-offline-mobile/contracts/`)
 - `tests/` — unit and integration tests (Vitest + React Testing Library); `tests/build/` checks
   the production build (`npm run test:pwa`)
+- `.github/workflows/deploy.yml` — checks and GitHub Pages deployment
+  (`specs/005-github-pages-deploy/`)
 - `specs/` — Spec Kit feature specs, plans and tasks
 - `.specify/memory/constitution.md` — project principles

@@ -17,6 +17,11 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   [docs/design/ui-redesign.md](docs/design/ui-redesign.md). Spec: `specs/004-ui-redesign/`.
   Status: built, tested and checked in desktop Chrome; remaining: DevTools checks (360 px,
   reduced motion, offline) and real iPhone/Android checks (tasks T027, T030–T031).
+- **Deploy to GitHub Pages**: a GitHub Actions pipeline that runs every check on each push and
+  publishes `main` to https://jcavalin.github.io/duopona/ when they pass. Gives the public HTTPS
+  address the open phone checks of 003 and 004 need. Spec: `specs/005-github-pages-deploy/`.
+  Status: workflow, relative-path build and build checks done and passing locally; remaining:
+  local preview checks (T007) and the owner's GitHub and phone checks (T010a–T018, incl. T017a).
 
 ## Next
 
