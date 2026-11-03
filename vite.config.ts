@@ -19,8 +19,8 @@ export default defineConfig({
         start_url: '.',
         scope: '.',
         display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#ffffff',
+        background_color: '#131F24',
+        theme_color: '#131F24',
         lang: 'en',
         icons: [
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
@@ -30,7 +30,7 @@ export default defineConfig({
       },
       workbox: {
         // Icons and manifest are added by the plugin (manifest icons + includeAssets)
-        globPatterns: ['**/*.{js,css,html}'],
+        globPatterns: ['**/*.{js,css,html,woff2}'],
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
       },

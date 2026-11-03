@@ -3,7 +3,7 @@ import { Navigate, useNavigate, useParams } from 'react-router'
 import ExerciseScreen from '../components/ExerciseScreen'
 import LessonIntro from '../components/LessonIntro'
 import LessonSummary from '../components/LessonSummary'
-import { getLesson } from '../content/lessons'
+import { getLesson, lessons } from '../content/lessons'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { selectIsUnlocked } from '../store/progressSlice'
 import { quitLesson, selectFirstTryCorrect, selectSession, selectTotal, startLesson } from '../store/sessionSlice'
@@ -44,7 +44,18 @@ export default function LessonRoute() {
   if (!session || session.lessonId !== lesson.id) return null
 
   if (session.status === 'finished') {
-    return <LessonSummary firstTryCorrect={firstTryCorrect} total={total} onBack={goHome} />
+    const next = lessons[lessons.findIndex((l) => l.id === lesson.id) + 1]
+    return (
+      <LessonSummary
+        lessonTitle={lesson.title}
+        nextLessonTitle={next?.title}
+        firstTryCorrect={firstTryCorrect}
+        total={total}
+        onContinue={goHome}
+        // Back to the introduction; Start begins a fresh session (research R10)
+        onReplay={() => setStartedId(null)}
+      />
+    )
   }
   return <ExerciseScreen onQuit={goHome} />
 }

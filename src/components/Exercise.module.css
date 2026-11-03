@@ -1,119 +1,378 @@
-.header {
+/* Exercise screens (mockups 03–06) and the lesson summary (mockup 07) */
+
+/* Top bar: close, progress, n/total */
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.progress {
+  flex: 1;
+  min-width: 0;
+  height: 16px;
+  appearance: none;
+  border: none;
+  border-radius: 8px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.progress::-webkit-progress-bar {
+  border-radius: 8px;
+  background: var(--line);
+}
+
+.progress::-webkit-progress-value {
+  border-radius: 8px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.progress::-moz-progress-bar {
+  border-radius: 8px;
+  background: var(--primary);
+}
+
+.position {
+  color: var(--text-muted);
+  font-size: 17px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+/* Instruction and prompt */
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.instruction {
+  margin: 0 0 20px;
+  font-size: 26px;
+}
+
+.grammarTag {
+  flex-shrink: 0;
+  margin-top: 4px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: var(--gold-tint);
+  color: var(--gold-tag-text);
+}
+
+.promptRow {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
 }
 
-.quit {
-  min-height: 44px;
-  min-width: 44px;
-  border: none;
-  background: none;
-  color: var(--color-muted);
-  padding: 8px 0;
-}
-
-.progress {
-  flex: 1;
-  height: 12px;
-  accent-color: var(--color-primary);
-}
-
-.position {
-  color: var(--color-muted);
-  white-space: nowrap;
-}
-
-.instruction {
-  margin: 0;
-  color: var(--color-muted);
+.promptIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--primary-tint);
+  color: var(--primary-text);
 }
 
 .prompt {
-  margin: 4px 0 24px;
-  font-size: 1.75rem;
-  font-weight: 700;
+  margin: 0;
+  padding: 10px 18px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  font-size: 22px;
+  font-weight: 800;
 }
 
+/* Multiple choice */
 .options {
   display: grid;
-  gap: 10px;
-  margin-bottom: 24px;
+  gap: 12px;
 }
 
 .option {
-  min-height: 44px;
-  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 16px;
+  border: 2px solid var(--line);
+  border-bottom-width: 5px;
+  border-radius: 14px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 800;
   text-align: left;
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius);
-  background: var(--color-bg);
-  color: var(--color-text);
+}
+
+.optionNumber {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 900;
 }
 
 .option[aria-pressed='true'] {
-  border-color: var(--color-selected-border);
-  background: var(--color-selected);
+  border-color: var(--primary-text);
+  background: var(--primary-tint);
+  color: var(--primary-text);
 }
 
-.answerLine,
+.option[aria-pressed='true'] .optionNumber {
+  border-color: var(--primary-text);
+  color: var(--primary-text);
+}
+
+.option[data-result='wrong'] {
+  border-color: var(--error);
+  background: var(--error-tint);
+  color: var(--error-text);
+}
+
+.option[data-result='wrong'] .optionNumber {
+  border-color: var(--error);
+  color: var(--error-text);
+}
+
+/* While feedback shows: keep the chosen option bright, fade the others */
+.option:disabled[aria-pressed='false'] {
+  opacity: 0.6;
+}
+
+/* Word bank */
+.answerLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 10px;
+  min-height: 128px; /* two ruled rows of 48px tiles */
+  margin-bottom: 28px;
+  padding: 6px 0;
+  /* Two ruled lines, one under each row of tiles */
+  background: linear-gradient(var(--line), var(--line)) 0 57px / 100% 2px no-repeat,
+    linear-gradient(var(--line), var(--line)) 0 115px / 100% 2px no-repeat;
+}
+
 .bank {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  min-height: 64px; /* fits one row of 44px tiles plus padding, so placing a tile does not shift the layout */
-  padding: 8px 0;
-}
-
-.answerLine {
-  border-bottom: 2px solid var(--color-border);
-  margin-bottom: 16px;
-}
-
-.bank {
   justify-content: center;
-  margin-bottom: 24px;
+  gap: 10px;
 }
 
 .tile,
 .tilePlaceholder {
-  min-height: 44px;
-  min-width: 44px;
-  padding: 8px 14px;
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius);
-  background: var(--color-bg);
-  color: var(--color-text);
+  min-width: 48px;
+  min-height: 48px;
+  padding: 8px 16px;
+  border: 2px solid var(--line);
+  border-bottom-width: 4px;
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .tilePlaceholder {
+  display: inline-flex;
+  align-items: center;
+  border-color: transparent;
+  background: var(--line);
   color: transparent;
-  background: var(--color-border);
 }
 
-.correct,
-.wrong {
-  margin-top: 16px;
-  padding: 16px;
-  border-radius: var(--radius);
+/* Feedback sheet: replaces the bottom bar */
+.sheet {
+  border-top: none;
+  animation: slide-up 0.2s ease-out;
 }
 
-.correct {
-  background: var(--color-correct-bg);
-  color: var(--color-correct-text);
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
 }
 
-.wrong {
-  background: var(--color-wrong-bg);
-  color: var(--color-wrong-text);
+.sheetCorrect {
+  background: var(--success-tint);
 }
 
-.feedbackText {
-  margin: 0 0 12px;
-  font-weight: 700;
+.sheetWrong {
+  background: var(--error-tint);
 }
 
+.sheetRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sheetIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  color: #ffffff;
+}
+
+.sheetCorrect .sheetIcon {
+  background: var(--primary);
+}
+
+.sheetWrong .sheetIcon {
+  background: var(--error);
+}
+
+.sheetText {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.sheetCorrect .sheetText {
+  color: var(--primary-text-strong);
+}
+
+.sheetWrong .sheetText {
+  color: var(--error-text);
+}
+
+.sheetTitle {
+  display: block;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.sheetLabel {
+  display: block;
+  margin-top: 4px;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.sheetAnswer {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+/* Lesson summary (mockup 07) */
 .summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: max(56px, env(safe-area-inset-top));
   text-align: center;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  background: var(--gold-tint);
+}
+
+.badgeCoin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 104px;
+  height: 104px;
+  border-bottom: 8px solid var(--gold-deep);
+  border-radius: 50%;
+  background: var(--gold);
+  color: #ffffff;
+}
+
+.summaryTitle {
+  margin: 28px 0 4px;
+  color: var(--primary-text);
+  font-size: 32px;
+}
+
+.summaryLesson {
+  margin: 0 0 28px;
+  color: var(--text-muted);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.stats {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.stat {
+  overflow: hidden;
+  border: 3px solid;
+  border-radius: 16px;
+}
+
+.stat p {
+  margin: 0;
+}
+
+.statLabel {
+  padding: 6px 8px;
+}
+
+.statValue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  padding: 8px 12px;
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.statNext {
+  font-size: 22px;
+}
+
+.statCorrect {
+  border-color: var(--gold);
+}
+
+.statCorrect .statLabel {
+  background: var(--gold);
+  color: var(--gold-ink-label);
+}
+
+.statUnlocked {
+  border-color: var(--primary-text);
+}
+
+.statUnlocked .statLabel {
+  background: var(--primary);
+  color: #ffffff;
 }

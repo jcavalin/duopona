@@ -12,13 +12,15 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   insets and 44×44 px touch targets were done in 002.)
   Spec: `specs/003-pwa-offline-mobile/`. Status: built and checked in desktop Chrome; remaining:
   desktop install check and real iPhone/Android checks (tasks T014, T016–T021).
+- **UI redesign: Duolingo-style, dark mode**: restyle all screens to the approved mockups:
+  lesson path, intro, exercises, feedback sheets, summary. Reference:
+  [docs/design/ui-redesign.md](docs/design/ui-redesign.md). Spec: `specs/004-ui-redesign/`.
+  Status: built, tested and checked in desktop Chrome; remaining: DevTools checks (360 px,
+  reduced motion, offline) and real iPhone/Android checks (tasks T027, T030–T031).
 
 ## Next
 
-- **UI redesign: Duolingo-style, dark mode** (after PWA): restyle all screens to the approved
-  mockups: lesson path, intro, exercises, feedback sheets, summary. Reference, tokens and open
-  points: [docs/design/ui-redesign.md](docs/design/ui-redesign.md).
-  `/speckit-specify Restyle Duopona to the dark Duolingo-style design in docs/design/ui-redesign.md`
+- (none)
 
 ## Done
 
@@ -40,3 +42,5 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   feature 001.
 - Audio pronunciation (would enable the book's Lesson 1, "Letters and Sounds").
 - sitelen pona (Toki Pona glyphs).
+- Light theme following the device setting (004 ships dark only; the light palette is in the
+  design canvas history).

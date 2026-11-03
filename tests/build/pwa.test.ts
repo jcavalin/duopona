@@ -1,6 +1,7 @@
 /// <reference types="node" />
 /*
- * Checks dist/ against specs/003-pwa-offline-mobile/contracts (rows marked "auto").
+ * Checks dist/ against specs/003-pwa-offline-mobile/contracts (rows marked "auto")
+ * and specs/004-ui-redesign/contracts/app-identity-changes.md.
  * Run `npm run build` first; `npm run test:pwa` runs this file.
  *
  * Patterns in the generated (minified) dist/sw.js, vite-plugin-pwa 2.0.0 / Workbox 7:
@@ -126,8 +127,9 @@ describe('app identity (contracts/app-identity.md)', () => {
 
   it('opens full-screen with the app colors and any orientation', () => {
     expect(manifest.display).toBe('standalone')
-    expect(manifest.background_color).toBe('#ffffff')
-    expect(manifest.theme_color).toBe('#ffffff')
+    // Dark only (specs/004-ui-redesign/contracts/app-identity-changes.md)
+    expect(manifest.background_color).toBe('#131F24')
+    expect(manifest.theme_color).toBe('#131F24')
     expect(manifest).not.toHaveProperty('orientation')
   })
 
@@ -151,13 +153,17 @@ describe('app identity (contracts/app-identity.md)', () => {
     expect(indexHtml).not.toContain('user-scalable')
   })
 
-  it('colors the browser bars for light and dark mode', () => {
-    expect(indexHtml).toContain(
-      '<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />',
-    )
-    expect(indexHtml).toContain(
-      '<meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)" />',
-    )
+  it('colors the browser bars dark in every color scheme (004)', () => {
+    const themeColors = indexHtml.match(/<meta name="theme-color"[^>]*>/g) ?? []
+    expect(themeColors).toEqual(['<meta name="theme-color" content="#131F24" />'])
+    expect(indexHtml).toContain('<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />')
+  })
+
+  it('precaches the self-hosted Nunito font files (004)', () => {
+    for (const font of ['fonts/nunito-latin-wght-normal.woff2', 'fonts/nunito-latin-wght-italic.woff2']) {
+      expect(distFiles, font).toContain(font)
+      expect(precachedUrls, font).toContain(font)
+    }
   })
 
   it('has the iOS home-screen icon and title, and an SVG favicon', () => {

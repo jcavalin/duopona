@@ -13,6 +13,10 @@ offline after the first visit, including every lesson.
 and a short grammar explanation, then multiple-choice and word-bank exercises. Lessons unlock in
 order: finish one to open the next; finished lessons can be replayed any time.
 
+The app has one dark, Duolingo-style look: a lesson path on the home screen, chunky buttons
+and colored feedback sheets. Design reference, mockups and color tokens:
+[docs/design/ui-redesign.md](docs/design/ui-redesign.md).
+
 All sentences, exercises and explanations are original to Duopona; only the chapter order, word
 lists and grammar topics follow the book.
 
@@ -50,9 +54,13 @@ the background and used from the next launch, after every Duopona window is clos
 - Content rules (no word before it is taught, every new word used, …) are checked by
   `tests/unit/courseContent.test.ts`; see `specs/002-book-course/contracts/lesson-content.md`
 - `src/store/` — Redux state: current lesson session, saved progress, persistence
-- `src/components/`, `src/routes/` — UI and pages (`#/` lesson list, `#/lesson/:id`)
+- `src/components/`, `src/routes/` — UI and pages (`#/` lesson path, `#/lesson/:id`);
+  `src/components/icons.tsx` holds the inline SVG icons, `src/index.css` the color tokens and
+  shared layout classes
 - `public/` — app icons (`icon.svg` is the source; regenerate the PNGs with
-  `npx @vite-pwa/assets-generator@2`, config in `pwa-assets.config.mjs`)
+  `npx @vite-pwa/assets-generator@2`, config in `pwa-assets.config.mjs`); `public/fonts/` —
+  the Nunito font (Latin subset, SIL Open Font License in `OFL.txt`), self-hosted so it works
+  offline
 - `vite.config.ts` — build, PWA manifest and service-worker settings
   (see `specs/003-pwa-offline-mobile/contracts/`)
 - `tests/` — unit and integration tests (Vitest + React Testing Library); `tests/build/` checks

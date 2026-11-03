@@ -13,8 +13,8 @@ and manually in Chrome DevTools → Application → Manifest and on devices (qui
 | `start_url` | `.` | auto |
 | `scope` | `.` | auto |
 | `display` | `standalone` | auto |
-| `background_color` | `#ffffff` (matches light `--color-bg`) | auto |
-| `theme_color` | `#ffffff` (matches light `--color-bg` and the light `theme-color` meta; the page's metas override it per color scheme) | auto |
+| `background_color` | `#131F24` (dark `--bg`; changed by 004) | auto |
+| `theme_color` | `#131F24` (dark `--bg`; changed by 004) | auto |
 | `lang` | `en` | auto |
 | `orientation` | not set (portrait and landscape allowed) | auto (absent) |
 | `icons` | 192×192 PNG; 512×512 PNG; 512×512 PNG `purpose: "maskable"` | auto (each file exists in `dist/`) |
@@ -25,12 +25,12 @@ and manually in Chrome DevTools → Application → Manifest and on devices (qui
 |-----|-------|-------|
 | `<link rel="manifest">` | injected by the build | auto |
 | `<meta name="viewport">` | unchanged: `width=device-width, initial-scale=1, viewport-fit=cover` (no `user-scalable=no`) | auto |
-| `<meta name="theme-color">` | two tags: `media="(prefers-color-scheme: light)"` → `#ffffff`; `dark` → `#0d1117` | auto |
+| `<meta name="theme-color">` | one tag, `#131F24`, no `media` (changed by 004: dark only) | auto |
 | `<link rel="apple-touch-icon">` | 180×180 PNG, file exists | auto |
 | `<link rel="icon">` | `icon.svg` | auto |
 | `<meta name="description">` | same text as manifest `description` | manual |
 | `<meta name="apple-mobile-web-app-title">` | `Duopona` | auto |
-| `<meta name="apple-mobile-web-app-status-bar-style">` | absent, or `black-translucent` if device check requires (research R7) | manual |
+| `<meta name="apple-mobile-web-app-status-bar-style">` | `black-translucent` (changed by 004, research R3 there) | auto (presence), manual (look) |
 
 ## Icons
 
