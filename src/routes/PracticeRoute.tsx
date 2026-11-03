@@ -2,9 +2,11 @@ import { useEffect } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router'
 import ExerciseScreen from '../components/ExerciseScreen'
 import LessonSummary from '../components/LessonSummary'
+import { today } from '../lib/days'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { startPracticeSession } from '../store/lessonThunks'
 import { selectCanPractice } from '../store/progressSlice'
+import { selectStreak } from '../store/streakSlice'
 import { quitLesson, selectFirstTryCorrect, selectSession, selectTotal } from '../store/sessionSlice'
 import { selectCanReview } from '../store/wordsSlice'
 
@@ -25,6 +27,7 @@ export default function PracticeRoute() {
   const session = useAppSelector(selectSession)
   const firstTryCorrect = useAppSelector(selectFirstTryCorrect)
   const total = useAppSelector(selectTotal)
+  const streak = useAppSelector(selectStreak(today()))
   const valid = isKind(kind)
   const available = kind === 'review' ? canReview : canPractice
 
@@ -53,6 +56,7 @@ export default function PracticeRoute() {
         replayLabel="Practise again"
         firstTryCorrect={firstTryCorrect}
         total={total}
+        streak={session.goalMet ? streak : undefined}
         onContinue={goHome}
         // Nothing left to review: go home instead of starting an empty session (contract S5)
         onReplay={() => (available ? dispatch(startPracticeSession(kind)) : goHome())}

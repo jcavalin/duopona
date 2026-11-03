@@ -1,4 +1,4 @@
-import { StarIcon } from './icons'
+import { FlameIcon, StarIcon } from './icons'
 import styles from './Exercise.module.css'
 
 interface Props {
@@ -11,6 +11,8 @@ interface Props {
   nextLessonTitle?: string
   firstTryCorrect: number
   total: number
+  /** Set only on the summary of the session that met today's daily goal (007 contract U3) */
+  streak?: number
   onContinue: () => void
   onReplay: () => void
 }
@@ -23,6 +25,7 @@ export default function LessonSummary({
   nextLessonTitle,
   firstTryCorrect,
   total,
+  streak,
   onContinue,
   onReplay,
 }: Props) {
@@ -36,6 +39,7 @@ export default function LessonSummary({
         </div>
         <h1 className={styles.summaryTitle}>{heading}</h1>
         <p className={styles.summaryLesson}>{subtitle}</p>
+        {streak !== undefined && <p className={styles.goalMet}>Daily goal met</p>}
         <div className={styles.stats}>
           <div className={`${styles.stat} ${styles.statCorrect}`}>
             <p className={`label ${styles.statLabel}`}>Correct</p>
@@ -47,6 +51,15 @@ export default function LessonSummary({
             <div className={`${styles.stat} ${styles.statUnlocked}`}>
               <p className={`label ${styles.statLabel}`}>Unlocked</p>
               <p className={`${styles.statValue} ${styles.statNext}`}>{nextLessonTitle}</p>
+            </div>
+          )}
+          {streak !== undefined && (
+            <div className={`${styles.stat} ${styles.statStreak}`}>
+              <p className={`label ${styles.statLabel}`}>Streak</p>
+              <p className={styles.statValue}>
+                <FlameIcon size={26} />
+                {streak} {streak === 1 ? 'day' : 'days'}
+              </p>
             </div>
           )}
         </div>

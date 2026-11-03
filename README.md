@@ -23,8 +23,12 @@ Two buttons on the home screen keep old material fresh:
   right one removes one (but not from words you already missed in the same session). A word
   stays "weak" until its mistakes are back to zero.
 
-Practice never changes lesson progress. Progress is saved under `duopona:progress` and word
-mistakes under `duopona:words`, both in `localStorage`.
+A small **daily goal** encourages a little practice every day: finish one lesson, practice or
+review a day. The flame in the top bar shows your **streak** (days in a row you met the goal);
+missing a day resets it, and your best streak is kept.
+
+Practice never changes lesson progress. Progress is saved under `duopona:progress`, word
+mistakes under `duopona:words` and the streak under `duopona:streak`, all in `localStorage`.
 
 The app has one dark, Duolingo-style look: a lesson path on the home screen, chunky buttons
 and colored feedback sheets. Design reference, mockups and color tokens:
