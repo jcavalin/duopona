@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { continueLesson, selectCurrentExercise, selectPosition, selectSession, submitAnswer } from '../store/sessionSlice'
+import { continueAndRecord } from '../store/lessonThunks'
+import { selectCurrentExercise, selectPosition, selectSession, submitAnswer } from '../store/sessionSlice'
 import FeedbackBanner from './FeedbackBanner'
 import MultipleChoice from './MultipleChoice'
 import WordBank from './WordBank'
@@ -38,7 +39,7 @@ export default function ExerciseScreen({ onQuit }: Props) {
       )}
 
       {showingFeedback && session.feedback && (
-        <FeedbackBanner feedback={session.feedback} onContinue={() => dispatch(continueLesson())} />
+        <FeedbackBanner feedback={session.feedback} onContinue={() => dispatch(continueAndRecord())} />
       )}
     </div>
   )

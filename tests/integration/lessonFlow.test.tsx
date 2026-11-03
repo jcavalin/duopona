@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { createMemoryRouter, RouterProvider } from 'react-router'
@@ -6,6 +6,7 @@ import { getLesson } from '../../src/content/lessons'
 import type { Exercise } from '../../src/content/types'
 import { routes } from '../../src/router'
 import { makeStore } from '../../src/store'
+import { STORAGE_KEY } from '../../src/store/persistence'
 
 const lesson = getLesson('basics-1')!
 const total = lesson.exercises.length
@@ -149,5 +150,64 @@ describe('first lesson flow', () => {
   it('unknown paths redirect to the list', async () => {
     renderApp('/whatever')
     expect(await screen.findByRole('heading', { name: 'Duopona' })).toBeInTheDocument()
+  })
+})
+
+async function completeLesson(user: User) {
+  await startLesson(user)
+  await answer(user, false)
+  await user.click(screen.getByRole('button', { name: 'Continue' }))
+  while (!screen.queryByRole('heading', { name: 'Lesson complete!' })) {
+    await answer(user, true)
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+  }
+}
+
+describe('saved progress (US2)', () => {
+  const card = () => screen.getByRole('link', { name: /Basic Words/ })
+
+  it('a new learner has no completed lessons', () => {
+    renderApp()
+    expect(card()).not.toHaveTextContent('Completed')
+  })
+
+  it('completing the lesson marks it completed with its score, and survives a reload', async () => {
+    const { user } = renderApp()
+    await completeLesson(user)
+    await user.click(screen.getByRole('button', { name: 'Back to lessons' }))
+    expect(card()).toHaveTextContent(`Completed · ${total - 1}/${total}`)
+
+    // Simulate a reload: throw the app away and start again with a fresh store
+    cleanup()
+    renderApp()
+    expect(card()).toHaveTextContent(`Completed · ${total - 1}/${total}`)
+  })
+
+  it('re-completing shows the latest score', async () => {
+    const { user } = renderApp()
+    await completeLesson(user)
+    await user.click(screen.getByRole('button', { name: 'Back to lessons' }))
+    await startLesson(user)
+    while (!screen.queryByRole('heading', { name: 'Lesson complete!' })) {
+      await answer(user, true)
+      await user.click(screen.getByRole('button', { name: 'Continue' }))
+    }
+    await user.click(screen.getByRole('button', { name: 'Back to lessons' }))
+    expect(card()).toHaveTextContent(`Completed · ${total}/${total}`)
+  })
+
+  it('quitting mid-lesson does not mark it completed', async () => {
+    const { user } = renderApp()
+    await startLesson(user)
+    await answer(user, true)
+    await user.click(screen.getByRole('button', { name: 'Quit' }))
+    expect(card()).not.toHaveTextContent('Completed')
+    expect(localStorage.getItem(STORAGE_KEY)).toBeNull()
+  })
+
+  it('garbage saved data loads as empty progress (FR-012)', () => {
+    localStorage.setItem(STORAGE_KEY, 'garbage')
+    renderApp()
+    expect(card()).not.toHaveTextContent('Completed')
   })
 })

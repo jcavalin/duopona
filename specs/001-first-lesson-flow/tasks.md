@@ -101,14 +101,14 @@ independently.
 
 ### Implementation for User Story 2
 
-- [ ] T026 [P] [US2] Implement `src/store/progressSlice.ts` per data-model.md "LearnerProgress": state `{ completedLessons: Record<string, { firstTryCorrect: number; total: number; completedAt: string }> }`; action `completeLesson({ lessonId, firstTryCorrect, total, completedAt })` overwrites any previous result ("Re-completing a lesson overwrites its LessonResult"); selector `selectLessonResult(lessonId)`
-- [ ] T027 [P] [US2] Implement `src/store/persistence.ts` per contracts/progress-storage.md: key `"duopona:progress"`; `loadProgress()` returns empty progress when key missing, invalid JSON, `version !== 1`, wrong shape, or `localStorage` throws; `saveProgress(progress)` writes `{ version: 1, completedLessons }` and swallows any error
-- [ ] T028 [US2] Wire persistence in `src/store/index.ts`: register `progress` reducer; `makeStore()` uses `loadProgress()` as `preloadedState.progress`; `store.subscribe` saves only when the `progress` state reference changes
-- [ ] T029 [US2] Record completion: in `src/store/sessionSlice.ts` (or a thunk in `src/store/lessonThunks.ts`) make continuing from the last exercise dispatch `completeLesson` with `firstTryCorrect`, `total`, and `new Date().toISOString()` when status becomes `"finished"` (FR-009); update `ExerciseScreen` to dispatch it
-- [ ] T030 [US2] Show completion on the lesson card in `src/components/LessonList.tsx`: "Completed" badge and latest score "{firstTryCorrect}/{total}" when a result exists (FR-010)
-- [ ] T031 [P] [US2] Unit test `progressSlice` in `tests/unit/progressSlice.test.ts`: completing adds result; re-completing overwrites
-- [ ] T032 [P] [US2] Unit test persistence in `tests/unit/persistence.test.ts`: every row of the "Read rules" table in contracts/progress-storage.md, plus save writes version 1 and a throwing `setItem` does not throw
-- [ ] T033 [US2] Extend `tests/integration/lessonFlow.test.tsx`: complete the lesson, back to list shows "Completed" + score; simulate reload by creating a new store with `makeStore()` and re-rendering → still completed (SC-004); quitting mid-lesson does not mark completed; garbage in `localStorage["duopona:progress"]` → app renders with no progress (FR-012)
+- [X] T026 [P] [US2] Implement `src/store/progressSlice.ts` per data-model.md "LearnerProgress": state `{ completedLessons: Record<string, { firstTryCorrect: number; total: number; completedAt: string }> }`; action `completeLesson({ lessonId, firstTryCorrect, total, completedAt })` overwrites any previous result ("Re-completing a lesson overwrites its LessonResult"); selector `selectLessonResult(lessonId)`
+- [X] T027 [P] [US2] Implement `src/store/persistence.ts` per contracts/progress-storage.md: key `"duopona:progress"`; `loadProgress()` returns empty progress when key missing, invalid JSON, `version !== 1`, wrong shape, or `localStorage` throws; `saveProgress(progress)` writes `{ version: 1, completedLessons }` and swallows any error
+- [X] T028 [US2] Wire persistence in `src/store/index.ts`: register `progress` reducer; `makeStore()` uses `loadProgress()` as `preloadedState.progress`; `store.subscribe` saves only when the `progress` state reference changes
+- [X] T029 [US2] Record completion: in `src/store/sessionSlice.ts` (or a thunk in `src/store/lessonThunks.ts`) make continuing from the last exercise dispatch `completeLesson` with `firstTryCorrect`, `total`, and `new Date().toISOString()` when status becomes `"finished"` (FR-009); update `ExerciseScreen` to dispatch it
+- [X] T030 [US2] Show completion on the lesson card in `src/components/LessonList.tsx`: "Completed" badge and latest score "{firstTryCorrect}/{total}" when a result exists (FR-010)
+- [X] T031 [P] [US2] Unit test `progressSlice` in `tests/unit/progressSlice.test.ts`: completing adds result; re-completing overwrites
+- [X] T032 [P] [US2] Unit test persistence in `tests/unit/persistence.test.ts`: every row of the "Read rules" table in contracts/progress-storage.md, plus save writes version 1 and a throwing `setItem` does not throw
+- [X] T033 [US2] Extend `tests/integration/lessonFlow.test.tsx`: complete the lesson, back to list shows "Completed" + score; simulate reload by creating a new store with `makeStore()` and re-rendering → still completed (SC-004); quitting mid-lesson does not mark completed; garbage in `localStorage["duopona:progress"]` → app renders with no progress (FR-012)
 
 **Checkpoint**: Both stories work and all tests pass
 
