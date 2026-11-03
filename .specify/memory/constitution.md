@@ -1,15 +1,13 @@
 <!--
 Sync Impact Report
-- Version change: template (unversioned) → 1.0.0
-- Modified principles: all placeholders replaced (initial ratification)
-  - [PRINCIPLE_1_NAME] → I. Keep It Simple (KISS)
-  - [PRINCIPLE_2_NAME] → II. Frontend-Only, Local-First
-  - [PRINCIPLE_3_NAME] → III. Standard React Stack
-  - [PRINCIPLE_4_NAME] → IV. Tests After Code, Before Done
-  - [PRINCIPLE_5_NAME] → removed (project defines four principles)
-- Added sections: Technology Constraints, Development Workflow
+- Version change: 1.0.0 → 1.1.0 (MINOR: new principle added)
+- Modified principles: none renamed
+- Added principles: V. Mobile-First Progressive Web App
+- Modified sections: Technology Constraints (platform line), Development Workflow (check all
+  principles, not "four")
 - Removed sections: none
-- Deferred TODOs: none
+- Deferred TODOs: none. Note: the current app is responsive but not yet a PWA (no manifest or
+  service worker); bringing it into compliance is tracked as a follow-up feature.
 -->
 
 # Duopona Constitution
@@ -58,9 +56,26 @@ not anticipated.
 **Rationale**: Writing tests after keeps iteration fast, while the "before done" gate keeps
 regressions out.
 
+### V. Mobile-First Progressive Web App
+
+- Duopona MUST be an installable Progressive Web App: a web app manifest with name, icons and
+  standalone display mode.
+- After the first visit, the app (including all lesson content) MUST work fully offline via a
+  service worker that caches the app shell and content.
+- Layouts MUST be designed mobile-first and be fully usable from 360px viewport width, with no
+  horizontal scrolling.
+- Interactive targets MUST be at least 44×44 CSS px, and content MUST respect device safe areas
+  (notches, home indicators).
+- Every feature MUST work on current iOS Safari and Android Chrome, in the browser and when
+  installed.
+
+**Rationale**: Language practice happens in short sessions on phones; an installable, offline
+app makes Duopona feel native while keeping it backend-free (Principle II).
+
 ## Technology Constraints
 
-- Platform: modern evergreen desktop and mobile browsers.
+- Platform: Progressive Web App for modern evergreen browsers; primary targets are iOS Safari and
+  Android Chrome (installed and in-browser), with desktop browsers also supported.
 - Language/UI: React; state: Redux (Redux Toolkit).
 - Storage: `localStorage` only; no backend, database, or server-side code.
 - Course content (Toki Pona vocabulary, lessons, exercises) is shipped with the app as static data.
@@ -68,7 +83,7 @@ regressions out.
 ## Development Workflow
 
 - Every feature follows the Spec Kit flow: specify → (clarify) → plan → tasks → implement.
-- Plans MUST include a Constitution Check confirming compliance with all four principles.
+- Plans MUST include a Constitution Check confirming compliance with all Core Principles.
 - A feature is merged only when its tests pass and its spec's acceptance criteria are met.
 
 ## Governance
@@ -80,4 +95,4 @@ regressions out.
   added principles or sections, PATCH for clarifications.
 - Every plan and review MUST verify compliance with the Core Principles.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-01
+**Version**: 1.1.0 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-03
