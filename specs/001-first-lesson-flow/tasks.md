@@ -116,10 +116,10 @@ independently.
 
 ## Phase 5: Polish & Cross-Cutting Concerns
 
-- [ ] T034 [P] Add a short `README.md`: what Duopona is, `npm install`, `npm run dev`, `npm test`, `npm run build`
-- [ ] T035 [P] Check layout at 360px width and keyboard use (Tab to options/tiles, Enter/Space to select, visible focus) in `src/components/*.module.css`; fix issues
-- [ ] T036 Run `npm run lint`, `npm test`, `npm run build`; fix all errors in `src/` and `tests/`
-- [ ] T037 Walk through every manual scenario in `specs/001-first-lesson-flow/quickstart.md` and confirm expected results
+- [X] T034 [P] Add a short `README.md`: what Duopona is, `npm install`, `npm run dev`, `npm test`, `npm run build`
+- [X] T035 [P] Check layout at 360px width and keyboard use (Tab to options/tiles, Enter/Space to select, visible focus) in `src/components/*.module.css`; fix issues
+- [X] T036 Run `npm run lint`, `npm test`, `npm run build`; fix all errors in `src/` and `tests/`
+- [X] T037 Walk through every manual scenario in `specs/001-first-lesson-flow/quickstart.md` and confirm expected results
 
 ---
 
@@ -178,3 +178,10 @@ T032 persistence.test.ts
 1. MVP (US1) → playable lesson
 2. US2 → saved progress and completed badge
 3. Polish → README, accessibility check, final validation
+
+---
+
+## Phase 6: Convergence
+
+- [X] T038 CRITICAL: Render the exercise prompt as a heading (`<h2>`) in `src/components/MultipleChoice.tsx` and `src/components/WordBank.tsx`, and replace the CSS-class selector `[class*="prompt"]` in `tests/integration/lessonFlow.test.tsx` with a role-based query (`getByRole('heading', { level: 2 })`) so tests target behavior, not implementation details, per Constitution IV (contradicts)
+- [X] T039 Update the "State transitions" section of `specs/001-first-lesson-flow/data-model.md` to say a missed exercise is moved to the end of the queue on `continue` (not on `submit`), matching `src/store/sessionSlice.ts`, per T016 (partial)

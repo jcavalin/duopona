@@ -42,10 +42,13 @@ All Technical Context unknowns are resolved below. Guiding rule: Constitution Pr
 
 ## 5. Navigation
 
-- **Decision**: React Router (v7, `react-router` package) with a hash router
+- **Decision**: React Router (v8, `react-router` package; planned as v7, v8 was current
+  at install with the same APIs) with a hash router
   (`createHashRouter`). Routes: `#/` → lesson list; `#/lesson/:lessonId` → exercise screen,
   which shows the summary once the session is finished. Unknown lesson ids redirect to `#/`.
   Entering the lesson route starts a fresh session; leaving it (Quit, Back button) discards it.
+  The route list lives in `src/router.tsx`; `main.tsx` wraps it in `createHashRouter`, and
+  tests wrap the same list in `createMemoryRouter`.
 - **Rationale**: Chosen by the project owner. Gives working browser Back/Forward and
   bookmarkable lesson URLs, and scales to future screens. Hash URLs work on any static host
   (e.g., GitHub Pages) with no server rewrite rules, keeping Principle II trivial to satisfy.

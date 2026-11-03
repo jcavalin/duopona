@@ -17,14 +17,15 @@ export default function MultipleChoice({ exercise, disabled, onSubmit }: Props) 
   return (
     <div>
       <p className={styles.instruction}>{instruction}</p>
-      <p className={styles.prompt}>{exercise.prompt}</p>
+      <h2 className={styles.prompt}>{exercise.prompt}</h2>
       <div className={styles.options} role="group" aria-label="Options">
-        {options.map((option) => (
+        {options.map((option, index) => (
           <button
             key={option}
             type="button"
             className={styles.option}
             aria-pressed={selected === option}
+            autoFocus={index === 0} // keyboard users land on the new exercise
             disabled={disabled}
             onClick={() => setSelected(option)}
           >

@@ -59,7 +59,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  min-height: 52px;
+  min-height: 62px; /* fits one row of tiles, so placing a tile does not shift the layout */
   padding: 8px 0;
 }
 

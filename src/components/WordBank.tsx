@@ -20,7 +20,7 @@ export default function WordBank({ exercise, disabled, onSubmit }: Props) {
   return (
     <div>
       <p className={styles.instruction}>Translate this sentence</p>
-      <p className={styles.prompt}>{exercise.prompt}</p>
+      <h2 className={styles.prompt}>{exercise.prompt}</h2>
       <div className={styles.answerLine} role="group" aria-label="Your answer">
         {placed.map((index) => (
           <button key={index} type="button" className={styles.tile} disabled={disabled} onClick={() => remove(index)}>
@@ -35,7 +35,14 @@ export default function WordBank({ exercise, disabled, onSubmit }: Props) {
               {word}
             </span>
           ) : (
-            <button key={index} type="button" className={styles.tile} disabled={disabled} onClick={() => place(index)}>
+            <button
+              key={index}
+              type="button"
+              className={styles.tile}
+              disabled={disabled}
+              autoFocus={index === 0} // keyboard users land on the new exercise
+              onClick={() => place(index)}
+            >
               {word}
             </button>
           ),

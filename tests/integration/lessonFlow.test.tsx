@@ -24,7 +24,7 @@ function renderApp(path = '/') {
 }
 
 function currentExercise(): Exercise {
-  const prompt = document.querySelector('[class*="prompt"]')!.textContent
+  const prompt = screen.getByRole('heading', { level: 2 }).textContent
   // Prompts are unique within the lesson
   return lesson.exercises.find((e) => e.prompt === prompt)!
 }

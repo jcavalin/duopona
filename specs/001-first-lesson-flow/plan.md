@@ -17,7 +17,7 @@ persistence is a small hand-written module.
 
 **Language/Version**: TypeScript 5.x (strict), targeting ES2022
 
-**Primary Dependencies**: React 19, Redux Toolkit 2, react-redux 9, React Router 7 (hash
+**Primary Dependencies**: React 19, Redux Toolkit 2, react-redux 9, React Router 8 (hash
 router), Vite (build/dev server)
 
 **Storage**: Browser `localStorage`, single key `duopona:progress` (versioned JSON)
@@ -75,8 +75,8 @@ package.json
 vite.config.ts                 # includes Vitest config
 tsconfig.json
 src/
-├── main.tsx                   # entry: create store + router, render
-├── router.tsx                 # hash router: "/" and "/lesson/:lessonId"
+├── main.tsx                   # entry: create store, createHashRouter(routes), render
+├── router.tsx                 # route list: "/", "/lesson/:lessonId", "*" → "/" (shared by app and tests)
 ├── routes/
 │   ├── HomeRoute.tsx          # renders LessonList
 │   └── LessonRoute.tsx        # starts session on enter, ends on leave; exercise or summary
@@ -85,14 +85,17 @@ src/
 │   └── lessons.ts             # "Basic Words" lesson data
 ├── store/
 │   ├── index.ts               # configureStore + persistence wiring
+│   ├── hooks.ts               # typed useAppDispatch / useAppSelector
+│   ├── lessonThunks.ts        # continueAndRecord: continue + record completion
 │   ├── progressSlice.ts       # completed lessons (persisted)
 │   ├── sessionSlice.ts        # current lesson run, retry queue, feedback
 │   └── persistence.ts         # load/save progress (try/catch, versioned)
 ├── lib/
 │   └── shuffle.ts             # shuffle with injectable random source
 └── components/
-    ├── LessonList.tsx (+ .module.css)
-    ├── ExerciseScreen.tsx (+ .module.css)
+    ├── LessonList.tsx (+ LessonList.module.css)
+    ├── ExerciseScreen.tsx
+    ├── Exercise.module.css    # shared styles for the exercise screen pieces
     ├── MultipleChoice.tsx
     ├── WordBank.tsx
     ├── FeedbackBanner.tsx

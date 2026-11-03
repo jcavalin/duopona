@@ -83,8 +83,9 @@ leaving that route (Quit, Back to lessons, browser Back) dispatches `quitLesson`
 (no session) --startLesson(id)--> answering   queue = all exercise ids in order
 
 answering --submit(correct)--> feedback       head will be removed on continue
-answering --submit(wrong)----> feedback       id added to missedOnce; head moved to queue end
+answering --submit(wrong)----> feedback       id added to missedOnce; head stays current for feedback
 
+feedback --continue--> (queue update)         correct: head removed; wrong: head moved to queue end
 feedback --continue--> answering              if queue not empty
 feedback --continue--> finished               if queue empty → progress.completeLesson(...)
 

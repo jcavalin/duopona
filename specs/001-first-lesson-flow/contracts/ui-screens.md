@@ -19,7 +19,7 @@ exercise.
 
 - Heading: "Duopona".
 - One lesson card per lesson (only "Basic Words" in this feature — FR-014).
-- A completed lesson shows a "Completed" badge and its latest score (e.g., "8/10") — FR-010.
+- A completed lesson shows a "Completed" badge and its latest score (e.g., "10/11") — FR-010.
 - Activating a lesson card starts the lesson — FR-002.
 
 ## Exercise screen (session `answering` / `feedback`)

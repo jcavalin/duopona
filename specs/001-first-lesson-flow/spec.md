@@ -99,8 +99,10 @@ still marked completed.
   the answer in order; tapped words can be removed before submitting.
 - **FR-006**: The app MUST show right/wrong feedback immediately after each submitted answer,
   and MUST show the correct answer when the learner's answer was wrong.
-- **FR-007**: The app MUST show the learner's position in the lesson (e.g., "exercise 3 of 10"
-  or a progress bar).
+- **FR-007**: The app MUST show the learner's progress through the lesson as the number of
+  exercises answered correctly out of the total (e.g., "4 of 11" and a progress bar). A wrong
+  answer does not advance the progress; missed exercises repeated at the end count when answered
+  correctly.
 - **FR-008**: The app MUST show a lesson-complete summary with the number of exercises answered
   correctly on the first try.
 - **FR-009**: The app MUST mark a lesson as completed when the learner reaches its summary, and
@@ -132,13 +134,16 @@ still marked completed.
 
 ### Measurable Outcomes
 
+*SC-001–SC-003 are verified manually during the quickstart walkthrough; they are not
+covered by automated tests.*
+
 - **SC-001**: A first-time visitor can go from opening the app to answering the first exercise
   in under 30 seconds, with no instructions.
 - **SC-002**: A learner can complete the first lesson in under 5 minutes.
 - **SC-003**: Feedback for each answer appears in under 1 second after submitting.
 - **SC-004**: 100% of completed lessons are still shown as completed after a page reload or
   browser restart on the same device and browser.
-- **SC-005**: Every exercise in the first lesson has exactly one accepted correct answer , verified before release.
+- **SC-005**: Every exercise in the first lesson has exactly one accepted correct answer, verified before release.
 
 ## Assumptions
 
