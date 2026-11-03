@@ -1,0 +1,49 @@
+.intro {
+  overflow-wrap: anywhere;
+}
+
+.back {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 0;
+  border: none;
+  background: none;
+  color: var(--color-muted);
+}
+
+.title {
+  margin: 8px 0 0;
+}
+
+.chapter {
+  margin: 0 0 16px;
+  color: var(--color-muted);
+}
+
+.words {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 24px;
+}
+
+.word {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 8px 12px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.word dt {
+  font-weight: 700;
+}
+
+.word dd {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.intro section:last-of-type {
+  margin-bottom: 24px;
+}

@@ -5,15 +5,22 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-- **002 – Book-based course**: 17 lessons following *Toki Pona: The Language of Good*
-  (`specs/002-book-course/`).
+(none)
 
 ## Next
 
-- **PWA & mobile compliance** (required by Constitution v1.1.0, Principle V): web app manifest
-  and icons (installable), service worker for full offline use, safe-area insets, 44×44 px touch
-  targets, checked on iOS Safari and Android Chrome.
+- **PWA & mobile compliance** (required by Constitution Principle V; allowed to slip past 002
+  only under Governance "Transitional compliance", v1.2.0, so it MUST be the next feature): web
+  app manifest and icons (installable), service worker for full offline use including all lesson
+  content, checked on iOS Safari and Android Chrome, installed and in the browser. (Safe-area
+  insets and 44×44 px touch targets were done in 002.)
   `/speckit-specify Make Duopona an installable, offline-capable PWA that is fully usable on phones`
+
+## Done
+
+- **001 – First lesson flow** (`specs/001-first-lesson-flow/`).
+- **002 – Book-based course**: 17 lessons following *Toki Pona: The Language of Good*, with
+  unlocking and lesson introductions (`specs/002-book-course/`).
 
 ## Later
 
