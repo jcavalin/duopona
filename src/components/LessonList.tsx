@@ -1,54 +1,87 @@
+import { useEffect, useRef, type CSSProperties } from 'react'
 import { Link } from 'react-router'
-import { lessons, sourceLabel } from '../content/lessons'
+import { lessons } from '../content/lessons'
 import { useAppSelector } from '../store/hooks'
 import { selectIsUnlocked } from '../store/progressSlice'
+import { BubbleIcon, CheckIcon, LockIcon, StarIcon } from './icons'
 import styles from './LessonList.module.css'
 
+/** Horizontal node offsets (× 44px) that make the path zigzag (research R7) */
+const OFFSETS = [0, 1, 2, 1, 0, -1, -2, -1]
+
+/** Home screen: the course as a path of lesson nodes (mockup 01, contract S1). */
 export default function LessonList() {
   const progress = useAppSelector((state) => state.progress)
   const completed = progress.completedLessons
+  // Only count lessons that exist in the course (research R11)
+  const doneCount = lessons.filter((lesson) => Object.hasOwn(completed, lesson.id)).length
+  const currentRef = useRef<HTMLAnchorElement>(null)
+
+  useEffect(() => {
+    currentRef.current?.scrollIntoView?.({ block: 'center' })
+  }, [])
 
   return (
     <div>
-      <h1>Duopona</h1>
-      <ul className={styles.list}>
+      <header className={styles.topBar}>
+        <h1 className={styles.wordmark}>duopona</h1>
+        <p className={styles.counter} aria-label={`${doneCount} of ${lessons.length} lessons done`}>
+          <BubbleIcon size={26} />
+          {doneCount} / {lessons.length}
+        </p>
+      </header>
+
+      <div className={styles.banner}>
+        <p className="label">
+          Course · {doneCount} of {lessons.length} done
+        </p>
+        <p className={styles.bannerTitle}>Learn Toki Pona</p>
+        <p className={styles.bannerText}>
+          Following <cite>Toki Pona: The Language of Good</cite>
+        </p>
+      </div>
+
+      <ul className={styles.path}>
         {lessons.map((lesson, index) => {
           const result = completed[lesson.id]
-          const unlocked = selectIsUnlocked(lesson.id)({ progress })
-          const content = (
+          const state = result ? 'completed' : selectIsUnlocked(lesson.id)({ progress }) ? 'current' : 'locked'
+          const style = { '--offset': OFFSETS[index % OFFSETS.length] } as CSSProperties
+          const node = (
             <>
-              <span className={styles.number}>Lesson {index + 1}</span>
-              <span className={styles.title}>{lesson.title}</span>
-              <span className={styles.meta}>
-                {sourceLabel(lesson)} · {lesson.exercises.length} exercises
+              {state === 'current' && <span className={`label ${styles.startPill}`}>Start</span>}
+              <span className={`${styles.node} ${styles[state]}`}>
+                {state === 'completed' && <CheckIcon size={34} />}
+                {state === 'current' && <StarIcon size={34} />}
+                {state === 'locked' && <LockIcon size={30} />}
               </span>
-              {result && (
-                <span className={styles.badge}>
-                  Completed · {result.firstTryCorrect}/{result.total}
-                </span>
-              )}
-              {!unlocked && (
-                <span className={styles.lockedNote}>
-                  <strong>Locked</strong> · Complete the previous lesson to unlock
-                </span>
-              )}
+              <span className={styles.title}>{lesson.title}</span>
             </>
           )
           return (
-            <li key={lesson.id}>
-              {unlocked ? (
-                <Link className={result ? `${styles.card} ${styles.done}` : styles.card} to={`/lesson/${lesson.id}`}>
-                  {content}
-                </Link>
-              ) : (
-                <div className={`${styles.card} ${styles.locked}`} role="link" aria-disabled="true">
-                  {content}
+            <li key={lesson.id} className={styles.item} style={style}>
+              {state === 'locked' ? (
+                <div className={styles.nodeLink} role="link" aria-disabled="true" aria-label={`${lesson.title}, locked`}>
+                  {node}
                 </div>
+              ) : (
+                <Link
+                  ref={state === 'current' ? currentRef : undefined}
+                  className={styles.nodeLink}
+                  to={`/lesson/${lesson.id}`}
+                  aria-label={
+                    result
+                      ? `${lesson.title}, completed, ${result.firstTryCorrect} of ${result.total}`
+                      : `${lesson.title}, start`
+                  }
+                >
+                  {node}
+                </Link>
               )}
             </li>
           )
         })}
       </ul>
+
       <footer className={styles.footer}>
         Course based on <cite>Toki Pona: The Language of Good</cite> by Sonja Lang ·{' '}
         <a className={styles.footerLink} href="https://tokipona.org" target="_blank" rel="noopener">

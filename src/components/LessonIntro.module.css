@@ -1,49 +1,64 @@
-.intro {
-  overflow-wrap: anywhere;
-}
-
-.back {
-  min-height: 44px;
-  min-width: 44px;
-  padding: 8px 0;
-  border: none;
-  background: none;
-  color: var(--color-muted);
+.overline {
+  margin: 12px 0 4px;
+  color: var(--primary-text);
 }
 
 .title {
-  margin: 8px 0 0;
+  margin: 0 0 24px;
+  font-size: 30px;
 }
 
-.chapter {
-  margin: 0 0 16px;
-  color: var(--color-muted);
+.heading {
+  margin: 0 0 12px;
+  font-size: 20px;
 }
 
 .words {
   display: grid;
-  gap: 8px;
-  margin: 0 0 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 28px;
 }
 
 .word {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  padding: 8px 12px;
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius);
+  padding: 12px 14px;
+  border: 2px solid var(--line);
+  border-bottom-width: 4px;
+  border-radius: 16px;
 }
 
 .word dt {
-  font-weight: 700;
+  color: var(--primary-text);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.25;
 }
 
 .word dd {
   margin: 0;
-  color: var(--color-muted);
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 700;
 }
 
-.intro section:last-of-type {
-  margin-bottom: 24px;
+.grammar {
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: var(--grammar-tint);
+}
+
+.grammar h2 {
+  margin: 0 0 8px;
+  color: var(--primary-text-strong);
+  font-size: 20px;
+}
+
+.grammar p {
+  margin: 0 0 10px;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.grammar p:last-child {
+  margin-bottom: 0;
 }
