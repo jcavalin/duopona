@@ -20,12 +20,27 @@ export interface WordBankExercise {
   answer: string[]
   /** Extra tiles; none may make an alternative correct answer */
   distractors: string[]
+  /** true when answering requires the lesson's grammar point; ≥ 2 per lesson */
+  practisesGrammar?: boolean
 }
 
 export type Exercise = MultipleChoiceExercise | WordBankExercise
 
-export interface Lesson {
-  id: string
+export interface Grammar {
   title: string
+  /** 1–4 short original paragraphs */
+  explanation: string[]
+}
+
+export interface Lesson {
+  /** Stable kebab-case slug, used in URLs and saved progress; never rename after release */
+  id: string
+  /** Book chapter title */
+  title: string
+  /** Book reference, e.g. "Lesson 2", or "Dictionary" */
+  chapter: string
+  /** Words first taught here; an earlier word MAY be re-listed only when this lesson teaches a new role for it */
+  newWords: string[]
+  grammar: Grammar
   exercises: Exercise[]
 }

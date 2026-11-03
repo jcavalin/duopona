@@ -17,8 +17,31 @@
   text-decoration: none;
 }
 
-.card:hover {
+.card {
+  min-height: 44px;
+  overflow-wrap: anywhere;
+}
+
+a.card:hover {
   border-color: var(--color-selected-border);
+}
+
+.number {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.locked {
+  cursor: not-allowed;
+  color: var(--color-muted);
+  border-style: dashed;
+}
+
+.lockedNote {
+  font-size: 0.875rem;
 }
 
 .title {
@@ -43,4 +66,18 @@
   color: var(--color-correct-text);
   font-weight: 600;
   font-size: 0.875rem;
+}
+
+.footer {
+  margin-top: 24px;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.footerLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-selected-border);
 }

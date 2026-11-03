@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { lessons } from '../content/lessons'
 
 export interface LessonResult {
   firstTryCorrect: number
@@ -31,3 +32,14 @@ export default progressSlice.reducer
 
 export const selectLessonResult = (lessonId: string) => (state: { progress: LearnerProgress }) =>
   state.progress.completedLessons[lessonId]
+
+/**
+ * A lesson is unlocked if it is the first one or the previous lesson is completed (FR-012).
+ * Derived from saved progress; nothing extra is stored.
+ */
+export const selectIsUnlocked = (lessonId: string) => (state: { progress: LearnerProgress }) => {
+  const index = lessons.findIndex((lesson) => lesson.id === lessonId)
+  if (index < 0) return false
+  if (index === 0) return true
+  return Object.hasOwn(state.progress.completedLessons, lessons[index - 1].id)
+}

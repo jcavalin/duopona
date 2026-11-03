@@ -6,6 +6,8 @@
 }
 
 .quit {
+  min-height: 44px;
+  min-width: 44px;
   border: none;
   background: none;
   color: var(--color-muted);
@@ -41,6 +43,7 @@
 }
 
 .option {
+  min-height: 44px;
   padding: 14px 16px;
   text-align: left;
   border: 2px solid var(--color-border);
@@ -59,7 +62,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  min-height: 62px; /* fits one row of tiles, so placing a tile does not shift the layout */
+  min-height: 64px; /* fits one row of 44px tiles plus padding, so placing a tile does not shift the layout */
   padding: 8px 0;
 }
 
@@ -75,6 +78,8 @@
 
 .tile,
 .tilePlaceholder {
+  min-height: 44px;
+  min-width: 44px;
   padding: 8px 14px;
   border: 2px solid var(--color-border);
   border-radius: var(--radius);
