@@ -13,11 +13,11 @@ const lesson: Lesson = {
     ],
   },
   exercises: [
-    { id: 'kon', type: 'multipleChoice', direction: 'tp-en', prompt: 'kon', options: ['air / wind / spirit', 'moon / night sky object', 'money / wealth'], answer: 'air / wind / spirit' },
+    { id: 'kon', type: 'multipleChoice', direction: 'tp-en', prompt: 'kon', options: ['air / wind / spirit', 'moon / star', 'money / wealth'], answer: 'air / wind / spirit' },
     { id: 'kule', type: 'multipleChoice', direction: 'en-tp', prompt: 'colour / colourful', options: ['kon', 'kule', 'selo', 'sike'], answer: 'kule' },
     { id: 'mani', type: 'multipleChoice', direction: 'tp-en', prompt: 'mani', options: ['fun / game / art', 'box / container / bowl', 'money / wealth'], answer: 'money / wealth' },
     { id: 'moli', type: 'multipleChoice', direction: 'en-tp', prompt: 'dead / to die / death', options: ['musi', 'mun', 'mani', 'moli'], answer: 'moli' },
-    { id: 'mun', type: 'multipleChoice', direction: 'tp-en', prompt: 'mun', options: ['skin / outer layer / shell', 'moon / night sky object', 'circle / round / ball'], answer: 'moon / night sky object' },
+    { id: 'mun', type: 'multipleChoice', direction: 'tp-en', prompt: 'mun', options: ['skin / outer layer / shell', 'moon / star', 'circle / round / ball'], answer: 'moon / star' },
     { id: 'musi', type: 'multipleChoice', direction: 'en-tp', prompt: 'fun / game / art', options: ['nasa', 'musi', 'moli', 'poki'], answer: 'musi' },
     { id: 'nasa', type: 'multipleChoice', direction: 'tp-en', prompt: 'nasa', options: ['strange / silly / drunk', 'circle / round / ball', 'dead / to die / death'], answer: 'strange / silly / drunk' },
     { id: 'selo', type: 'multipleChoice', direction: 'en-tp', prompt: 'skin / outer layer / shell', options: ['sike', 'ko', 'kon', 'selo'], answer: 'selo' },
@@ -25,7 +25,7 @@ const lesson: Lesson = {
     { id: 'sitelen', type: 'multipleChoice', direction: 'en-tp', prompt: 'picture / writing / symbol', options: ['lipu', 'sitelen', 'kule', 'mani'], answer: 'sitelen' },
     { id: 'ko', type: 'multipleChoice', direction: 'tp-en', prompt: 'ko', options: ['money / wealth', 'paste / powder / dough', 'air / wind / spirit'], answer: 'paste / powder / dough' },
     { id: 'tenpo-pimeja-la-mi-lukin-e-mun', type: 'wordBank', direction: 'en-tp', prompt: 'At night, I see the moon.', answer: ['tenpo', 'pimeja', 'la', 'mi', 'lukin', 'e', 'mun'], distractors: ['li'], practisesGrammar: true },
-    { id: 'mi-pana-e-mani-lon-insa-poki', type: 'wordBank', direction: 'en-tp', prompt: 'I put the money inside the box.', answer: ['mi', 'pana', 'e', 'mani', 'lon', 'insa', 'poki'], distractors: ['tawa'], practisesGrammar: true },
+    { id: 'mani-li-lon-insa-poki', type: 'wordBank', direction: 'en-tp', prompt: 'The money is inside the box.', answer: ['mani', 'li', 'lon', 'insa', 'poki'], distractors: ['sewi'], practisesGrammar: true },
     { id: 'musi-ni-li-nasa', type: 'wordBank', direction: 'tp-en', prompt: 'musi ni li nasa', answer: ['this', 'game', 'is', 'strange'], distractors: ['round', 'dead'] },
   ],
 }

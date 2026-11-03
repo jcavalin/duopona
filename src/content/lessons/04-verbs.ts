@@ -23,7 +23,7 @@ const lesson: Lesson = {
     { id: 'mi-moku-e-kili', type: 'wordBank', direction: 'en-tp', prompt: 'I eat fruit.', answer: ['mi', 'moku', 'e', 'kili'], distractors: ['li'], practisesGrammar: true },
     { id: 'meli-li-jo-e-lipu', type: 'wordBank', direction: 'en-tp', prompt: 'The woman has a book.', answer: ['meli', 'li', 'jo', 'e', 'lipu'], distractors: ['mi'], practisesGrammar: true },
     { id: 'sina-kute-e-soweli', type: 'wordBank', direction: 'en-tp', prompt: 'You hear the animal.', answer: ['sina', 'kute', 'e', 'soweli'], distractors: ['li'], practisesGrammar: true },
-    { id: 'jan-li-pali-e-tomo', type: 'wordBank', direction: 'tp-en', prompt: 'jan li pali e tomo', answer: ['the', 'person', 'makes', 'a', 'house'], distractors: ['eats', 'water'] },
+    { id: 'jan-li-pali-e-tomo', type: 'wordBank', direction: 'tp-en', prompt: 'jan li pali e tomo', answer: ['the', 'person', 'makes', 'the', 'house'], distractors: ['eats', 'water'] },
     { id: 'mi-sona-e-ni', type: 'multipleChoice', direction: 'tp-en', prompt: 'mi sona e ni', options: ['This knows me.', 'I know this.', 'You know this.'], answer: 'I know this.' },
     { id: 'mi-toki', type: 'multipleChoice', direction: 'en-tp', prompt: 'I am talking.', options: ['mi li toki', 'sina toki', 'mi toki'], answer: 'mi toki' },
   ],

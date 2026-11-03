@@ -13,10 +13,10 @@ const lesson: Lesson = {
     ],
   },
   exercises: [
-    { id: 'telo', type: 'multipleChoice', direction: 'tp-en', prompt: 'telo', options: ['water / liquid', 'house / building / room', 'small / little / young', 'good / simple / fix'], answer: 'water / liquid' },
+    { id: 'telo', type: 'multipleChoice', direction: 'tp-en', prompt: 'telo', options: ['water / liquid', 'house / building / room', 'small / little / young', 'good / useful / simple'], answer: 'water / liquid' },
     { id: 'tomo', type: 'multipleChoice', direction: 'en-tp', prompt: 'house / building / room', options: ['telo', 'tomo', 'lipu', 'kili'], answer: 'tomo' },
-    { id: 'lili', type: 'multipleChoice', direction: 'tp-en', prompt: 'lili', options: ['big / important / long', 'good / simple / fix', 'small / little / young'], answer: 'small / little / young' },
-    { id: 'pona', type: 'multipleChoice', direction: 'en-tp', prompt: 'good / simple / fix', options: ['suli', 'lili', 'ijo', 'pona'], answer: 'pona' },
+    { id: 'lili', type: 'multipleChoice', direction: 'tp-en', prompt: 'lili', options: ['big / important / long', 'good / useful / simple', 'small / little / young'], answer: 'small / little / young' },
+    { id: 'pona', type: 'multipleChoice', direction: 'en-tp', prompt: 'good / useful / simple', options: ['suli', 'lili', 'ijo', 'pona'], answer: 'pona' },
     { id: 'suli', type: 'multipleChoice', direction: 'tp-en', prompt: 'suli', options: ['small / little / young', 'big / important / long', 'water / liquid'], answer: 'big / important / long' },
     { id: 'tomo-lili', type: 'wordBank', direction: 'en-tp', prompt: 'a small house', answer: ['tomo', 'lili'], distractors: ['suli'], practisesGrammar: true },
     { id: 'tomo-li-pona', type: 'wordBank', direction: 'en-tp', prompt: 'The house is good.', answer: ['tomo', 'li', 'pona'], distractors: ['telo'], practisesGrammar: true },
