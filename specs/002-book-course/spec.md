@@ -126,8 +126,8 @@ works without it.
   | 13 | Particles and Perspective (L16) | anpa, ante, en, lete, lupa, open, sama, suwi, taso, tawa | *en* for compound subjects; *taso* |
   | 14 | Hunting (L17) | alasa, lawa, len, linja, pakala, palisa, pipi, waso, weka | review in a themed story |
   | 15 | Cooking (L18) | lape, olin, pan, pini, seli, supa, uta | review in a themed story |
-| 16 | More Words 1 (L9 words + dictionary) | ma, nasin, nena, nimi, utala, akesi, jaki, kalama, kiwen | review of all grammar |
-| 17 | More Words 2 (dictionary) | kon, kule, mani, moli, mun, musi, nasa, selo, sike, sitelen | review of all grammar |
+  | 16 | More Words 1 (L9 words + dictionary) | ma, nasin, nena, nimi, utala, akesi, jaki, kalama, kiwen, ale, esun | review of all grammar |
+  | 17 | More Words 2 (dictionary) | kon, kule, mani, moli, mun, musi, nasa, selo, sike, sitelen, ko, poki | review of all grammar |
 
 - **FR-002**: The course MUST NOT include the book's Proper Names (L9) or Numbers (L12) grammar
   rules: no exercises on proper names/unofficial words, and no number-system exercises.
@@ -139,9 +139,11 @@ works without it.
   lesson or an earlier lesson (the grammar particles *li* and *e* count as introduced in the
   lesson whose grammar point teaches them).
 - **FR-006**: Each lesson's grammar point MUST be required by at least two of its word-bank
-  exercises.
-- **FR-007**: Word meanings shown to the learner MUST be consistent with the Official Toki Pona
-  Dictionary.
+  exercises. For review lessons (14–17), whose grammar point is "review", this means at least
+  two word-bank exercises that each combine two or more grammar points taught earlier.
+- **FR-007**: Word meanings shown to the learner MUST be short glosses written for Duopona whose
+  meaning is consistent with the book's Official Toki Pona Dictionary; dictionary definitions
+  MUST NOT be copied word for word.
 - **FR-008**: Example sentences and exercises MUST be original to Duopona and MUST NOT copy
   sentences, exercises or explanatory text from the book's lessons 4–19.
 - **FR-009**: Lesson play (feedback, retry of missed exercises, summary, quit) MUST behave
@@ -185,8 +187,11 @@ works without it.
 - Lesson 1 of the book ("Letters and Sounds") is about pronunciation; without audio it is not
   turned into a lesson. Lesson 19 ("The Frontier") and the book's Part 2 texts are reading
   material and are not turned into lessons.
-- The number words (*tu, luka, nanpa*) are out of scope (FR-002). The adult-only word *unpa*
-  is excluded. All other official dictionary words are covered by lessons 1–17.
+- The course covers every headword of the book's Official Toki Pona Dictionary except the number
+  words (*tu, luka, nanpa*, FR-002) and the adult-only *unpa*. *ale* is taught as "all /
+  everything", not as a number. The dictionary's variant forms (*ali* for *ale*, *kin* for *a*,
+  *oko* for *lukin*, *namako* for *sin*) are not separate entries and are not used in exercises.
+  Words outside that dictionary are out of scope.
 - Ongoing practice after finishing the course (beyond replaying lessons) is a separate,
   later feature.
 - The existing "Basic Words" lesson is removed and replaced by the course; any saved completion

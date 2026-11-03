@@ -10,7 +10,7 @@ Session and progress models are **unchanged**; this feature extends the static c
 | Field | Type | Rules |
 |-------|------|-------|
 | `word` | string | Lower-case Toki Pona word; unique |
-| `meaning` | string | Short English gloss consistent with the Official Toki Pona Dictionary |
+| `meaning` | string | Short English gloss in our own words, consistent in meaning with the book's Official Toki Pona Dictionary (not copied word for word) |
 
 All words in any lesson's `newWords` MUST have an entry.
 

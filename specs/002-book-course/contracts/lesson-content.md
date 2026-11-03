@@ -11,7 +11,7 @@ before merge.
 | C3 | Every word in `newWords` appears on the Toki Pona side of at least one exercise of that lesson | FR-004, SC-002 | auto |
 | C4 | Every Toki Pona token in a lesson is in the `newWords` of that lesson or an earlier one | FR-005, SC-003 | auto |
 | C5 | At least 2 word-bank exercises have `practisesGrammar: true` | FR-006 | auto (count) + review (truthful) |
-| C6 | Every `newWords` entry exists in `vocabulary.ts`; meanings match the official dictionary | FR-007 | auto (exists) + review (meaning) |
+| C6 | Every `newWords` entry exists in `vocabulary.ts`; meanings are consistent with the book's dictionary and not copied from it | FR-007 | auto (exists) + review (meaning) |
 | C7 | Multiple choice: 3–4 unique options, answer among them, no second correct option | FR-004 (001), SC-004 | auto (shape) + review (meaning) |
 | C8 | Word bank: no distractor appears in the answer; only one word order is a correct answer | SC-004 | auto (distractors) + review (order) |
 | C9 | No sentence, exercise or explanation copied from the book | FR-008 | review |

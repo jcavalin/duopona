@@ -34,10 +34,11 @@ rules: Constitution I (KISS) and V (mobile-first).
 
 ## 3. Word meanings
 
-- **Decision**: Meanings in `vocabulary.ts` are short glosses taken from the Official Toki
-  Pona Dictionary (public domain), shortened to 1–3 common senses for the intro screen and MC
-  options.
-- **Rationale**: FR-007; the dictionary's public-domain status allows reuse.
+- **Decision**: Meanings in `vocabulary.ts` are 1–3 common senses written in our own words,
+  checked for meaning against the book's Official Toki Pona Dictionary.
+- **Rationale**: FR-007; a word's meaning is a fact, but a dictionary's wording is protected
+  expression, so we do not copy it. (The dictionary's licence was not verified, so we do not
+  rely on it being public domain.)
 
 ## 4. Original content and the book's copyright
 

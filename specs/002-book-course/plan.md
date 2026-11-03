@@ -34,7 +34,7 @@ Vite 8
 **Constraints**: Original content only (FR-008); no word before it is introduced (FR-005);
 screens usable at 360 px with ≥ 44 px targets
 
-**Scale/Scope**: 17 lessons, ~115 vocabulary entries, ~200 exercises, 1 new screen (intro)
+**Scale/Scope**: 17 lessons, 116 vocabulary entries, ~200 exercises, 1 new screen (intro)
 
 ## Constitution Check
 
@@ -46,10 +46,11 @@ screens usable at 360 px with ≥ 44 px targets
 | II. Frontend-only, local-first | No backend; storage format unchanged; content shipped with the app | ✅ Pass |
 | III. Standard React stack | Redux for progress/session (unchanged); intro `started` flag is UI-local state | ✅ Pass |
 | IV. Tests after code, before done | Content rules + unlock + intro covered by tests before done; existing tests updated to course data | ✅ Pass |
-| V. Mobile-first PWA | Screen rules (360 px, 44 px targets, safe areas) applied to all touched screens. **Installability + offline not in this feature** | ⚠️ Justified deviation (see Complexity Tracking) |
+| V. Mobile-first PWA | Screen rules (360 px, 44 px targets, safe areas) applied to all touched screens. Installability + offline: existing gap, allowed by Governance "Transitional compliance" (constitution v1.2.0); fixed in the next feature (ROADMAP) | ✅ Pass (transitional) |
 
 **Post-design re-check (after Phase 1)**: unchanged. Design adds no abstractions beyond a
-vocabulary module and one selector; Principle V deviation remains the only item and is tracked.
+vocabulary module and one selector; the Principle V installability/offline gap remains the only item; it is allowed by Governance
+"Transitional compliance" and tracked in Complexity Tracking.
 
 ## Project Structure
 

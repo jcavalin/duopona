@@ -1,13 +1,13 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 → 1.1.0 (MINOR: new principle added)
-- Modified principles: none renamed
-- Added principles: V. Mobile-First Progressive Web App
-- Modified sections: Technology Constraints (platform line), Development Workflow (check all
-  principles, not "four")
+- Version change: 1.1.0 → 1.2.0 (MINOR: new governance rule added)
+- Modified principles: none
+- Added sections: Governance → "Transitional compliance" rule
 - Removed sections: none
-- Deferred TODOs: none. Note: the current app is responsive but not yet a PWA (no manifest or
-  service worker); bringing it into compliance is tracked as a follow-up feature.
+- Templates: none changed (plan template's Constitution Check already covers all principles)
+- Deferred TODOs: none. Applies now to the Principle V installability/offline gap: allowed for
+  feature 002-book-course (recorded in its plan's Complexity Tracking), fixed by the next
+  feature ("PWA & mobile compliance" in ROADMAP.md "Next").
 -->
 
 # Duopona Constitution
@@ -94,5 +94,8 @@ app makes Duopona feel native while keeping it backend-free (Principle II).
 - Versioning follows semantic versioning: MAJOR for removed or redefined principles, MINOR for
   added principles or sections, PATCH for clarifications.
 - Every plan and review MUST verify compliance with the Core Principles.
+- **Transitional compliance**: When a principle is added or tightened, existing gaps MAY remain
+  for at most one further feature, provided the plan's Complexity Tracking records the gap and
+  ROADMAP.md lists the fix as the next feature. New gaps MUST NOT be introduced.
 
-**Version**: 1.1.0 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-03
+**Version**: 1.2.0 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-03
