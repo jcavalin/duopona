@@ -47,7 +47,7 @@ export default function LessonRoute() {
     const next = lessons[lessons.findIndex((l) => l.id === lesson.id) + 1]
     return (
       <LessonSummary
-        lessonTitle={lesson.title}
+        subtitle={lesson.title}
         nextLessonTitle={next?.title}
         firstTryCorrect={firstTryCorrect}
         total={total}

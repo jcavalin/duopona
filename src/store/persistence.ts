@@ -1,4 +1,5 @@
 import { emptyProgress, type LearnerProgress, type LessonResult } from './progressSlice'
+import { emptyWords, type WordStats } from './wordsSlice'
 
 /** See specs/001-first-lesson-flow/contracts/progress-storage.md */
 export const STORAGE_KEY = 'duopona:progress'
@@ -30,5 +31,34 @@ export function saveProgress(progress: LearnerProgress): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: VERSION, completedLessons: progress.completedLessons }))
   } catch {
     // Storage full or disabled: keep working with in-memory state for this session.
+  }
+}
+
+/** See specs/006-practice-weak-words/contracts/words-storage.md; independent of progress (FR-012). */
+export const WORDS_KEY = 'duopona:words'
+const WORDS_VERSION = 1
+
+export function loadWords(): WordStats {
+  try {
+    const raw = localStorage.getItem(WORDS_KEY)
+    if (raw === null) return emptyWords()
+    const data: unknown = JSON.parse(raw)
+    if (typeof data !== 'object' || data === null) return emptyWords()
+    const { version, mistakes } = data as Record<string, unknown>
+    if (version !== WORDS_VERSION || typeof mistakes !== 'object' || mistakes === null || Array.isArray(mistakes)) {
+      return emptyWords()
+    }
+    const valid = Object.values(mistakes).every((v) => Number.isInteger(v) && (v as number) >= 1)
+    return valid ? { mistakes: mistakes as Record<string, number> } : emptyWords()
+  } catch {
+    return emptyWords()
+  }
+}
+
+export function saveWords(words: WordStats): void {
+  try {
+    localStorage.setItem(WORDS_KEY, JSON.stringify({ version: WORDS_VERSION, mistakes: words.mistakes }))
+  } catch {
+    // Storage full or disabled: keep working with in-memory records.
   }
 }

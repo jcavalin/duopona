@@ -1,8 +1,9 @@
 import { useEffect, useRef, type CSSProperties } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { lessons } from '../content/lessons'
 import { useAppSelector } from '../store/hooks'
-import { selectIsUnlocked } from '../store/progressSlice'
+import { selectCanPractice, selectIsUnlocked } from '../store/progressSlice'
+import { selectCanReview } from '../store/wordsSlice'
 import { BubbleIcon, CheckIcon, LockIcon, StarIcon } from './icons'
 import styles from './LessonList.module.css'
 
@@ -16,6 +17,14 @@ export default function LessonList() {
   // Only count lessons that exist in the course (research R11)
   const doneCount = lessons.filter((lesson) => Object.hasOwn(completed, lesson.id)).length
   const currentRef = useRef<HTMLAnchorElement>(null)
+  const navigate = useNavigate()
+  const canPractice = useAppSelector(selectCanPractice)
+  const canReview = useAppSelector(selectCanReview)
+  const hint = !canPractice
+    ? 'Finish a lesson to unlock practice.'
+    : !canReview
+      ? 'No weak words yet.'
+      : undefined
 
   useEffect(() => {
     currentRef.current?.scrollIntoView?.({ block: 'center' })
@@ -39,6 +48,35 @@ export default function LessonList() {
         <p className={styles.bannerText}>
           Following <cite>Toki Pona: The Language of Good</cite>
         </p>
+      </div>
+
+      {/* Practice row (006 contract S1): unavailable buttons stay focusable and point to the hint */}
+      <div className={styles.practice}>
+        <div className={styles.practiceRow}>
+          <button
+            type="button"
+            className="primary-button"
+            aria-disabled={!canPractice || undefined}
+            aria-describedby={canPractice ? undefined : 'practice-hint'}
+            onClick={() => canPractice && navigate('/practice/practice')}
+          >
+            Practice
+          </button>
+          <button
+            type="button"
+            className={`primary-button ${styles.outline}`}
+            aria-disabled={!canReview || undefined}
+            aria-describedby={canReview ? undefined : 'practice-hint'}
+            onClick={() => canReview && navigate('/practice/review')}
+          >
+            Review weak words
+          </button>
+        </div>
+        {hint && (
+          <p id="practice-hint" className={styles.practiceHint}>
+            {hint}
+          </p>
+        )}
       </div>
 
       <ul className={styles.path}>

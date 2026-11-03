@@ -43,3 +43,7 @@ export const selectIsUnlocked = (lessonId: string) => (state: { progress: Learne
   if (index === 0) return true
   return Object.hasOwn(state.progress.completedLessons, lessons[index - 1].id)
 }
+
+/** Practice needs at least one completed lesson that exists in the course (006 FR-001). */
+export const selectCanPractice = (state: { progress: LearnerProgress }) =>
+  lessons.some((lesson) => Object.hasOwn(state.progress.completedLessons, lesson.id))

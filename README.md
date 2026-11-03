@@ -15,6 +15,17 @@ offline after the first visit, including every lesson.
 and a short grammar explanation, then multiple-choice and word-bank exercises. Lessons unlock in
 order: finish one to open the next; finished lessons can be replayed any time.
 
+Two buttons on the home screen keep old material fresh:
+
+- **Practice**: 10 random exercises from the lessons you have finished.
+- **Review weak words**: 10 exercises built around the words you get wrong most. Every first
+  answer to an exercise counts: a wrong one adds a mistake to each Toki Pona word in it, a
+  right one removes one (but not from words you already missed in the same session). A word
+  stays "weak" until its mistakes are back to zero.
+
+Practice never changes lesson progress. Progress is saved under `duopona:progress` and word
+mistakes under `duopona:words`, both in `localStorage`.
+
 The app has one dark, Duolingo-style look: a lesson path on the home screen, chunky buttons
 and colored feedback sheets. Design reference, mockups and color tokens:
 [docs/design/ui-redesign.md](docs/design/ui-redesign.md).
@@ -74,8 +85,12 @@ To publish again without a commit: Actions → "Check and deploy" → "Run workf
 - `src/content/vocabulary.ts` — every course word with its meaning
 - Content rules (no word before it is taught, every new word used, …) are checked by
   `tests/unit/courseContent.test.ts`; see `specs/002-book-course/contracts/lesson-content.md`
-- `src/store/` — Redux state: current lesson session, saved progress, persistence
-- `src/components/`, `src/routes/` — UI and pages (`#/` lesson path, `#/lesson/:id`);
+- `src/store/` — Redux state: current lesson or practice session, saved progress, word
+  mistake records, persistence
+- `src/lib/practice.ts` — how Practice and Review choose exercises; `src/content/words.ts` —
+  which words an exercise tests
+- `src/components/`, `src/routes/` — UI and pages (`#/` lesson path, `#/lesson/:id`,
+  `#/practice/practice` and `#/practice/review`);
   `src/components/icons.tsx` holds the inline SVG icons, `src/index.css` the color tokens and
   shared layout classes
 - `public/` — app icons (`icon.svg` is the source; regenerate the PNGs with

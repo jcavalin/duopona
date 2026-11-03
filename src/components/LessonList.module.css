@@ -57,6 +57,52 @@
   font-weight: 700;
 }
 
+/* Practice row (006 contract S1) */
+.practice {
+  margin: 8px max(16px, env(safe-area-inset-right)) 16px max(16px, env(safe-area-inset-left));
+}
+
+.practiceRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.practiceRow > button {
+  flex: 1 1 150px;
+  width: auto;
+}
+
+/* Review weak words: same chunky shape, outline style */
+.practiceRow > .outline {
+  border: 2px solid var(--line);
+  border-bottom-width: 4px;
+  background: var(--bg);
+  color: var(--primary-text);
+}
+
+/* Unavailable: muted like a locked node; still focusable so the hint is announced */
+.practiceRow > [aria-disabled='true'] {
+  border: none;
+  border-bottom: 5px solid var(--line-deep);
+  background: var(--line);
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.practiceRow > [aria-disabled='true']:active {
+  transform: none;
+  border-bottom-width: 5px;
+  margin-bottom: 0;
+}
+
+.practiceHint {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 700;
+}
+
 .path {
   display: flex;
   flex-direction: column;
