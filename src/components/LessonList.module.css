@@ -32,6 +32,25 @@
   color: var(--primary-text);
 }
 
+/* Streak and lessons counters (007 contract U1) */
+.counters {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.streakMet svg {
+  color: var(--streak);
+}
+
+.streakIdle {
+  color: var(--text-muted);
+}
+
+.streakIdle svg {
+  color: var(--icon-muted);
+}
+
 .banner {
   margin: 16px max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left));
   padding: 18px 20px;
@@ -58,6 +77,44 @@
 }
 
 /* Practice row (006 contract S1) */
+/* Daily goal card (007 contract U2) */
+.goal {
+  margin: 8px max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left));
+  padding: 14px 20px 16px;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+}
+
+.goalLabel {
+  margin: 0;
+}
+
+.goalText {
+  margin: 4px 0 0;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.goalTrack {
+  height: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--line);
+}
+
+.goalFill {
+  height: 100%;
+  border-radius: 5px;
+  background: var(--streak);
+}
+
+.goalBest {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  font-weight: 800;
+}
+
 .practice {
   margin: 8px max(16px, env(safe-area-inset-right)) 16px max(16px, env(safe-area-inset-left));
 }

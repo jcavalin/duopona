@@ -1,4 +1,5 @@
 import { emptyProgress, type LearnerProgress, type LessonResult } from './progressSlice'
+import { emptyStreak, type StreakRecord } from './streakSlice'
 import { emptyWords, type WordStats } from './wordsSlice'
 
 /** See specs/001-first-lesson-flow/contracts/progress-storage.md */
@@ -60,5 +61,38 @@ export function saveWords(words: WordStats): void {
     localStorage.setItem(WORDS_KEY, JSON.stringify({ version: WORDS_VERSION, mistakes: words.mistakes }))
   } catch {
     // Storage full or disabled: keep working with in-memory records.
+  }
+}
+
+/** See specs/007-daily-goal-streak/contracts/streak-storage.md; independent of the other keys (FR-011). */
+export const STREAK_KEY = 'duopona:streak'
+const STREAK_VERSION = 1
+
+const isCount = (v: unknown): v is number => Number.isInteger(v) && (v as number) >= 0
+
+export function loadStreak(): StreakRecord {
+  try {
+    const raw = localStorage.getItem(STREAK_KEY)
+    if (raw === null) return emptyStreak()
+    const data: unknown = JSON.parse(raw)
+    if (typeof data !== 'object' || data === null) return emptyStreak()
+    const { version, lastDay, current, best } = data as Record<string, unknown>
+    if (version !== STREAK_VERSION || !isCount(current) || !isCount(best) || best < current) return emptyStreak()
+    if (lastDay === null) return current === 0 ? { lastDay, current, best } : emptyStreak()
+    if (typeof lastDay !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(lastDay) || current === 0) return emptyStreak()
+    return { lastDay, current, best }
+  } catch {
+    return emptyStreak()
+  }
+}
+
+export function saveStreak(streak: StreakRecord): void {
+  try {
+    localStorage.setItem(
+      STREAK_KEY,
+      JSON.stringify({ version: STREAK_VERSION, lastDay: streak.lastDay, current: streak.current, best: streak.best }),
+    )
+  } catch {
+    // Storage full or disabled: keep working with the in-memory streak.
   }
 }

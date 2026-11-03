@@ -1,16 +1,19 @@
 import { getExercise } from '../content/lessons'
+import { today } from '../lib/days'
 import { testedWords } from '../content/words'
 import { availableKeys, hasReviewable, pickPractice, pickReview } from '../lib/practice'
 import type { AppDispatch, RootState } from './index'
 import { completeLesson } from './progressSlice'
 import {
   continueLesson,
+  markGoalMet,
   selectCurrentKey,
   selectFirstTryCorrect,
   selectTotal,
   startPractice,
   submitAnswer,
 } from './sessionSlice'
+import { goalMet, selectMetToday } from './streakSlice'
 import { wordsKnown, wordsMissed } from './wordsSlice'
 
 function wordsOf(key: string): string[] {
@@ -45,7 +48,11 @@ export function submitAndRecord(answer: string | string[]) {
   }
 }
 
-/** Continue to the next exercise; when a lesson (not practice) finishes, record it as completed (FR-009; 006 FR-005). */
+/**
+ * Continue to the next exercise. When a lesson (not practice) finishes, record it as completed
+ * (FR-009; 006 FR-005). When any session finishes, count it towards today's daily goal and flag
+ * the session if it met the goal (007 FR-001, FR-009); quitting never reaches 'finished'.
+ */
 export function continueAndRecord() {
   return (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(continueLesson())
@@ -60,6 +67,12 @@ export function continueAndRecord() {
           completedAt: new Date().toISOString(),
         }),
       )
+    }
+    if (session?.status === 'finished') {
+      const day = today()
+      const metBefore = selectMetToday(day)(getState())
+      dispatch(goalMet(day))
+      if (!metBefore) dispatch(markGoalMet())
     }
   }
 }

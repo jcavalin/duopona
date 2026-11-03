@@ -85,3 +85,11 @@ export function BubbleIcon(props: IconProps) {
     </Stroke>
   )
 }
+
+export function FlameIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M12 3c.6 3.2 5 5.4 5 10.5a5 5 0 0 1-10 0c0-2.6 1.4-4.3 2.6-5.3.2 1.7.9 2.8 2 3.4.6-3.3-.6-5.6.4-8.6z" />
+    </Stroke>
+  )
+}

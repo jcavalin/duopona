@@ -4,8 +4,10 @@ import ExerciseScreen from '../components/ExerciseScreen'
 import LessonIntro from '../components/LessonIntro'
 import LessonSummary from '../components/LessonSummary'
 import { getLesson, lessons } from '../content/lessons'
+import { today } from '../lib/days'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { selectIsUnlocked } from '../store/progressSlice'
+import { selectStreak } from '../store/streakSlice'
 import { quitLesson, selectFirstTryCorrect, selectSession, selectTotal, startLesson } from '../store/sessionSlice'
 
 export default function LessonRoute() {
@@ -18,6 +20,7 @@ export default function LessonRoute() {
   const session = useAppSelector(selectSession)
   const firstTryCorrect = useAppSelector(selectFirstTryCorrect)
   const total = useAppSelector(selectTotal)
+  const streak = useAppSelector(selectStreak(today()))
   // The intro is shown until Start is pressed for this lesson; UI-local state (Constitution III)
   const [startedId, setStartedId] = useState<string | null>(null)
   const started = startedId === lessonId
@@ -51,6 +54,7 @@ export default function LessonRoute() {
         nextLessonTitle={next?.title}
         firstTryCorrect={firstTryCorrect}
         total={total}
+        streak={session.goalMet ? streak : undefined}
         onContinue={goHome}
         // Back to the introduction; Start begins a fresh session (research R10)
         onReplay={() => setStartedId(null)}

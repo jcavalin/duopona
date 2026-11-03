@@ -2,6 +2,7 @@ import { exerciseKey, getExercise, getLesson, lessons } from '../../src/content/
 import type { Exercise, MultipleChoiceExercise, WordBankExercise } from '../../src/content/types'
 import reducer, {
   continueLesson,
+  markGoalMet,
   quitLesson,
   selectCurrentExercise,
   selectFirstTryCorrect,
@@ -148,6 +149,22 @@ describe('sessionSlice: practice sessions (006)', () => {
     s = answerAllCorrectly(s)!
     expect(s.status).toBe('finished')
     expect(selectFirstTryCorrect(view(s))).toBe(2)
+  })
+})
+
+describe('sessionSlice: goalMet flag (007)', () => {
+  it('is false at the start of lesson and practice sessions', () => {
+    expect(run(null, startLesson(lesson.id))!.goalMet).toBe(false)
+    expect(run(null, startPractice({ kind: 'practice', keys: [firstKey] }))!.goalMet).toBe(false)
+  })
+
+  it('markGoalMet sets it only on a finished session', () => {
+    const started = run(null, startLesson(lesson.id))
+    expect(run(started, markGoalMet())!.goalMet).toBe(false)
+    const finished = answerAllCorrectly(started)!
+    expect(finished.status).toBe('finished')
+    expect(run(finished, markGoalMet())!.goalMet).toBe(true)
+    expect(run(null, markGoalMet())).toBeNull()
   })
 })
 

@@ -23,6 +23,8 @@ export interface LessonSession {
   status: 'answering' | 'feedback' | 'finished'
   /** Increments on every new exercise shown, so retries get fresh UI state */
   step: number
+  /** This session's finish met today's daily goal (007 research R5); not saved */
+  goalMet: boolean
 }
 
 type SessionState = LessonSession | null
@@ -49,6 +51,7 @@ function newSession(kind: SessionKind, lessonId: string | null, keys: string[]):
     feedback: null,
     status: 'answering',
     step: 0,
+    goalMet: false,
   }
 }
 
@@ -91,13 +94,18 @@ const sessionSlice = createSlice({
       state.step += 1
       state.status = state.queue.length === 0 ? 'finished' : 'answering'
     },
+    /** Set by continueAndRecord when this session's finish met today's goal (007 FR-009). */
+    markGoalMet(state) {
+      if (state?.status === 'finished') state.goalMet = true
+    },
     quitLesson() {
       return null
     },
   },
 })
 
-export const { startLesson, startPractice, submitAnswer, continueLesson, quitLesson } = sessionSlice.actions
+export const { startLesson, startPractice, submitAnswer, continueLesson, markGoalMet, quitLesson } =
+  sessionSlice.actions
 export default sessionSlice.reducer
 
 type WithSession = { session: SessionState }

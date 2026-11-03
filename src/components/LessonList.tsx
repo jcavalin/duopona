@@ -1,10 +1,12 @@
 import { useEffect, useRef, type CSSProperties } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { lessons } from '../content/lessons'
+import { DAILY_GOAL, today } from '../lib/days'
 import { useAppSelector } from '../store/hooks'
 import { selectCanPractice, selectIsUnlocked } from '../store/progressSlice'
+import { selectBestStreak, selectMetToday, selectStreak } from '../store/streakSlice'
 import { selectCanReview } from '../store/wordsSlice'
-import { BubbleIcon, CheckIcon, LockIcon, StarIcon } from './icons'
+import { BubbleIcon, CheckIcon, FlameIcon, LockIcon, StarIcon } from './icons'
 import styles from './LessonList.module.css'
 
 /** Horizontal node offsets (× 44px) that make the path zigzag (research R7) */
@@ -20,6 +22,12 @@ export default function LessonList() {
   const navigate = useNavigate()
   const canPractice = useAppSelector(selectCanPractice)
   const canReview = useAppSelector(selectCanReview)
+  // Read at render; the home screen re-renders after every session (007 research R7)
+  const day = today()
+  const streak = useAppSelector(selectStreak(day))
+  const metToday = useAppSelector(selectMetToday(day))
+  const best = useAppSelector(selectBestStreak)
+  const doneToday = metToday ? 1 : 0
   const hint = !canPractice
     ? 'Finish a lesson to unlock practice.'
     : !canReview
@@ -34,10 +42,19 @@ export default function LessonList() {
     <div>
       <header className={styles.topBar}>
         <h1 className={styles.wordmark}>duopona</h1>
-        <p className={styles.counter} aria-label={`${doneCount} of ${lessons.length} lessons done`}>
-          <BubbleIcon size={26} />
-          {doneCount} / {lessons.length}
-        </p>
+        <div className={styles.counters}>
+          <p
+            className={`${styles.counter} ${metToday ? styles.streakMet : styles.streakIdle}`}
+            aria-label={`${streak} day streak, ${metToday ? 'practised today' : 'not practised today'}`}
+          >
+            <FlameIcon size={26} />
+            {streak}
+          </p>
+          <p className={styles.counter} aria-label={`${doneCount} of ${lessons.length} lessons done`}>
+            <BubbleIcon size={26} />
+            {doneCount} / {lessons.length}
+          </p>
+        </div>
       </header>
 
       <div className={styles.banner}>
@@ -48,6 +65,29 @@ export default function LessonList() {
         <p className={styles.bannerText}>
           Following <cite>Toki Pona: The Language of Good</cite>
         </p>
+      </div>
+
+      {/* Daily goal (007 contract U2) */}
+      <div className={styles.goal}>
+        <p className={`label ${styles.goalLabel}`}>Daily goal</p>
+        <p className={styles.goalText}>
+          {doneToday} / {DAILY_GOAL} session today
+        </p>
+        <div
+          className={styles.goalTrack}
+          role="progressbar"
+          aria-label="Daily goal"
+          aria-valuemin={0}
+          aria-valuemax={DAILY_GOAL}
+          aria-valuenow={doneToday}
+        >
+          <div className={styles.goalFill} style={{ width: `${(doneToday / DAILY_GOAL) * 100}%` }} />
+        </div>
+        {best >= 1 && (
+          <p className={styles.goalBest}>
+            Best streak: {best} {best === 1 ? 'day' : 'days'}
+          </p>
+        )}
       </div>
 
       {/* Practice row (006 contract S1): unavailable buttons stay focusable and point to the hint */}
