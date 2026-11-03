@@ -1,3 +1,4 @@
+import { sourceLabel } from '../content/lessons'
 import type { Lesson } from '../content/types'
 import { getMeaning } from '../content/vocabulary'
 import styles from './LessonIntro.module.css'
@@ -16,7 +17,7 @@ export default function LessonIntro({ lesson, onStart, onBack }: Props) {
         Back
       </button>
       <h1 className={styles.title}>{lesson.title}</h1>
-      <p className={styles.chapter}>Book: {lesson.chapter}</p>
+      <p className={styles.chapter}>{sourceLabel(lesson)}</p>
 
       <section aria-labelledby="new-words">
         <h2 id="new-words">New words</h2>

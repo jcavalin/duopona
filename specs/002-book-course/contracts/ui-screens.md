@@ -6,8 +6,10 @@ Only differences are listed. All screens MUST meet Constitution V screen rules: 
 
 ## Lesson list (`#/`)
 
-- Lists all 17 lessons in course order. Each card shows lesson number, title, and the book
-  chapter (e.g., "Book: Lesson 11").
+- Lists all 17 lessons in course order. Each card shows lesson number, title, the source label
+  and the exercise count: "Book: Lesson 11 · 13 exercises" for book chapters, and
+  "Extra: dictionary words · 13 exercises" for the More Words lessons (`chapter` = `"Dictionary"`).
+  The lesson intro uses the same source label.
 - **Unlocked, not completed**: card is a link to `#/lesson/:id`.
 - **Completed**: link + "Completed · X/Y" badge (as in 001).
 - **Locked**: not a link; shows "Locked" and the hint "Complete the previous lesson to unlock";

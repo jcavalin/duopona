@@ -232,6 +232,9 @@ grammar title/paragraphs; "Start" shows exercise 1; replaying shows the intro ag
 - Content files (T010–T025) before registration (T026) and C1 test (T027)
 - Selector (T028) before list (T029) and route guard (T031)
 - Code before its tests (Constitution IV); each phase ends with a full test run
+- The content-rules suite (T006) is written after lesson 1 and then guards lessons 2–17 as they
+  are written. It checks contract rules on data, not behavior, so this is not test-first
+  development in the sense of Principle IV
 
 ### Same-file sequencing (not parallel)
 

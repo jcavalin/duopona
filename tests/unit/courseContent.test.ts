@@ -1,5 +1,5 @@
 // Content rules for every course lesson: specs/002-book-course/contracts/lesson-content.md
-import { getLesson, lessons } from '../../src/content/lessons'
+import { getLesson, lessons, sourceLabel } from '../../src/content/lessons'
 import type { Exercise } from '../../src/content/types'
 import { getMeaning } from '../../src/content/vocabulary'
 
@@ -26,6 +26,13 @@ const COURSE: [string, string, string, string][] = [
   ['more-words-2', 'More Words 2', 'Dictionary', 'kon kule mani moli mun musi nasa selo sike sitelen ko poki'],
 ]
 
+/** The Toki Pona side of an exercise, as written (contract table). */
+function tokiPonaText(ex: Exercise): string[] {
+  if (ex.direction === 'tp-en') return [ex.prompt]
+  if (ex.type === 'multipleChoice') return ex.options
+  return [...ex.answer, ...ex.distractors]
+}
+
 function tokenize(text: string): string[] {
   return text
     .toLowerCase()
@@ -34,11 +41,8 @@ function tokenize(text: string): string[] {
     .filter(Boolean)
 }
 
-/** The Toki Pona side of an exercise (contract table). */
 function tokiPonaTokens(ex: Exercise): string[] {
-  if (ex.direction === 'tp-en') return tokenize(ex.prompt)
-  if (ex.type === 'multipleChoice') return ex.options.flatMap(tokenize)
-  return [...ex.answer, ...ex.distractors].flatMap(tokenize)
+  return tokiPonaText(ex).flatMap(tokenize)
 }
 
 describe('course content', () => {
@@ -49,6 +53,11 @@ describe('course content', () => {
   it('lesson ids are unique (C11)', () => {
     const ids = lessons.map((l) => l.id)
     expect(new Set(ids).size).toBe(ids.length)
+  })
+
+  it('labels book chapters and the extra dictionary lessons', () => {
+    expect(sourceLabel(lessons[0])).toBe('Book: Lesson 2')
+    expect(sourceLabel(lessons[16])).toBe('Extra: dictionary words')
   })
 
   it('getLesson finds course lessons only', () => {
@@ -96,6 +105,15 @@ describe('course content', () => {
         expect(lesson.grammar.title).not.toBe('')
         expect(lesson.grammar.explanation.length).toBeGreaterThanOrEqual(1)
         expect(lesson.grammar.explanation.length).toBeLessThanOrEqual(4)
+      })
+
+      it('has no capitalised words, so no proper names (C10)', () => {
+        const capitalised = lesson.exercises.flatMap((ex) =>
+          tokiPonaText(ex)
+            .filter((text) => /[A-Z]/.test(text))
+            .map((text) => `${ex.id}: ${text}`),
+        )
+        expect(capitalised).toEqual([])
       })
 
       it('never uses excluded words (C10)', () => {

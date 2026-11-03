@@ -41,3 +41,8 @@ export const lessons: Lesson[] = [
 export function getLesson(id: string): Lesson | undefined {
   return lessons.find((lesson) => lesson.id === id)
 }
+
+/** Where a lesson comes from, as shown to the learner: a book chapter, or the extra dictionary lessons. */
+export function sourceLabel(lesson: Lesson): string {
+  return lesson.chapter === 'Dictionary' ? 'Extra: dictionary words' : `Book: ${lesson.chapter}`
+}

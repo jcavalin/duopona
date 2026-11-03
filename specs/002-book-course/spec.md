@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-03
 
-**Status**: Draft
+**Status**: Implemented (content review and device checks pending, see tasks T050–T051)
 
 **Input**: User description: "Full Toki Pona course following the book 'Toki Pona: The Language of Good' (Sonja Lang). Replace the single 'Basic Words' lesson with a course whose lessons follow the book's lesson order and teach each lesson's new vocabulary and grammar point. Exclude the book's Proper Names (L9) and Numbers (L12) grammar rules entirely. Word meanings come from the Official Toki Pona Dictionary (public domain); example sentences and exercises must be original, not copied from the book's copyrighted lessons 4–19. Same exercise types, same retry/feedback/summary flow, completed lessons still saved per lesson."
 
@@ -31,18 +31,18 @@ lesson's words and grammar point.
 1. **Given** a new learner opens the app, **When** the lesson list loads, **Then** it shows
    the course lessons in book order (see FR-001); only the first lesson can be started, and
    every later lesson is shown as locked.
-6. **Given** a learner completes a lesson, **When** they return to the lesson list, **Then**
+2. **Given** a learner completes a lesson, **When** they return to the lesson list, **Then**
    the next lesson is unlocked.
-7. **Given** a learner has completed a lesson, **When** they start it again, **Then** they can
+3. **Given** a learner has completed a lesson, **When** they start it again, **Then** they can
    replay it at any time (the latest score replaces the previous one).
-2. **Given** a learner starts a lesson, **When** they play through it, **Then** every new word
+4. **Given** a learner starts a lesson, **When** they play through it, **Then** every new word
    of that lesson appears in at least one exercise.
-3. **Given** a learner plays a lesson, **When** they see any exercise, **Then** every Toki
+5. **Given** a learner plays a lesson, **When** they see any exercise, **Then** every Toki
    Pona word in it was introduced in that lesson or an earlier one.
-4. **Given** a lesson introduces a grammar point (e.g., *li*, *e*, *pi*, *la*), **When** the
+6. **Given** a lesson introduces a grammar point (e.g., *li*, *e*, *pi*, *la*), **When** the
    learner plays it, **Then** at least two word-bank exercises require using that grammar
    point correctly.
-5. **Given** a learner answers wrong, **When** they continue, **Then** the existing feedback,
+7. **Given** a learner answers wrong, **When** they continue, **Then** the existing feedback,
    retry and summary behavior from feature 001 applies unchanged.
 
 ---
@@ -55,7 +55,7 @@ lessons are completed (with their latest score), and this survives reloads.
 **Why this priority**: A course is only usable over multiple sessions if progress per lesson
 is kept; the mechanism already exists and must keep working for many lessons.
 
-**Independent Test**: Complete two lessons, reload, and confirm both show as completed with
+**Independent Test** (needs at least the first lessons from US1): Complete two lessons, reload, and confirm both show as completed with
 their scores while the others do not.
 
 **Acceptance Scenarios**:

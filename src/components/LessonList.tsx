@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { lessons } from '../content/lessons'
+import { lessons, sourceLabel } from '../content/lessons'
 import { useAppSelector } from '../store/hooks'
 import { selectIsUnlocked } from '../store/progressSlice'
 import styles from './LessonList.module.css'
@@ -20,7 +20,7 @@ export default function LessonList() {
               <span className={styles.number}>Lesson {index + 1}</span>
               <span className={styles.title}>{lesson.title}</span>
               <span className={styles.meta}>
-                Book: {lesson.chapter} · {lesson.exercises.length} exercises
+                {sourceLabel(lesson)} · {lesson.exercises.length} exercises
               </span>
               {result && (
                 <span className={styles.badge}>

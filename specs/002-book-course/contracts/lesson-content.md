@@ -15,7 +15,7 @@ before merge.
 | C7 | Multiple choice: 3–4 unique options, answer among them, no second correct option | FR-004 (001), SC-004 | auto (shape) + review (meaning) |
 | C8 | Word bank: no distractor appears in the answer; only one word order is a correct answer | SC-004 | auto (distractors) + review (order) |
 | C9 | No sentence, exercise or explanation copied from the book | FR-008 | review |
-| C10 | No proper-name or number-system exercises; *unpa*, *tu*, *luka*, *nanpa* not used | FR-002 | auto (words) + review |
+| C10 | No proper-name or number-system exercises; *unpa*, *tu*, *luka*, *nanpa* not used; no capital letters on the Toki Pona side | FR-002 | auto (words, capitals) + review |
 | C11 | Exercise ids unique within a lesson; lesson ids unique across the course | — | auto |
 
 ## Toki Pona side of an exercise (for C3/C4/C10)

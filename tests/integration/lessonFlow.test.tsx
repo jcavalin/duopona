@@ -2,7 +2,7 @@ import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { createMemoryRouter, RouterProvider } from 'react-router'
-import { lessons } from '../../src/content/lessons'
+import { lessons, sourceLabel } from '../../src/content/lessons'
 import type { Exercise, Lesson } from '../../src/content/types'
 import { routes } from '../../src/router'
 import { makeStore } from '../../src/store'
@@ -273,7 +273,7 @@ describe('course in book order (US1)', () => {
     expect(items).toHaveLength(17)
     lessons.forEach((l, i) => {
       expect(items[i]).toHaveTextContent(l.title)
-      expect(items[i]).toHaveTextContent(`Book: ${l.chapter}`)
+      expect(items[i]).toHaveTextContent(sourceLabel(l))
       expect(items[i]).toHaveTextContent(`Lesson ${i + 1}`)
     })
     const startable = within(screen.getByRole('list')).getAllByRole('link').filter((el) => !isLocked(el))
@@ -340,7 +340,7 @@ describe('lesson introduction (US3)', () => {
     const { user, store } = renderApp()
     await openLesson(user)
     expect(screen.getByRole('heading', { level: 1, name: lesson.title })).toBeInTheDocument()
-    expect(screen.getByText(`Book: ${lesson.chapter}`)).toBeInTheDocument()
+    expect(screen.getByText(sourceLabel(lesson))).toBeInTheDocument()
     for (const word of lesson.newWords) {
       const term = screen.getByText(word, { selector: 'dt' })
       expect(term.nextElementSibling).toHaveTextContent(getMeaning(word)!)
