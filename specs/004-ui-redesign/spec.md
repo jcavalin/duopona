@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-03
 
-**Status**: Implemented (pending: quickstart V8, V11–V13 in DevTools; phone checks D1–D3)
+**Status**: Implemented (DevTools checks V8, V10–V13 and phone checks D1–D3 skipped by owner decision, tasks T027, T030–T031)
 
 **Input**: User description: "Restyle Duopona to the dark Duolingo-style design in docs/design/ui-redesign.md"
 

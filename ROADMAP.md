@@ -5,18 +5,7 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-- **PWA & mobile compliance** (required by Constitution Principle V; allowed to slip past 002
-  only under Governance "Transitional compliance", v1.2.0, so it MUST be the next feature): web
-  app manifest and icons (installable), service worker for full offline use including all lesson
-  content, checked on iOS Safari and Android Chrome, installed and in the browser. (Safe-area
-  insets and 44×44 px touch targets were done in 002.)
-  Spec: `specs/003-pwa-offline-mobile/`. Status: built and checked in desktop Chrome; remaining:
-  desktop install check and real iPhone/Android checks (tasks T014, T016–T021).
-- **UI redesign: Duolingo-style, dark mode**: restyle all screens to the approved mockups:
-  lesson path, intro, exercises, feedback sheets, summary. Reference:
-  [docs/design/ui-redesign.md](docs/design/ui-redesign.md). Spec: `specs/004-ui-redesign/`.
-  Status: built, tested and checked in desktop Chrome; remaining: DevTools checks (360 px,
-  reduced motion, offline) and real iPhone/Android checks (tasks T027, T030–T031).
+(none)
 
 ## Next
 
@@ -27,6 +16,11 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 - **001 – First lesson flow** (`specs/001-first-lesson-flow/`).
 - **002 – Book-based course**: 17 lessons following *Toki Pona: The Language of Good*, with
   unlocking and lesson introductions (`specs/002-book-course/`).
+- **003 – PWA & mobile**: installable, offline, basic play/install/offline confirmed on iPhone and
+  Android (`specs/003-pwa-offline-mobile/`). The desktop install check and the remaining phone
+  checks were skipped by owner decision.
+- **004 – UI redesign**: dark Duolingo-style screens (`specs/004-ui-redesign/`). The DevTools
+  checks (360 px, reduced motion, offline) and phone checks were skipped by owner decision.
 - **005 – GitHub Pages deployment**: checks on every push, `main` published to
   https://jcavalin.github.io/duopona/ (`specs/005-github-pages-deploy/`). The pipeline's
   failure, pull-request, manual-run and overlap checks were skipped by owner decision.

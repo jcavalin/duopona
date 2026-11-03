@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-03
 
-**Status**: Implemented (pending: T014, T016–T021 manual checks)
+**Status**: Implemented (desktop install and phone checks skipped by owner decision, tasks T014, T017–T021)
 
 **Input**: User description: "Make Duopona an installable, offline-capable PWA that is fully usable on phones"
 
