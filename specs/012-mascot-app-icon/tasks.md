@@ -124,7 +124,15 @@ on the next exercise.
 - [X] T017 Run `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa`; all pass. Record the counts under this task
   - **Result (2026-11-04)**: `npm test` 637 passed (+5); lint clean; build ok (precache 16 entries, 538.70 KiB); `npm run test:pwa` 29 passed (+3)
   - **Flaky**: in 1 of 5 full runs the existing test "first lesson flow > browser Back from a lesson discards the session" failed. It passed in 3 isolated runs of the file and in the other 4 full runs. It looks like a timing flake under load, not a 012 regression; left as is and noted
-- [ ] T018 Manual check: ask the user to run `npm run dev`, then in Chrome run quickstart M1–M6 against mockups 03–07 and 09. Record the results under this task. On a mismatch, fix the CSS and re-check
+- [X] T018 Manual check: ask the user to run `npm run dev`, then in Chrome run quickstart M1–M6 against mockups 03–07 and 09. Record the results under this task. On a mismatch, fix the CSS and re-check
+  - **Result (2026-11-04)**, Chrome against the user's `npm run dev` (500 px window, the narrowest Chrome allows):
+    - **M1**: multiple choice: idle mascot 88 × 100 px at the left, "mi" in a bubble with its tail pointing at the mascot, bottom-aligned; no drop icon. Word bank ("I am strong."): same. Matches 03/05.
+    - **M2**: wrong answer ("you" for mi): sad mascot, red sheet and "Why?" unchanged (04/04a).
+    - **M3**: 12 right answers (multiple choice and word bank): idle → happy each time, idle again on the next exercise (06).
+    - **M4**: lesson summary: celebrating mascot 170 px centred above "Lesson complete!", no star badge; stats unchanged (07). Practice summary covered by the practiceFlow integration test.
+    - **M5**: app column forced to 360 px with the longest course prompt ("In the daytime, the hunter goes to the plants."): the text wraps in the bubble beside the mascot, the row ends at 340 px, no horizontal overflow.
+    - **M6**: `<link rel="icon">` serves icon.svg, which is byte-identical to the design file (build test).
+    - The user's dev `localStorage` was saved before and restored after.
 
 ---
 
