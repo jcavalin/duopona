@@ -16,8 +16,9 @@ npm run dev       # for the manual checks below
 | Area | Test | Spec |
 |------|------|------|
 | `moveItem`, `dropIndex` (same row, wrapped rows, start, end, empty) | `tests/unit/reorder.test.ts` | FR-002, US1-4 |
-| Drag a placed word to a new spot; Check grades the shown order | `tests/integration/lessonFlow.test.tsx` | FR-001, FR-002, FR-007, US1-1, US1-3 |
-| Tap (no or < 6 px movement) still removes / adds | same | FR-003, FR-004a, SC-002, SC-002a |
+| Drag a placed word to a new spot; the line shows the gap while dragging | `tests/integration/wordBank.test.tsx` | FR-001, FR-002, US1-1, US1-3, US1-4 |
+| A reordered answer is graded in the shown order | `tests/integration/lessonFlow.test.tsx` | FR-007 |
+| Tap (no or < 6 px movement) still removes / adds | `tests/integration/wordBank.test.tsx` | FR-003, FR-004a, SC-002, SC-002a |
 | Placed word dropped on bank → back in bank; dropped elsewhere → stays at shown spot; same spot → unchanged; cancel → unchanged | same | FR-004, edge cases |
 | Bank word dragged between two placed words; dragged and dropped elsewhere → stays in bank | same | FR-004a, US3-1, US3-3 |
 | Repeated words stay distinct while moving | same | edge case |

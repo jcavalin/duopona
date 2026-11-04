@@ -25,9 +25,10 @@ vite-plugin-pwa 2; **no new dependencies** (R1)
 **Storage**: none; `duopona:*` keys unchanged (FR-009)
 
 **Testing**: Vitest + React Testing Library on jsdom 30 (`PointerEvent` available, no layout, no
-pointer capture: R10). New unit tests for `src/lib/reorder.ts`; `lessonFlow.test.tsx` extended
-with pointer-driven drags over stubbed tile boxes, keyboard moves and the hint. Touch on real
-phones as manual check S-D1
+pointer capture: R10). New unit tests for `src/lib/reorder.ts`; new component-level integration
+test `tests/integration/wordBank.test.tsx` rendering `WordBank` with a fixture exercise and
+stubbed tile boxes (pointer drags, taps, keyboard moves, hint); one `lessonFlow.test.tsx` test
+that a reordered answer is graded in its shown order. Touch on real phones as manual check S-D1
 
 **Target Platform**: iOS Safari and Android Chrome (browser and installed); desktop browsers
 
@@ -89,7 +90,8 @@ tests/
 ├── unit/
 │   └── reorder.test.ts         # new
 └── integration/
-    └── lessonFlow.test.tsx     # + drag, tap, drop, cancel, bank-to-spot, keyboard, hint, after-Check
+    ├── wordBank.test.tsx       # new: drag, tap, drop, cancel, bank-to-spot, keyboard, hint, after-Check
+    └── lessonFlow.test.tsx     # + a reordered answer is graded in the shown order (FR-007)
 ```
 
 **Structure Decision**: Existing single-project layout. The helpers go in `src/lib/` next to

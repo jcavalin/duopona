@@ -126,10 +126,12 @@ chosen spot). These are the design decisions.
 - **Decision**: jsdom (v30) supports `PointerEvent` with `clientX`, `clientY` and `pointerId`
   (checked 2026-11-04) but has no layout and no `setPointerCapture`. So:
   - `dropIndex` and `moveItem` get unit tests with plain rectangles (rows, wrapping, ends).
-  - Integration tests in `lessonFlow.test.tsx` stub `getBoundingClientRect` on the line, bank
-    and tiles (a simple row layout), then drive `fireEvent.pointerDown/Move/Up` and assert the
-    answer line order, what Check grades, tap-vs-drag, drop on bank, drop outside, cancel, bank
-    to chosen spot, arrow keys with focus, and the hint's `aria-describedby`.
+  - A component-level integration test (`tests/integration/wordBank.test.tsx`) renders
+    `WordBank` with a fixture exercise, stubs `getBoundingClientRect` on the line, bank and
+    tiles (a simple row layout), then drives `fireEvent.pointerDown/Move/Up` and asserts the
+    answer line order, what `onSubmit` receives, tap-vs-drag, drop on bank, drop outside,
+    cancel, bank to chosen spot, arrow keys with focus, and the hint's `aria-describedby`.
+    One `lessonFlow.test.tsx` test checks the full app grades a reordered answer.
   - The code calls `setPointerCapture` through optional chaining so it runs in jsdom.
   - Real touch on phones is manual check S-D1 (Principle IV exception), which the owner may waive.
 - **Rationale**: Everything except the real touch gesture is simulated automatically
