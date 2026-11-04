@@ -5,8 +5,7 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-- **008 – Mistake explanations**: word meanings, grammar point and book lesson after a wrong
-  answer (`specs/008-mistake-explanations/`).
+(none)
 
 ## Next
 
@@ -30,6 +29,8 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   by owner decision.
 - **007 – Daily goal & streak**: one finished session a day, streak and best streak on the home
   screen (`specs/007-daily-goal-streak/`). The phone check was skipped by owner decision.
+- **008 – Mistake explanations**: word meanings, grammar point and book lesson after a wrong
+  answer (`specs/008-mistake-explanations/`). The phone check was skipped by owner decision.
 
 ## Ideas (not yet evaluated)
 

@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-04
 
-**Status**: Draft
+**Status**: Implemented (phone check S-D1 skipped by owner decision, task T025)
 
 **Input**: User description: "Mistake explanations: when the learner answers an exercise wrong,
 explain why the right answer is right (e.g. the grammar point or word meaning involved, tied to

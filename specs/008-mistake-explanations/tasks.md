@@ -140,9 +140,12 @@ and a short note on why the right answer follows it, in every session kind (FR-0
 ## Phase 5: Polish & Cross-Cutting Concerns
 
 - [X] T024 [P] Update README.md: in the course/features section mention that wrong answers explain the right one (word meanings, and the grammar point with its book lesson for grammar exercises)
-- [ ] T025 Ask the user to run quickstart S-D1 on iPhone (Safari) and Android (Chrome), installed; record results under this task (the owner may waive it under the constitution's recorded-waiver rule, Principle IV; then mark `[~]` with the date and "owner decision" and name the waived check in spec.md **Status**)
-- [ ] T026 Set spec.md **Status** to `Implemented` (or `Implemented (…)` naming skipped manual checks); update ROADMAP.md: move the item from **In progress** to **Done** as `**008 – Mistake explanations**: word meanings, grammar point and book lesson after a wrong answer (\`specs/008-mistake-explanations/\`).`, leaving **In progress** as `(none)`
-- [ ] T027 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the test count vs. T001's baseline under this task (offline use of explanations is covered by the bundled lesson content and the precache check in `test:pwa`; FR-009)
+- [~] T025 Ask the user to run quickstart S-D1 on iPhone (Safari) and Android (Chrome), installed; record results under this task (the owner may waive it under the constitution's recorded-waiver rule, Principle IV; then mark `[~]` with the date and "owner decision" and name the waived check in spec.md **Status**)
+  - **Won't do (2026-11-04)**: owner decision (constitution IV waiver); phone check S-D1 not run
+- [X] T026 Set spec.md **Status** to `Implemented` (or `Implemented (…)` naming skipped manual checks); update ROADMAP.md: move the item from **In progress** to **Done** as `**008 – Mistake explanations**: word meanings, grammar point and book lesson after a wrong answer (\`specs/008-mistake-explanations/\`).`, leaving **In progress** as `(none)`
+  - **Result (2026-11-04)**: Status `Implemented (phone check S-D1 skipped by owner decision, task T025)`; requirements checklist unchanged (14/14); ROADMAP updated
+- [X] T027 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the test count vs. T001's baseline under this task (offline use of explanations is covered by the bundled lesson content and the precache check in `test:pwa`; FR-009)
+  - **Result (2026-11-04)**: `npm test` 563 passed (baseline 546, +17); lint clean; build ok (precache 12 entries, 497.59 KiB); `npm run test:pwa` 26 passed
 
 ---
 
