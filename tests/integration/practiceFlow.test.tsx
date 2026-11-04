@@ -296,3 +296,31 @@ describe('mistake explanations in practice (008 US2)', () => {
     expect(card).toHaveTextContent(ex.grammarNote!)
   })
 })
+
+describe('mascot in practice (feature 012)', () => {
+  const mascot = () => document.querySelector('img[data-expression]')
+
+  it('reacts to answers and celebrates on the practice summary', async () => {
+    completeLessons(l1.id)
+    const { user, store } = renderApp('/practice/practice')
+    expect(mascot()).toHaveAttribute('data-expression', 'idle')
+    const ex = current(store)
+    const pick = (correct: boolean) =>
+      ex.type === 'multipleChoice'
+        ? [correct ? ex.answer : ex.options.find((o) => o !== ex.answer)!]
+        : correct
+          ? ex.answer
+          : [ex.distractors[0]]
+    const group = ex.type === 'multipleChoice' ? 'Options' : 'Word bank'
+    for (const word of pick(true)) {
+      await user.click(within(screen.getByRole('group', { name: group })).getAllByRole('button', { name: word })[0])
+    }
+    await user.click(screen.getByRole('button', { name: 'Check' }))
+    expect(mascot()).toHaveAttribute('data-expression', 'happy')
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    expect(mascot()).toHaveAttribute('data-expression', 'idle')
+
+    await playToEnd(user, store)
+    expect(mascot()).toHaveAttribute('data-expression', 'celebrate')
+  })
+})

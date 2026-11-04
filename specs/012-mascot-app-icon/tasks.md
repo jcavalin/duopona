@@ -39,15 +39,18 @@ US1 and US2 share the `Mascot` component (Foundational). US3 is independent.
 
 ## Phase 1: Setup
 
-- [ ] T001 Record the baseline: `npm test`, `npm run build`, `npm run test:pwa` pass counts under this task
-- [ ] T002 Copy docs/design/mascot/mascot-{idle,sad,happy,celebrate}.svg unchanged into src/assets/mascot/ (create the folder); confirm with `cmp`
+- [X] T001 Record the baseline: `npm test`, `npm run build`, `npm run test:pwa` pass counts under this task
+  - **Baseline (2026-11-04)**: same code as the 011 final gate on main: `npm test` 632 passed; `npm run test:pwa` 26 passed
+- [X] T002 Copy docs/design/mascot/mascot-{idle,sad,happy,celebrate}.svg unchanged into src/assets/mascot/ (create the folder); confirm with `cmp`
+  - **Result**: 4 files copied, `cmp` identical
 
 ---
 
 ## Phase 2: Foundational
 
-- [ ] T003 Create src/components/Mascot.tsx (research R2): `export type MascotExpression = 'idle' | 'sad' | 'happy' | 'celebrate'`. Import the four SVG URLs from `../assets/mascot/`. Default export `Mascot({ expression, className })` renders `<img src={…} alt="" aria-hidden="true" draggable={false} className={className} data-expression={expression} />`
-- [ ] T004 In vite.config.ts change the workbox `globPatterns` to `['**/*.{js,css,html,woff2,svg}']` (research R4). Run `npm run build` and check that dist/sw.js lists the four hashed `assets/mascot-*.svg` and `icon.svg` once each
+- [X] T003 Create src/components/Mascot.tsx (research R2): `export type MascotExpression = 'idle' | 'sad' | 'happy' | 'celebrate'`. Import the four SVG URLs from `../assets/mascot/`. Default export `Mascot({ expression, className })` renders `<img src={…} alt="" aria-hidden="true" draggable={false} className={className} data-expression={expression} />`
+- [X] T004 In vite.config.ts change the workbox `globPatterns` to `['**/*.{js,css,html,woff2}', 'assets/*.svg']` (research R4). Run `npm run build` and check that dist/sw.js lists the four hashed `assets/mascot-*.svg` and `icon.svg` once each
+  - **Result**: first try `**/*.{…,svg}` precached `icon.svg` twice (caught by the existing "lists each file only once" test); narrowed to `assets/*.svg` (research R4 correction). Precache 16 entries, 538.70 KiB
 
 ---
 
@@ -59,10 +62,11 @@ tail (FR-001–FR-003, FR-006, FR-007, FR-010; contract C1, C2, C4).
 **Independent Test**: Play a lesson. The mascot is idle, turns sad or happy on Check, and is idle
 on the next exercise.
 
-- [ ] T005 [US1] In src/components/MultipleChoice.tsx replace the `promptIcon` span and `DropIcon` with `<Mascot expression={result === 'wrong' ? 'sad' : result === 'correct' ? 'happy' : 'idle'} className={styles.promptMascot} />`. Remove the DropIcon import, and remove `DropIcon` from src/components/icons.tsx if nothing else uses it (grep)
-- [ ] T006 [US1] In src/components/WordBank.tsx add an optional prop `result?: 'correct' | 'wrong'` (same doc comment as MultipleChoice) and replace the `promptIcon` span and `BubbleIcon` with the same `Mascot` expression mapping. Remove the BubbleIcon import (keep `BubbleIcon` in icons.tsx: the lesson path uses it)
-- [ ] T007 [US1] In src/components/ExerciseScreen.tsx pass the same `result` value given to MultipleChoice to `<WordBank … />`
-- [ ] T008 [US1] In src/components/Exercise.module.css (research R6):
+- [X] T005 [US1] In src/components/MultipleChoice.tsx replace the `promptIcon` span and `DropIcon` with `<Mascot expression={result === 'wrong' ? 'sad' : result === 'correct' ? 'happy' : 'idle'} className={styles.promptMascot} />`. Remove the DropIcon import, and remove `DropIcon` from src/components/icons.tsx if nothing else uses it (grep)
+  - **Result**: shared `exerciseExpression(result)` helper in Mascot.tsx maps result → expression for both exercises; `DropIcon` removed (no other use)
+- [X] T006 [US1] In src/components/WordBank.tsx add an optional prop `result?: 'correct' | 'wrong'` (same doc comment as MultipleChoice) and replace the `promptIcon` span and `BubbleIcon` with the same `Mascot` expression mapping. Remove the BubbleIcon import (keep `BubbleIcon` in icons.tsx: the lesson path uses it)
+- [X] T007 [US1] In src/components/ExerciseScreen.tsx pass the same `result` value given to MultipleChoice to `<WordBank … />`
+- [X] T008 [US1] In src/components/Exercise.module.css (research R6):
   - `.promptRow` → `align-items: flex-end; gap: 16px`;
   - replace `.promptIcon` with `.promptMascot { flex-shrink: 0; width: 88px; height: 100px; }`;
   - `.prompt` gets `position: relative; min-width: 0; overflow-wrap: anywhere;`;
@@ -78,8 +82,8 @@ on the next exercise.
 
 **Goal**: The celebrate mascot replaces the star badge (FR-004; contract C3).
 
-- [ ] T009 [US2] In src/components/LessonSummary.tsx replace the `.badge` div (with `.badgeCoin` and `StarIcon`) with `<Mascot expression="celebrate" className={styles.summaryMascot} />`, and drop `StarIcon` from the import
-- [ ] T010 [US2] In src/components/Exercise.module.css remove the now-unused `.badge` and `.badgeCoin` rules (grep first), and add `.summaryMascot { width: 170px; height: auto; }`. Centring comes from the existing `.summary` column; check that it is centred like mockup 07
+- [X] T009 [US2] In src/components/LessonSummary.tsx replace the `.badge` div (with `.badgeCoin` and `StarIcon`) with `<Mascot expression="celebrate" className={styles.summaryMascot} />`, and drop `StarIcon` from the import
+- [X] T010 [US2] In src/components/Exercise.module.css remove the now-unused `.badge` and `.badgeCoin` rules (grep first), and add `.summaryMascot { width: 170px; height: auto; }`. Centring comes from the existing `.summary` column; check that it is centred like mockup 07
 
 **Checkpoint**: US2 complete.
 
@@ -89,8 +93,9 @@ on the next exercise.
 
 **Goal**: The tab and installed-app icons are the mascot (FR-008; contract C5).
 
-- [ ] T011 [P] [US3] Copy the five files from docs/design/app-icon/ over the ones in public/ (`icon.svg`, `pwa-192x192.png`, `pwa-512x512.png`, `maskable-icon-512x512.png`, `apple-touch-icon-180x180.png`); confirm with `cmp`
-- [ ] T012 [P] [US3] In pwa-assets.config.mjs replace the top comment: the icons are hand-made in docs/design/app-icon/ (with different mascot scales per purpose) and are copied into public/, so don't regenerate them with this config. Set `background` to `'#16151f'` so an accidental run is at least on-brand. In README.md, update the `public/` line about regenerating PNGs to match
+- [X] T011 [P] [US3] Copy the five files from docs/design/app-icon/ over the ones in public/ (`icon.svg`, `pwa-192x192.png`, `pwa-512x512.png`, `maskable-icon-512x512.png`, `apple-touch-icon-180x180.png`); confirm with `cmp`
+  - **Result**: 5 files copied, `cmp` identical
+- [X] T012 [P] [US3] In pwa-assets.config.mjs replace the top comment: the icons are hand-made in docs/design/app-icon/ (with different mascot scales per purpose) and are copied into public/, so don't regenerate them with this config. Set `background` to `'#16151f'` so an accidental run is at least on-brand. In README.md, update the `public/` line about regenerating PNGs to match
 
 **Checkpoint**: US3 complete.
 
@@ -98,7 +103,7 @@ on the next exercise.
 
 ## Phase 6: Tests (after the code, Constitution IV)
 
-- [ ] T013 [P] In tests/integration/lessonFlow.test.tsx add `describe('mascot (feature 012)')`, using a helper `mascot = () => document.querySelector('img[data-expression]')`:
+- [X] T013 [P] In tests/integration/lessonFlow.test.tsx add `describe('mascot (feature 012)')`, using a helper `mascot = () => document.querySelector('img[data-expression]')`:
   - on a multiple-choice exercise the mascot is `idle` and has `alt=""`;
   - after a wrong Check it is `sad`, and after Continue the next exercise shows `idle`;
   - after a right Check it is `happy`;
@@ -107,15 +112,18 @@ on the next exercise.
   - finishing the lesson shows `celebrate` on the summary.
 
   Reuse the file's existing `answer`, `startLesson`, `completeLesson` and `playUntil`-style helpers
-- [ ] T014 [P] In tests/integration/practiceFlow.test.tsx add one test: in a practice session the mascot is `idle`, turns `happy` or `sad` with the answer, and the practice summary shows `celebrate`
-- [ ] T015 [P] Check tests/integration/wordBank.test.tsx (it renders WordBank directly): it must still compile and pass without passing `result`. Add one test: rendering with `result="wrong"` shows the `sad` mascot
-- [ ] T016 [P] In tests/build/pwa.test.ts add:
+- [X] T014 [P] In tests/integration/practiceFlow.test.tsx add one test: in a practice session the mascot is `idle`, turns `happy` or `sad` with the answer, and the practice summary shows `celebrate`
+- [X] T015 [P] Check tests/integration/wordBank.test.tsx (it renders WordBank directly): it must still compile and pass without passing `result`. Add one test: rendering with `result="wrong"` shows the `sad` mascot
+  - **Result**: existing tests pass without `result` (optional prop); added the idle → sad rerender test
+- [X] T016 [P] In tests/build/pwa.test.ts add:
   - (a) dist/sw.js precaches four `assets/mascot-(idle|sad|happy|celebrate)-*.svg` files, and each exists in dist/;
   - (b) each of the five public icons in dist/ is byte-identical to its docs/design/app-icon/ source;
   - (c) `icon.svg` appears exactly once in the precache list.
 
   Update existing assertions only where the new svg pattern changes counts
-- [ ] T017 Run `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa`; all pass. Record the counts under this task
+- [X] T017 Run `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa`; all pass. Record the counts under this task
+  - **Result (2026-11-04)**: `npm test` 637 passed (+5); lint clean; build ok (precache 16 entries, 538.70 KiB); `npm run test:pwa` 29 passed (+3)
+  - **Flaky**: in 1 of 5 full runs the existing test "first lesson flow > browser Back from a lesson discards the session" failed. It passed in 3 isolated runs of the file and in the other 4 full runs. It looks like a timing flake under load, not a 012 regression; left as is and noted
 - [ ] T018 Manual check: ask the user to run `npm run dev`, then in Chrome run quickstart M1–M6 against mockups 03–07 and 09. Record the results under this task. On a mismatch, fix the CSS and re-check
 
 ---

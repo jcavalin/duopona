@@ -47,13 +47,15 @@ It renders `<img src={urls[expression]} alt="" aria-hidden="true" draggable={fal
 
 ## R4 – Offline
 
-**Decision**: Change the workbox `globPatterns` in `vite.config.ts` from
-`**/*.{js,css,html,woff2}` to `**/*.{js,css,html,woff2,svg}`.
+**Decision**: Add `'assets/*.svg'` to the workbox `globPatterns` in `vite.config.ts`
+(`['**/*.{js,css,html,woff2}', 'assets/*.svg']`).
 
 **Rationale**: Vite inlines assets under 4 KB as data URIs, but these are about 9 KB, so they
-are emitted as files in `dist/assets/`. They must be precached for FR-009. `icon.svg` is already
-precached through `includeAssets`, and vite-plugin-pwa removes duplicate entries. The build test
-checks for one entry per file.
+are emitted as files in `dist/assets/`. They must be precached for FR-009.
+
+**Correction (implementation)**: the first try, `**/*.{…,svg}`, listed `icon.svg` twice (glob
+plus `includeAssets`). vite-plugin-pwa does not remove the duplicate, and the existing "lists each
+file only once" build test caught it. Limiting the pattern to `assets/` fixes that.
 
 ## R5 – App icons
 

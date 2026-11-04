@@ -830,3 +830,47 @@ describe('correct colours (feature 011)', () => {
     expect(wrong).not.toHaveClass('success')
   })
 })
+
+describe('mascot (feature 012)', () => {
+  const mascot = () => document.querySelector('img[data-expression]')
+
+  it('is idle before Check, sad after a wrong answer and idle again on the next exercise', async () => {
+    const { user } = renderApp()
+    await startLesson(user)
+    expect(currentExercise().type).toBe('multipleChoice')
+    expect(mascot()).toHaveAttribute('data-expression', 'idle')
+    expect(mascot()).toHaveAttribute('alt', '')
+    expect(mascot()).toHaveAttribute('aria-hidden', 'true')
+    expect(screen.queryAllByRole('img')).not.toContain(mascot())
+
+    await answer(user, false)
+    expect(mascot()).toHaveAttribute('data-expression', 'sad')
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    expect(mascot()).toHaveAttribute('data-expression', 'idle')
+
+    await answer(user, true)
+    expect(mascot()).toHaveAttribute('data-expression', 'happy')
+  })
+
+  it('reacts the same way on word-bank exercises', async () => {
+    const { user } = renderApp()
+    await startLesson(user)
+    while (currentExercise().type !== 'wordBank') {
+      await answer(user, true)
+      await user.click(screen.getByRole('button', { name: 'Continue' }))
+    }
+    expect(mascot()).toHaveAttribute('data-expression', 'idle')
+    await answer(user, false)
+    expect(mascot()).toHaveAttribute('data-expression', 'sad')
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    // Retries and new exercises both start idle
+    expect(mascot()).toHaveAttribute('data-expression', 'idle')
+  })
+
+  it('celebrates on the lesson summary in place of the star badge', async () => {
+    const { user } = renderApp()
+    await completeLesson(user)
+    expect(mascot()).toHaveAttribute('data-expression', 'celebrate')
+    expect(document.querySelectorAll('img[data-expression]')).toHaveLength(1)
+  })
+})

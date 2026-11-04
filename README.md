@@ -109,8 +109,8 @@ To publish again without a commit: Actions → "Check and deploy" → "Run workf
   `#/practice/practice` and `#/practice/review`);
   `src/components/icons.tsx` holds the inline SVG icons, `src/index.css` the color tokens (`--primary*` purple brand, `--success*`
   green for correct answers) and shared layout classes
-- `public/` — app icons (`icon.svg` is the source; regenerate the PNGs with
-  `npx @vite-pwa/assets-generator@2`, config in `pwa-assets.config.mjs`); `public/fonts/` —
+- `public/` — app icons (the mascot; copied from `docs/design/app-icon/`, don't regenerate
+  them); `public/fonts/` —
   the Nunito font (Latin subset, SIL Open Font License in `OFL.txt`), self-hosted so it works
   offline
 - `vite.config.ts` — build, PWA manifest and service-worker settings

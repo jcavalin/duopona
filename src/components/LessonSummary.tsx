@@ -1,4 +1,5 @@
-import { FlameIcon, StarIcon } from './icons'
+import { FlameIcon } from './icons'
+import Mascot from './Mascot'
 import { focusOnMount } from './focusOnMount'
 import styles from './Exercise.module.css'
 
@@ -33,11 +34,7 @@ export default function LessonSummary({
   return (
     <div className="screen">
       <div className={`screen-body ${styles.summary}`}>
-        <div className={styles.badge} aria-hidden="true">
-          <span className={styles.badgeCoin}>
-            <StarIcon size={44} />
-          </span>
-        </div>
+        <Mascot expression="celebrate" className={styles.summaryMascot} />
         <h1 className={styles.summaryTitle}>{heading}</h1>
         <p className={styles.summaryLesson}>{subtitle}</p>
         {streak !== undefined && <p className={styles.goalMet}>Daily goal met</p>}
