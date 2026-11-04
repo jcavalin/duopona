@@ -1,6 +1,6 @@
-import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent, type PointerEvent, type ReactNode } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from 'react'
 import type { WordBankExercise } from '../content/types'
-import { dropIndex } from '../lib/reorder'
+import { dropIndex, moveItem } from '../lib/reorder'
 import { shuffle } from '../lib/shuffle'
 import { BubbleIcon } from './icons'
 import { focusOnMount } from './focusOnMount'
@@ -74,6 +74,8 @@ export default function WordBank({ header, exercise, disabled, onSubmit }: Props
   const lineRef = useRef<HTMLDivElement>(null)
   const bankRef = useRef<HTMLDivElement>(null)
   const placedRefs = useRef(new Map<number, HTMLButtonElement>())
+  const refocus = useRef<number | null>(null)
+  const hintId = useId()
   const instruction = exercise.direction === 'tp-en' ? 'Write this in English' : 'Write this in Toki Pona'
 
   // Latest committed order, for the window listeners below
@@ -169,6 +171,26 @@ export default function WordBank({ header, exercise, disabled, onSubmit }: Props
     }
   }, [])
 
+  // Moving a focused button in the DOM blurs it: put focus back after a keyboard move (research R8).
+  useEffect(() => {
+    if (refocus.current === null) return
+    placedRefs.current.get(refocus.current)?.focus({ preventScroll: true })
+    refocus.current = null
+  }, [placed])
+
+  /** ArrowLeft / ArrowRight move a focused placed word one place (contract W3) */
+  const onPlacedKeyDown = (tile: number, event: KeyboardEvent<HTMLButtonElement>) => {
+    if (disabled || dragRef.current || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+    const step = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0
+    if (!step) return
+    event.preventDefault()
+    const from = placed.indexOf(tile)
+    const to = from + step
+    if (to < 0 || to >= placed.length) return
+    refocus.current = tile
+    setPlaced(moveItem(placed, from, to))
+  }
+
   const pointerHandlers = (tile: number, from: Source) => ({
     onPointerDown: (e: PointerEvent<HTMLButtonElement>) => onPointerDown(tile, from, e),
   })
@@ -187,6 +209,9 @@ export default function WordBank({ header, exercise, disabled, onSubmit }: Props
           </span>
           <h2 className={styles.prompt}>{exercise.prompt}</h2>
         </div>
+        <p id={hintId} className="visually-hidden">
+          Press to remove. Drag or use the left and right arrow keys to move.
+        </p>
         <div ref={lineRef} className={styles.answerLine} role="group" aria-label="Your answer">
           {previewOrder(placed, drag).map((index) => (
             <button
@@ -198,7 +223,9 @@ export default function WordBank({ header, exercise, disabled, onSubmit }: Props
               type="button"
               className={drag?.tile === index ? `${styles.tile} ${styles.tileSlot}` : styles.tile}
               disabled={disabled}
+              aria-describedby={hintId}
               onClick={(e) => onTileClick(e, () => remove(index))}
+              onKeyDown={(e) => onPlacedKeyDown(index, e)}
               {...pointerHandlers(index, 'line')}
             >
               {tiles[index]}

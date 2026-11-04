@@ -135,16 +135,20 @@ it is last and still focused.
 
 ### Implementation for User Story 2
 
-- [ ] T011 [US2] In src/components/WordBank.tsx (research R8, contract W3): `onKeyDown` on placed tiles — ArrowLeft / ArrowRight (no modifier) call `preventDefault()` and move the tile one place with `moveItem`; "no-op at the ends"; ignored when `disabled` or during a drag. Store the moved tile index in a ref and, in an effect on `placed`, re-focus that button with `focus({ preventScroll: true })` then clear the ref. Add one `<p id={hintId} className="visually-hidden">Press to remove. Drag or use the left and right arrow keys to move.</p>` (`hintId` from `useId()`) and `aria-describedby={hintId}` on every placed tile button; the button's name stays the word
-- [ ] T012 [US2] Run `npm run lint`, `npm run build`, `npm test`
+- [X] T011 [US2] In src/components/WordBank.tsx (research R8, contract W3): `onKeyDown` on placed tiles — ArrowLeft / ArrowRight (no modifier) call `preventDefault()` and move the tile one place with `moveItem`; "no-op at the ends"; ignored when `disabled` or during a drag. Store the moved tile index in a ref and, in an effect on `placed`, re-focus that button with `focus({ preventScroll: true })` then clear the ref. Add one `<p id={hintId} className="visually-hidden">Press to remove. Drag or use the left and right arrow keys to move.</p>` (`hintId` from `useId()`) and `aria-describedby={hintId}` on every placed tile button; the button's name stays the word
+  - **Result (2026-11-04)**: also ignored with Shift held (Shift+arrows are left to the browser)
+- [X] T012 [US2] Run `npm run lint`, `npm run build`, `npm test`
+  - **Result (2026-11-04)**: lint clean, type check ok, 583 passed
 
 ### Tests for User Story 2
 
-- [ ] T013 [US2] Extend tests/integration/wordBank.test.tsx (user-event keyboard): place three words; focus the first; `{ArrowRight}` twice → it is last and `toHaveFocus()`; `{ArrowLeft}` on the first → no change; `{ArrowRight}` on the last → no change; Enter on a focused placed tile still removes it; a placed tile has an accessible description equal to the hint (`toHaveAccessibleDescription`) and its name is the word; after `disabled` arrows change nothing
+- [X] T013 [US2] Extend tests/integration/wordBank.test.tsx (user-event keyboard): place three words; focus the first; `{ArrowRight}` twice → it is last and `toHaveFocus()`; `{ArrowLeft}` on the first → no change; `{ArrowRight}` on the last → no change; Enter on a focused placed tile still removes it; a placed tile has an accessible description equal to the hint (`toHaveAccessibleDescription`) and its name is the word; after `disabled` arrows change nothing
+  - **Result (2026-11-04)**: 5 tests (19 in wordBank.test.tsx)
 
 ### Validation for User Story 2
 
-- [ ] T014 [US2] Manual check in Chrome: quickstart S6; record results under this task
+- [X] T014 [US2] Manual check in Chrome: quickstart S6; record results under this task
+  - **Result (2026-11-04)**: Chrome, "This is a woman." with meli ni li placed, focus on meli: real ArrowRight ×3 → ni li meli (third press a no-op at the end), focus still on meli, no page scroll; the hint is the description of placed tiles
 
 **Checkpoint**: every reorder is possible without a pointer
 

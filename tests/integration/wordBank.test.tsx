@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import WordBank from '../../src/components/WordBank'
 import type { WordBankExercise } from '../../src/content/types'
 import { centre, dragTo, stubWordBankLayout, tap } from './wordBankLayout'
@@ -170,6 +171,60 @@ describe('drag a placed word (US1)', () => {
     rerender(<WordBank header={null} exercise={fixture} disabled onSubmit={onSubmit} />)
     dragTo(placedTile('wawa'), 300, 24)
     tap(placedTile('kulupu'))
+    expect(lineWords()).toEqual(['wawa', 'kulupu'])
+  })
+})
+
+describe('reorder without dragging (US2)', () => {
+  it('ArrowRight / ArrowLeft move the focused placed word and keep focus on it', async () => {
+    const user = userEvent.setup()
+    renderBank()
+    placeWords('wawa', 'kulupu', 'sina')
+    placedTile('wawa').focus()
+    await user.keyboard('{ArrowRight}{ArrowRight}')
+    expect(lineWords()).toEqual(['kulupu', 'sina', 'wawa'])
+    expect(placedTile('wawa')).toHaveFocus()
+    await user.keyboard('{ArrowLeft}')
+    expect(lineWords()).toEqual(['kulupu', 'wawa', 'sina'])
+    expect(placedTile('wawa')).toHaveFocus()
+  })
+
+  it('does nothing at the ends', async () => {
+    const user = userEvent.setup()
+    renderBank()
+    placeWords('wawa', 'kulupu')
+    placedTile('wawa').focus()
+    await user.keyboard('{ArrowLeft}')
+    placedTile('kulupu').focus()
+    await user.keyboard('{ArrowRight}')
+    expect(lineWords()).toEqual(['wawa', 'kulupu'])
+  })
+
+  it('Enter on a focused placed word still removes it', async () => {
+    const user = userEvent.setup()
+    renderBank()
+    placeWords('wawa', 'kulupu')
+    placedTile('wawa').focus()
+    await user.keyboard('{Enter}')
+    expect(lineWords()).toEqual(['kulupu'])
+  })
+
+  it('placed words are named by the word and described by the hint (FR-006)', () => {
+    renderBank()
+    placeWords('wawa')
+    expect(placedTile('wawa')).toHaveAccessibleName('wawa')
+    expect(placedTile('wawa')).toHaveAccessibleDescription(
+      'Press to remove. Drag or use the left and right arrow keys to move.',
+    )
+  })
+
+  it('after Check the arrow keys change nothing', async () => {
+    const user = userEvent.setup()
+    const { rerender } = renderBank()
+    placeWords('wawa', 'kulupu')
+    rerender(<WordBank header={null} exercise={fixture} disabled onSubmit={onSubmit} />)
+    fireEvent.keyDown(placedTile('wawa'), { key: 'ArrowRight' })
+    await user.keyboard('{ArrowRight}')
     expect(lineWords()).toEqual(['wawa', 'kulupu'])
   })
 })
