@@ -34,7 +34,12 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 - Progress counter alternatives (count every attempt, or progress bar only); see FR-007 of
   feature 001.
-- Audio pronunciation (would enable the book's Lesson 1, "Letters and Sounds").
+- Audio pronunciation (would enable the book's Lesson 1, "Letters and Sounds"). Being
+  brainstormed: speaker buttons, listening exercises and the Letters and Sounds lesson, in
+  stages; sound source still open (generated espeak-ng files from phonemes, a more natural
+  speech tool, or human recordings).
+- Mistake explanations: when the learner answers wrong, explain why the right answer is right
+  (e.g. the grammar point or word meaning involved), not only show it.
 - sitelen pona (Toki Pona glyphs).
 - Light theme following the device setting (004 ships dark only; the light palette is in the
   design canvas history).
