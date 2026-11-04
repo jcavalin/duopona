@@ -201,8 +201,16 @@
 
 /* Feedback sheet: replaces the bottom bar */
 .sheet {
+  display: flex;
+  flex-direction: column;
+  max-height: 75dvh;
   border-top: none;
   animation: slide-up 0.2s ease-out;
+}
+
+/* Continue stays visible; long explanations scroll in the row above it (008 contract F1) */
+.sheet > button {
+  flex-shrink: 0;
 }
 
 @keyframes slide-up {
@@ -221,6 +229,9 @@
 
 .sheetRow {
   display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 16px;
@@ -246,6 +257,7 @@
 }
 
 .sheetText {
+  min-width: 0;
   margin: 0;
   overflow-wrap: anywhere;
 }
@@ -276,6 +288,52 @@
   display: block;
   font-size: 20px;
   font-weight: 800;
+}
+
+/* Mistake explanation inside the wrong-answer sheet (008 contract F1) */
+.explain {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid currentcolor;
+  border-top-color: color-mix(in srgb, currentcolor 35%, transparent);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.explainWords {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.explainPick {
+  margin: 8px 0 0;
+}
+
+.explainGrammar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 12px;
+}
+
+.explainGrammar p {
+  margin: 0;
+}
+
+.explainGrammarTitle {
+  font-weight: 800;
+}
+
+.explainLesson {
+  margin-bottom: 2px;
+  font-size: 15px;
+  font-weight: 700;
+  opacity: 0.8;
 }
 
 /* Lesson summary (mockup 07) */

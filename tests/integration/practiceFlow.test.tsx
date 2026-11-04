@@ -262,3 +262,34 @@ describe('review weak words (006 US3)', () => {
     expect(screen.getByRole('button', { name: 'Review weak words' })).toHaveAttribute('aria-disabled', 'true')
   })
 })
+
+describe('mistake explanations in practice (008 US2)', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('a missed grammar exercise names its own lesson in a practice session', async () => {
+    const pi = lessons.find((l) => l.id === 'pi')!
+    completeLessons(pi.id)
+    // Fixed shuffle so the session order is the same every run (008 analysis U1)
+    vi.spyOn(Math, 'random').mockReturnValue(0)
+    const { user, store } = renderApp('/practice/practice')
+    const grammarKeys = pi.exercises
+      .filter((e) => e.type === 'wordBank' && e.practisesGrammar)
+      .map((e) => exerciseKey(pi.id, e.id))
+    expect(store.getState().session!.queue.some((k) => grammarKeys.includes(k))).toBe(true)
+
+    while (!grammarKeys.includes(store.getState().session!.queue[0])) {
+      await answer(user, store, true)
+    }
+    const ex = current(store)
+    if (ex.type !== 'wordBank') throw new Error('expected a word bank')
+    await user.click(within(screen.getByRole('group', { name: 'Word bank' })).getAllByRole('button', { name: ex.distractors[0] })[0])
+    await user.click(screen.getByRole('button', { name: 'Check' }))
+
+    const status = screen.getByRole('status')
+    expect(status).toHaveTextContent(pi.grammar.title)
+    expect(status).toHaveTextContent(`${pi.chapter} · ${pi.title}`)
+    expect(status).toHaveTextContent(ex.grammarNote!)
+  })
+})

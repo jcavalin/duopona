@@ -5,6 +5,8 @@ import type { Exercise } from '../content/types'
 export interface Feedback {
   correct: boolean
   correctAnswer: string
+  /** The answer as submitted; session only, never saved (008 research R4) */
+  given: string | string[]
 }
 
 export type SessionKind = 'lesson' | 'practice' | 'review'
@@ -83,7 +85,7 @@ const sessionSlice = createSlice({
       if (!correct && !state.missedOnce.includes(key)) {
         state.missedOnce.push(key)
       }
-      state.feedback = { correct, correctAnswer: formatAnswer(exercise) }
+      state.feedback = { correct, correctAnswer: formatAnswer(exercise), given: action.payload }
       state.status = 'feedback'
     },
     continueLesson(state) {

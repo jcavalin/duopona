@@ -22,6 +22,8 @@ export interface WordBankExercise {
   distractors: string[]
   /** true when answering requires the lesson's grammar point; ≥ 2 per lesson */
   practisesGrammar?: boolean
+  /** Why the right answer follows the lesson's grammar point; present iff practisesGrammar. ≤ 2 sentences, ≤ 160 characters, original wording (008 FR-005, FR-006) */
+  grammarNote?: string
 }
 
 export type Exercise = MultipleChoiceExercise | WordBankExercise

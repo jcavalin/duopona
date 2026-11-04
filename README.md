@@ -27,6 +27,11 @@ A small **daily goal** encourages a little practice every day: finish one lesson
 review a day. The flame in the top bar shows your **streak** (days in a row you met the goal);
 missing a day resets it, and your best streak is kept.
 
+When you answer wrong, the feedback explains the right answer: what each Toki Pona word in the
+exercise means (and what your wrong pick means, if it is a course word). For exercises that
+practise grammar, it also names the grammar point, the lesson it comes from and a short note on
+why the answer follows it.
+
 Practice never changes lesson progress. Progress is saved under `duopona:progress`, word
 mistakes under `duopona:words` and the streak under `duopona:streak`, all in `localStorage`.
 

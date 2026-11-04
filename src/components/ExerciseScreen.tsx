@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { continueAndRecord, submitAndRecord } from '../store/lessonThunks'
-import { selectCurrentExercise, selectPosition, selectSession } from '../store/sessionSlice'
+import { selectCurrentExercise, selectCurrentKey, selectPosition, selectSession } from '../store/sessionSlice'
 import FeedbackBanner from './FeedbackBanner'
 import { CloseIcon } from './icons'
 import MultipleChoice from './MultipleChoice'
@@ -18,9 +18,10 @@ export default function ExerciseScreen({ onQuit, quitLabel = 'Quit lesson', prog
   const dispatch = useAppDispatch()
   const session = useAppSelector(selectSession)
   const exercise = useAppSelector(selectCurrentExercise)
+  const exerciseKey = useAppSelector(selectCurrentKey)
   const { done, total } = useAppSelector(selectPosition)
 
-  if (!session || !exercise) return null
+  if (!session || !exercise || !exerciseKey) return null
   const feedback = session.status === 'feedback' ? session.feedback : undefined
   const key = `${exercise.id}-${session.step}`
 
@@ -52,7 +53,7 @@ export default function ExerciseScreen({ onQuit, quitLabel = 'Quit lesson', prog
         <WordBank key={key} header={topBar} exercise={exercise} disabled={!!feedback} onSubmit={(a) => dispatch(submitAndRecord(a))} />
       )}
 
-      {feedback && <FeedbackBanner feedback={feedback} onContinue={() => dispatch(continueAndRecord())} />}
+      {feedback && <FeedbackBanner feedback={feedback} exerciseKey={exerciseKey} onContinue={() => dispatch(continueAndRecord())} />}
     </div>
   )
 }

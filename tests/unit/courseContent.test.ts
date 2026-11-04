@@ -1,5 +1,6 @@
 // Content rules for every course lesson: specs/002-book-course/contracts/lesson-content.md
-import { getLesson, lessons, sourceLabel } from '../../src/content/lessons'
+import { explainMistake } from '../../src/content/explanations'
+import { exerciseKey, getLesson, lessons, sourceLabel } from '../../src/content/lessons'
 import type { Exercise } from '../../src/content/types'
 import { getMeaning } from '../../src/content/vocabulary'
 
@@ -143,5 +144,43 @@ describe('course content', () => {
         }
       })
     })
+  })
+})
+
+describe('mistake explanations (feature 008)', () => {
+  const all = lessons.flatMap((lesson) => lesson.exercises.map((exercise) => ({ lesson, exercise })))
+
+  it('grammar notes appear exactly on the exercises that practise grammar, 49 in all (FR-005)', () => {
+    let count = 0
+    for (const { lesson, exercise } of all) {
+      const grammar = exercise.type === 'wordBank' && exercise.practisesGrammar === true
+      const note = exercise.type === 'wordBank' ? exercise.grammarNote : undefined
+      expect(typeof note === 'string' && note.trim() !== '', `${lesson.id}/${exercise.id}`).toBe(grammar)
+      if (note) {
+        count += 1
+        expect(note.length, `${lesson.id}/${exercise.id}`).toBeLessThanOrEqual(160)
+        expect(note.match(/[.!?](\s|$)/g)?.length ?? 0, `${lesson.id}/${exercise.id}`).toBeLessThanOrEqual(2)
+      }
+    }
+    expect(count).toBe(49)
+  })
+
+  it('every exercise explains at least one word or a grammar point when missed (SC-001, SC-002)', () => {
+    for (const { lesson, exercise } of all) {
+      const e = explainMistake(exerciseKey(lesson.id, exercise.id), 'x')!
+      expect(e.words.length > 0 || e.grammar !== null, `${lesson.id}/${exercise.id}`).toBe(true)
+      if (exercise.type === 'wordBank' && exercise.practisesGrammar) expect(e.grammar).not.toBeNull()
+    }
+  })
+
+  it('every wrong multiple-choice option that is a course word explains its meaning (SC-003)', () => {
+    for (const { lesson, exercise } of all) {
+      if (exercise.type !== 'multipleChoice') continue
+      for (const option of exercise.options) {
+        if (option === exercise.answer || getMeaning(option) === undefined) continue
+        const e = explainMistake(exerciseKey(lesson.id, exercise.id), option)!
+        expect(e.wrongPick, `${lesson.id}/${exercise.id} ${option}`).toEqual({ word: option, meaning: getMeaning(option) })
+      }
+    }
   })
 })
