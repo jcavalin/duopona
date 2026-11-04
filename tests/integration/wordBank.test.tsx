@@ -228,3 +228,72 @@ describe('reorder without dragging (US2)', () => {
     expect(lineWords()).toEqual(['wawa', 'kulupu'])
   })
 })
+
+describe('drop a bank word into a chosen spot (US3)', () => {
+  const bankTile = (word: string) => bank().getByRole('button', { name: word })
+
+  it('a bank word dragged between two placed words lands there; its bank place shows empty', () => {
+    renderBank()
+    placeWords('kulupu', 'wawa')
+    dragTo(bankTile('sina'), 100, 24) // right of kulupu's centre, left of wawa's
+    expect(lineWords()).toEqual(['kulupu', 'sina', 'wawa'])
+    expect(bank().queryByRole('button', { name: 'sina' })).not.toBeInTheDocument()
+  })
+
+  it('shows a slot in the line while over it, and none once it leaves', () => {
+    renderBank()
+    placeWords('kulupu', 'wawa')
+    const tile = bankTile('sina')
+    const start = centre(tile)
+    fireEvent.pointerDown(tile, { pointerId: 1, clientX: start.x, clientY: start.y })
+    fireEvent.pointerMove(tile, { pointerId: 1, clientX: 100, clientY: 24 })
+    const line = screen.getByRole('group', { name: 'Your answer' })
+    expect(line.children).toHaveLength(3) // kulupu, slot, wawa
+    expect(lineWords()).toEqual(['kulupu', 'wawa']) // the slot is not a button
+    fireEvent.pointerMove(tile, { pointerId: 1, clientX: 100, clientY: -100 })
+    expect(line.children).toHaveLength(2)
+    fireEvent.pointerUp(tile, { pointerId: 1, clientX: 100, clientY: -100 })
+    expect(lineWords()).toEqual(['kulupu', 'wawa'])
+    expect(bankTile('sina')).toBeInTheDocument()
+  })
+
+  it('dropped outside the line, the word stays in the bank', () => {
+    renderBank()
+    placeWords('kulupu')
+    dragTo(bankTile('sina'), 100, -100)
+    expect(lineWords()).toEqual(['kulupu'])
+    expect(bankTile('sina')).toBeInTheDocument()
+  })
+
+  it('a bank tap, even a shaky one, still adds the word at the end (SC-002a)', () => {
+    renderBank()
+    placeWords('kulupu')
+    tap(bankTile('wawa'), 4)
+    expect(lineWords()).toEqual(['kulupu', 'wawa'])
+  })
+
+  it('a cancelled bank drag changes nothing', () => {
+    renderBank()
+    placeWords('kulupu', 'wawa')
+    dragTo(bankTile('sina'), 100, 24, { cancel: true })
+    expect(lineWords()).toEqual(['kulupu', 'wawa'])
+    expect(bankTile('sina')).toBeInTheDocument()
+  })
+
+  it('after a drop into the line (no click arrives), the next bank tap adds its word', () => {
+    renderBank()
+    placeWords('kulupu', 'wawa')
+    dragTo(bankTile('sina'), 100, 24, { click: false })
+    const next = bank().getAllByRole('button')[0] // one of the two li tiles
+    tap(next)
+    expect(lineWords()).toEqual(['kulupu', 'sina', 'wawa', 'li'])
+  })
+
+  it('after Check, bank words cannot be dragged in', () => {
+    const { rerender } = renderBank()
+    placeWords('kulupu')
+    rerender(<WordBank header={null} exercise={fixture} disabled onSubmit={onSubmit} />)
+    dragTo(bankTile('sina'), 100, 24)
+    expect(lineWords()).toEqual(['kulupu'])
+  })
+})

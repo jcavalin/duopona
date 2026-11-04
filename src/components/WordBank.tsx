@@ -213,24 +213,31 @@ export default function WordBank({ header, exercise, disabled, onSubmit }: Props
           Press to remove. Drag or use the left and right arrow keys to move.
         </p>
         <div ref={lineRef} className={styles.answerLine} role="group" aria-label="Your answer">
-          {previewOrder(placed, drag).map((index) => (
-            <button
-              key={index}
-              ref={(el) => {
-                if (el) placedRefs.current.set(index, el)
-                else placedRefs.current.delete(index)
-              }}
-              type="button"
-              className={drag?.tile === index ? `${styles.tile} ${styles.tileSlot}` : styles.tile}
-              disabled={disabled}
-              aria-describedby={hintId}
-              onClick={(e) => onTileClick(e, () => remove(index))}
-              onKeyDown={(e) => onPlacedKeyDown(index, e)}
-              {...pointerHandlers(index, 'line')}
-            >
-              {tiles[index]}
-            </button>
-          ))}
+          {previewOrder(placed, drag).map((index) =>
+            drag?.from === 'bank' && drag.tile === index ? (
+              // Where a dragged bank word will land; the word itself is still in the bank (contract W2)
+              <span key="bank-slot" className={`${styles.tile} ${styles.tileSlot}`} aria-hidden="true">
+                {tiles[index]}
+              </span>
+            ) : (
+              <button
+                key={index}
+                ref={(el) => {
+                  if (el) placedRefs.current.set(index, el)
+                  else placedRefs.current.delete(index)
+                }}
+                type="button"
+                className={drag?.tile === index ? `${styles.tile} ${styles.tileSlot}` : styles.tile}
+                disabled={disabled}
+                aria-describedby={hintId}
+                onClick={(e) => onTileClick(e, () => remove(index))}
+                onKeyDown={(e) => onPlacedKeyDown(index, e)}
+                {...pointerHandlers(index, 'line')}
+              >
+                {tiles[index]}
+              </button>
+            ),
+          )}
         </div>
         <div ref={bankRef} className={styles.bank} role="group" aria-label="Word bank">
           {tiles.map((word, index) =>
@@ -243,9 +250,11 @@ export default function WordBank({ header, exercise, disabled, onSubmit }: Props
                 key={index}
                 ref={index === 0 ? focusOnMount : undefined} // keyboard users land on the new exercise
                 type="button"
-                className={styles.tile}
+                // While dragged, its place in the bank shows empty (contract W2)
+                className={drag?.tile === index ? `${styles.tile} ${styles.tileSlot}` : styles.tile}
                 disabled={disabled}
-                onClick={() => place(index)}
+                onClick={(e) => onTileClick(e, () => place(index))}
+                {...pointerHandlers(index, 'bank')}
               >
                 {word}
               </button>

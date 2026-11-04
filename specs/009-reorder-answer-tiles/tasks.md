@@ -164,16 +164,20 @@ in the middle and the bank shows its empty place.
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] In src/components/WordBank.tsx (research R3–R6, contract W2): give **bank** tile buttons the same pointer handlers with `from: 'bank'` and initial `index: null`; while over the answer line (box extended 16 px down) `index = dropIndex(<rects of all placed tiles>, x, y)`, otherwise `index = null`. While dragging, the bank button stays mounted (R4) and is styled as the bank's empty place (`tilePlaceholder` look); the line shows an `aria-hidden` slot `<span>` at `index` when not null. On drop: "bank | answer line (`index !== null`) | `placed` = preview order (tile inserted)"; "bank | elsewhere | unchanged". A bank tap (no drag) still appends; the click after a drag is suppressed. Tap and the first-tile `focusOnMount` unchanged
-- [ ] T016 [US3] Run `npm run lint`, `npm run build`, `npm test`
+- [X] T015 [US3] In src/components/WordBank.tsx (research R3–R6, contract W2): give **bank** tile buttons the same pointer handlers with `from: 'bank'` and initial `index: null`; while over the answer line (box extended 16 px down) `index = dropIndex(<rects of all placed tiles>, x, y)`, otherwise `index = null`. While dragging, the bank button stays mounted (R4) and is styled as the bank's empty place (`tilePlaceholder` look); the line shows an `aria-hidden` slot `<span>` at `index` when not null. On drop: "bank | answer line (`index !== null`) | `placed` = preview order (tile inserted)"; "bank | elsewhere | unchanged". A bank tap (no drag) still appends; the click after a drag is suppressed. Tap and the first-tile `focusOnMount` unchanged
+  - **Result (2026-11-04)**: the line shows an `aria-hidden` slot span keyed `bank-slot`; the bank button keeps its place with the slot look
+- [X] T016 [US3] Run `npm run lint`, `npm run build`, `npm test`
+  - **Result (2026-11-04)**: lint clean, type check ok, 588 passed
 
 ### Tests for User Story 3
 
-- [ ] T017 [US3] Extend tests/integration/wordBank.test.tsx (extend the layout stub so bank buttons sit inside the bank box): place `kulupu` and `wawa`; drag `sina` from the bank to between them → line reads `kulupu sina wawa` and the bank shows `sina`'s place empty (no `sina` button in the bank); mid-drag over the line a slot is present; drag a bank word and drop it at y −100 → stays in the bank, line unchanged; drag over the line then away and drop → stays in the bank; a bank press with < 6 px movement → appended at the end (SC-002a); `pointerCancel` → nothing changes; drop a bank word into the line **without** firing a click afterwards, then tap another bank word → it is appended (research R2)
+- [X] T017 [US3] Extend tests/integration/wordBank.test.tsx (extend the layout stub so bank buttons sit inside the bank box): place `kulupu` and `wawa`; drag `sina` from the bank to between them → line reads `kulupu sina wawa` and the bank shows `sina`'s place empty (no `sina` button in the bank); mid-drag over the line a slot is present; drag a bank word and drop it at y −100 → stays in the bank, line unchanged; drag over the line then away and drop → stays in the bank; a bank press with < 6 px movement → appended at the end (SC-002a); `pointerCancel` → nothing changes; drop a bank word into the line **without** firing a click afterwards, then tap another bank word → it is appended (research R2)
+  - **Result (2026-11-04)**: 7 tests (26 in wordBank.test.tsx), including a drop with no click followed by a bank tap, and no drag after Check
 
 ### Validation for User Story 3
 
-- [ ] T018 [US3] Manual check in Chrome: quickstart S4 (and S5 again); record results under this task
+- [X] T018 [US3] Manual check in Chrome: quickstart S4 (and S5 again); record results under this task
+  - **Result (2026-11-04)**: Chrome, real mouse drags, "This is a woman." with ni meli placed: li dragged from the bank to between them → ni li meli, its bank place empty; lipu dragged and dropped on the prompt → stays in the bank; S5: tap lipu → appended, tap it in the line → back; Check → "pona! Correct."; Check caused no scroll (0 scroll events). Learner data restored from the backup afterwards (only `duopona:words` had changed) and confirmed after a reload
 
 **Checkpoint**: all three stories done
 
@@ -181,7 +185,7 @@ in the middle and the bank shows its empty place.
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T019 [P] Update README.md: in the features section mention that sentence answers can be reordered by dragging words (or with the arrow keys) and that bank words can be dragged into place
+- [X] T019 [P] Update README.md: in the features section mention that sentence answers can be reordered by dragging words (or with the arrow keys) and that bank words can be dragged into place
 - [ ] T020 Ask the user to run quickstart S-D1 on iPhone (Safari) and Android (Chrome), in the browser or installed; record results under this task (the owner may waive it under the constitution's recorded-waiver rule, Principle IV; then mark `[~]` with the date and "owner decision" and name the waived check in spec.md **Status**)
 - [ ] T021 Set spec.md **Status** to `Implemented` (or `Implemented (…)` naming skipped manual checks) and mark the requirements checklist unchanged; in ROADMAP.md move the T001 entry from **In progress** to **Done** with the same text, leaving **In progress** as `(none)`
 - [ ] T022 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the test count vs. T001's baseline under this task
