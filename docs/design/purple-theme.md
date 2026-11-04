@@ -1,5 +1,8 @@
 # Purple brand colours
 
+> Implemented in [`specs/011-purple-brand-colours/`](../../specs/011-purple-brand-colours/). The
+> progress-shadow and banner-text rows had no hard-coded values to change.
+
 Design reference for the "Purple brand colours" item in [ROADMAP.md](../../ROADMAP.md). Turn it
 into a feature with `/speckit-specify` when it is picked up; this file is the input, not the spec.
 

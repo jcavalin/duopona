@@ -66,7 +66,7 @@ export default function FeedbackBanner({ feedback, exerciseKey, onContinue }: Pr
           <ExplanationContent {...explanation} />
         </div>
       )}
-      <button type="button" className={`primary-button${correct ? '' : ' danger'}`} onClick={onContinue} ref={focusOnMount}>
+      <button type="button" className={`primary-button ${correct ? 'success' : 'danger'}`} onClick={onContinue} ref={focusOnMount}>
         Continue
       </button>
     </div>

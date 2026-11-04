@@ -275,7 +275,7 @@
 }
 
 .sheetCorrect .sheetIcon {
-  background: var(--primary);
+  background: var(--success);
 }
 
 .sheetWrong .sheetIcon {
@@ -290,7 +290,7 @@
 }
 
 .sheetCorrect .sheetText {
-  color: var(--primary-text-strong);
+  color: var(--success-text);
 }
 
 .sheetWrong .sheetText {
