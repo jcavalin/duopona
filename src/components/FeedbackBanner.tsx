@@ -1,6 +1,7 @@
 import { explainMistake } from '../content/explanations'
 import type { Feedback } from '../store/sessionSlice'
 import { CheckIcon, WrongIcon } from './icons'
+import { focusOnMount } from './focusOnMount'
 import styles from './Exercise.module.css'
 
 interface Props {
@@ -40,7 +41,7 @@ export default function FeedbackBanner({ feedback, exerciseKey, onContinue }: Pr
           )}
         </div>
       </div>
-      <button type="button" className={`primary-button${correct ? '' : ' danger'}`} onClick={onContinue} autoFocus>
+      <button type="button" className={`primary-button${correct ? '' : ' danger'}`} onClick={onContinue} ref={focusOnMount}>
         Continue
       </button>
     </div>

@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import type { MultipleChoiceExercise } from '../content/types'
 import { shuffle } from '../lib/shuffle'
 import { DropIcon } from './icons'
+import { focusOnMount } from './focusOnMount'
 import styles from './Exercise.module.css'
 
 interface Props {
@@ -49,7 +50,7 @@ export default function MultipleChoice({ header, exercise, disabled, result, onS
               className={styles.option}
               aria-pressed={selected === option}
               data-result={selected === option ? result : undefined}
-              autoFocus={index === 0} // keyboard users land on the new exercise
+              ref={index === 0 ? focusOnMount : undefined} // keyboard users land on the new exercise
               disabled={disabled}
               onClick={() => setSelected(option)}
             >

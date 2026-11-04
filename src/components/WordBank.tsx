@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react'
 import type { WordBankExercise } from '../content/types'
 import { shuffle } from '../lib/shuffle'
 import { BubbleIcon } from './icons'
+import { focusOnMount } from './focusOnMount'
 import styles from './Exercise.module.css'
 
 interface Props {
@@ -53,7 +54,7 @@ export default function WordBank({ header, exercise, disabled, onSubmit }: Props
                 type="button"
                 className={styles.tile}
                 disabled={disabled}
-                autoFocus={index === 0} // keyboard users land on the new exercise
+                ref={index === 0 ? focusOnMount : undefined} // keyboard users land on the new exercise
                 onClick={() => place(index)}
               >
                 {word}

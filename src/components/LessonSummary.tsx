@@ -1,4 +1,5 @@
 import { FlameIcon, StarIcon } from './icons'
+import { focusOnMount } from './focusOnMount'
 import styles from './Exercise.module.css'
 
 interface Props {
@@ -65,7 +66,7 @@ export default function LessonSummary({
         </div>
       </div>
       <div className="bottom-bar">
-        <button type="button" className="primary-button" onClick={onContinue} autoFocus>
+        <button type="button" className="primary-button" onClick={onContinue} ref={focusOnMount}>
           Continue
         </button>
         <button type="button" className="text-button" onClick={onReplay}>
