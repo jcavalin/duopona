@@ -230,12 +230,13 @@
 .sheet {
   display: flex;
   flex-direction: column;
-  max-height: 75dvh;
+  /* Grows with the explanation up to ~60% of the screen; the floor keeps short screens usable (010 R4) */
+  max-height: max(60dvh, 360px);
   border-top: none;
   animation: slide-up 0.2s ease-out;
 }
 
-/* Continue stays visible; long explanations scroll in the row above it (008 contract F1) */
+/* Continue stays visible; only the explanation card scrolls (010 contract C4) */
 .sheet > button {
   flex-shrink: 0;
 }
@@ -256,9 +257,7 @@
 
 .sheetRow {
   display: flex;
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
+  flex: none;
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 16px;
@@ -318,15 +317,63 @@
   font-weight: 800;
 }
 
-/* Mistake explanation inside the wrong-answer sheet (008 contract F1) */
+/* "Why?" / "Hide" toggle beside the heading (010 contract C1, C2, C4; mockups 04a/04b) */
+.explainToggle {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 44px;
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 2px solid var(--explain-toggle-border);
+  border-bottom-width: 4px;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--explain-toggle-text);
+  font: inherit;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.explainToggle svg {
+  transition: transform 0.15s;
+}
+
+.explainToggle[aria-expanded='true'] {
+  background: var(--explain-toggle-pressed);
+}
+
+.explainToggle[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+/* Mistake explanation card (008 content, 010 contract C2): the only part of the sheet that scrolls */
 .explain {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid currentcolor;
-  border-top-color: color-mix(in srgb, currentcolor 35%, transparent);
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border: 2px solid var(--explain-border);
+  border-radius: 16px;
+  background: var(--explain-bg);
+  color: var(--explain-text);
   font-size: 17px;
   font-weight: 500;
   line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.explain[hidden] {
+  display: none;
+}
+
+/* Bold words in white, as in mockup 4b */
+.explain strong {
+  color: #ffffff;
 }
 
 .explainWords {
@@ -342,11 +389,24 @@
   margin: 8px 0 0;
 }
 
+.explainWords + .explainPick {
+  margin-top: 8px;
+}
+
+.explainPick:first-child {
+  margin-top: 0;
+}
+
 .explainGrammar {
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.explainGrammarDivided {
   margin-top: 12px;
+  padding-top: 12px;
+  border-top: 2px solid var(--explain-border);
 }
 
 .explainGrammar p {
@@ -354,14 +414,17 @@
 }
 
 .explainGrammarTitle {
+  color: #ffffff;
   font-weight: 800;
 }
 
 .explainLesson {
   margin-bottom: 2px;
-  font-size: 15px;
-  font-weight: 700;
-  opacity: 0.8;
+  color: var(--explain-source);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* Lesson summary (mockup 07) */

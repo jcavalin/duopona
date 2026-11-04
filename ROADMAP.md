@@ -43,6 +43,10 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 - **009 – Reorder answer tiles**: drag or arrow-key placed words into a new order, and drag bank
   words into a chosen spot (`specs/009-reorder-answer-tiles/`). The phone check was deferred by
   owner decision (to be run later).
+- **010 – Collapsible mistake explanations**: the explanation after a wrong answer starts hidden
+  behind a "Why?" toggle and opens in a scrolling card (mockups 04a/04b)
+  (`specs/010-collapsible-explanations/`). The phone check was deferred by owner decision (to be
+  run later).
 
 ## Ideas (not yet evaluated)
 

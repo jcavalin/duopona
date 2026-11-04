@@ -34,6 +34,14 @@
   --error-deep: #a3141f;
   --error-text: #ff8a92;
   --error-tint: #3a1b1f;
+  /* Mistake explanation toggle and card (010, mockups 04a/04b) */
+  --explain-toggle-border: #6b2b32;
+  --explain-toggle-pressed: #4a2328;
+  --explain-toggle-text: #ffc2c6;
+  --explain-bg: #2a1316;
+  --explain-border: #5a262c;
+  --explain-text: #ffd9db;
+  --explain-source: #e7a3a8;
   --gold: #f2b705;
   --gold-deep: #c79600;
   --gold-ink: #5a4300;

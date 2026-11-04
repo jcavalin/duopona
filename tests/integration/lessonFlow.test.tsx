@@ -623,6 +623,13 @@ describe('mistake explanations (feature 008)', () => {
     }
   }
 
+  /** Opens the collapsed explanation (010) and returns its card */
+  async function openExplanation(user: User): Promise<HTMLElement> {
+    const toggle = screen.getByRole('button', { name: 'Why?' })
+    await user.click(toggle)
+    return document.getElementById(toggle.getAttribute('aria-controls')!)!
+  }
+
   it('a wrong pick shows the answer word and the pick with their meanings; a right answer shows none', async () => {
     unlock(youAndI)
     const { user } = renderApp()
@@ -640,15 +647,19 @@ describe('mistake explanations (feature 008)', () => {
     await answer(user, false)
     const status = screen.getByRole('status')
     expect(status).toHaveTextContent('Not quite. Correct answer: kulupu')
-    expect(within(status).getByRole('listitem')).toHaveTextContent('kulupu: group / community')
-    expect(status).toHaveTextContent('kili means fruit / vegetable')
+    // 010: the explanation is outside the announcement and opens on "Why?"
+    expect(status).not.toHaveTextContent('group / community')
     expect(screen.getByRole('button', { name: 'Continue' })).toHaveFocus()
+    const card = await openExplanation(user)
+    expect(within(card).getByRole('listitem')).toHaveTextContent('kulupu: group / community')
+    expect(card).toHaveTextContent('kili means fruit / vegetable')
 
-    // The missed exercise comes back at the end with the same explanation
+    // The missed exercise comes back at the end, collapsed again, with the same explanation
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     await playUntil(user, 'kulupu')
     await answer(user, false)
-    expect(screen.getByRole('status')).toHaveTextContent('kulupu: group / communitykili means fruit / vegetable')
+    expect(screen.queryByRole('button', { name: 'Hide' })).not.toBeInTheDocument()
+    expect(await openExplanation(user)).toHaveTextContent('kulupu: group / communitykili means fruit / vegetable')
   })
 
   it('a missed grammar exercise names the grammar point, its lesson and the note (US2)', async () => {
@@ -658,11 +669,11 @@ describe('mistake explanations (feature 008)', () => {
     await playUntil(user, 'mi-wawa')
     await answer(user, false)
     const exercise = youAndI.exercises.find((e) => e.id === 'mi-wawa')!
-    const status = screen.getByRole('status')
-    expect(status).toHaveTextContent('Correct answer: mi wawa')
-    expect(status).toHaveTextContent('mi and sina need no li')
-    expect(status).toHaveTextContent('Lesson 4 · You and I')
-    expect(status).toHaveTextContent(exercise.type === 'wordBank' ? exercise.grammarNote! : '')
+    expect(screen.getByRole('status')).toHaveTextContent('Correct answer: mi wawa')
+    const card = await openExplanation(user)
+    expect(card).toHaveTextContent('mi and sina need no li')
+    expect(card).toHaveTextContent('From Lesson 4 · You and I')
+    expect(card).toHaveTextContent(exercise.type === 'wordBank' ? exercise.grammarNote! : '')
   })
 
   it('a wrong sentence lists its Toki Pona words in order', async () => {
@@ -671,12 +682,133 @@ describe('mistake explanations (feature 008)', () => {
     await startLesson(user, youAndI)
     await playUntil(user, 'kulupu-sina-li-wawa')
     await answer(user, false)
-    const items = within(screen.getByRole('status')).getAllByRole('listitem').map((li) => li.textContent)
+    const items = within(await openExplanation(user)).getAllByRole('listitem').map((li) => li.textContent)
     expect(items).toEqual([
       `kulupu: ${getMeaning('kulupu')}`,
       `sina: ${getMeaning('sina')}`,
       `li: ${getMeaning('li')}`,
       `wawa: ${getMeaning('wawa')}`,
     ])
+  })
+})
+
+describe('collapsible explanation (feature 010)', () => {
+  // Second lesson on the path, chapter "Lesson 3"; its "good water" exercise is the one in mockups 04a/04b
+  const nouns = lessons.find((l) => l.id === 'nouns-and-adjectives')!
+
+  function unlockNouns() {
+    const before = lessons.slice(0, lessons.indexOf(nouns))
+    const done = Object.fromEntries(
+      before.map((l) => [l.id, { firstTryCorrect: 1, total: l.exercises.length, completedAt: '2026-11-04T00:00:00Z' }]),
+    )
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, completedLessons: done }))
+  }
+
+  async function playUntil(user: User, id: string) {
+    while (currentExercise().id !== id) {
+      await answer(user, true)
+      await user.click(screen.getByRole('button', { name: 'Continue' }))
+    }
+  }
+
+  /** Starts the lesson and answers "good water" wrong with "pona telo" */
+  async function missGoodWater() {
+    unlockNouns()
+    const app = renderApp()
+    await startLesson(app.user, nouns)
+    await playUntil(app.user, 'telo-pona')
+    await answer(app.user, false)
+    return app
+  }
+
+  const card = (toggle: HTMLElement) => document.getElementById(toggle.getAttribute('aria-controls')!)!
+
+  it('a wrong answer opens with the explanation hidden behind "Why?" and focus on Continue (C1)', async () => {
+    await missGoodWater()
+    const toggle = screen.getByRole('button', { name: 'Why?' })
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(card(toggle)).not.toBeVisible()
+    expect(screen.getByText(/^telo$/)).not.toBeVisible()
+    expect(screen.getByRole('status')).toHaveTextContent('Not quite. Correct answer: telo pona')
+    expect(screen.getByRole('button', { name: 'Continue' })).toHaveFocus()
+  })
+
+  it('"Why?" reveals the explanation and becomes "Hide"; "Hide" collapses it again (C2)', async () => {
+    const { user } = await missGoodWater()
+    const toggle = screen.getByRole('button', { name: 'Why?' })
+    await user.click(toggle)
+    expect(toggle).toHaveAccessibleName('Hide')
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    const explanation = card(toggle)
+    expect(explanation).toBeVisible()
+    const items = within(explanation).getAllByRole('listitem').map((li) => li.textContent)
+    expect(items).toEqual([`telo: ${getMeaning('telo')}`, `pona: ${getMeaning('pona')}`])
+    // "pona telo" is not a single course word: no "means" line; multiple choice has no grammar note
+    expect(explanation).not.toHaveTextContent('means')
+    expect(explanation).not.toHaveTextContent('From ')
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeInTheDocument()
+    expect(screen.getByRole('status')).not.toHaveTextContent('water')
+
+    await user.click(toggle)
+    expect(toggle).toHaveAccessibleName('Why?')
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(explanation).not.toBeVisible()
+  })
+
+  it('the next mistake starts collapsed again (FR-004)', async () => {
+    const { user } = await missGoodWater()
+    await user.click(screen.getByRole('button', { name: 'Why?' }))
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    await answer(user, false)
+    const toggle = screen.getByRole('button', { name: 'Why?' })
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(card(toggle)).not.toBeVisible()
+  })
+
+  it('a right answer shows no toggle (FR-005)', async () => {
+    unlockNouns()
+    const { user } = renderApp()
+    await startLesson(user, nouns)
+    await answer(user, true)
+    expect(screen.getByRole('status')).toHaveTextContent('pona! Correct.')
+    expect(screen.queryByRole('button', { name: 'Why?' })).not.toBeInTheDocument()
+  })
+
+  it('works from the keyboard and Continue still continues (FR-006, FR-007)', async () => {
+    const { user, store } = await missGoodWater()
+    const step = store.getState().session!.step
+    await user.tab({ shift: true })
+    const toggle = screen.getByRole('button', { name: 'Why?' })
+    expect(toggle).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    expect(store.getState().session!.status).toBe('feedback')
+    await user.keyboard(' ')
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    await user.tab()
+    expect(screen.getByRole('button', { name: 'Continue' })).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(store.getState().session!.step).toBe(step + 1)
+  })
+
+  it('opening the explanation changes no state or saved data (FR-008)', async () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0)
+    const snapshot = async (open: boolean) => {
+      const { user, store } = await missGoodWater()
+      if (open) {
+        await user.click(screen.getByRole('button', { name: 'Why?' }))
+        await user.click(screen.getByRole('button', { name: 'Hide' }))
+        await user.click(screen.getByRole('button', { name: 'Why?' }))
+      }
+      await user.click(screen.getByRole('button', { name: 'Continue' }))
+      const { progress, words, session } = store.getState()
+      const saved = { ...localStorage }
+      cleanup()
+      localStorage.clear()
+      return { progress, words, session, saved }
+    }
+    const closed = await snapshot(false)
+    const opened = await snapshot(true)
+    expect(opened).toEqual(closed)
   })
 })

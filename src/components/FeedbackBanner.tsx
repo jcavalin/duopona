@@ -1,6 +1,7 @@
+import { useId, useState } from 'react'
 import { explainMistake } from '../content/explanations'
 import type { Feedback } from '../store/sessionSlice'
-import { CheckIcon, WrongIcon } from './icons'
+import { CheckIcon, ChevronDownIcon, WrongIcon } from './icons'
 import { focusOnMount } from './focusOnMount'
 import styles from './Exercise.module.css'
 
@@ -11,13 +12,21 @@ interface Props {
   onContinue: () => void
 }
 
+type Explanation = NonNullable<ReturnType<typeof explainMistake>>
+
 /**
  * Bottom sheet that replaces the Check bar after an answer (mockups 04 and 06, research R9).
- * After a wrong answer it also explains the right one (008 contract F1).
+ * After a wrong answer it offers the explanation of the right one (008) behind a "Why?" toggle,
+ * hidden until asked for (010 contract C1–C3). The sheet unmounts between answers, so every new
+ * wrong-answer sheet starts collapsed.
  */
 export default function FeedbackBanner({ feedback, exerciseKey, onContinue }: Props) {
+  const [open, setOpen] = useState(false)
+  const cardId = useId()
   const { correct } = feedback
   const explanation = correct ? null : explainMistake(exerciseKey, feedback.given)
+  const hasExplanation = !!explanation && (explanation.words.length > 0 || !!explanation.wrongPick || !!explanation.grammar)
+
   return (
     <div className={`bottom-bar ${styles.sheet} ${correct ? styles.sheetCorrect : styles.sheetWrong}`}>
       <div className={styles.sheetRow}>
@@ -36,11 +45,27 @@ export default function FeedbackBanner({ feedback, exerciseKey, onContinue }: Pr
               </span>{' '}
               <span className={styles.sheetLabel}>Correct answer:</span>{' '}
               <span className={styles.sheetAnswer}>{feedback.correctAnswer}</span>
-              {explanation && <ExplanationBlock {...explanation} />}
             </>
           )}
         </div>
+        {hasExplanation && (
+          <button
+            type="button"
+            className={styles.explainToggle}
+            aria-expanded={open}
+            aria-controls={cardId}
+            onClick={() => setOpen((o) => !o)}
+          >
+            <span>{open ? 'Hide' : 'Why?'}</span>
+            <ChevronDownIcon size={20} />
+          </button>
+        )}
       </div>
+      {hasExplanation && (
+        <div id={cardId} className={styles.explain} hidden={!open}>
+          <ExplanationContent {...explanation} />
+        </div>
+      )}
       <button type="button" className={`primary-button${correct ? '' : ' danger'}`} onClick={onContinue} ref={focusOnMount}>
         Continue
       </button>
@@ -48,10 +73,9 @@ export default function FeedbackBanner({ feedback, exerciseKey, onContinue }: Pr
   )
 }
 
-function ExplanationBlock({ words, wrongPick, grammar }: NonNullable<ReturnType<typeof explainMistake>>) {
-  if (words.length === 0 && !wrongPick && !grammar) return null
+function ExplanationContent({ words, wrongPick, grammar }: Explanation) {
   return (
-    <div className={styles.explain}>
+    <>
       {words.length > 0 && (
         <ul className={styles.explainWords}>
           {words.map(({ word, meaning }) => (
@@ -67,12 +91,12 @@ function ExplanationBlock({ words, wrongPick, grammar }: NonNullable<ReturnType<
         </p>
       )}
       {grammar && (
-        <div className={styles.explainGrammar}>
+        <div className={`${styles.explainGrammar}${words.length > 0 || wrongPick ? ` ${styles.explainGrammarDivided}` : ''}`}>
           <p className={styles.explainGrammarTitle}>{grammar.title}</p>
-          <p className={styles.explainLesson}>{grammar.lesson}</p>
+          <p className={styles.explainLesson}>From {grammar.lesson}</p>
           <p>{grammar.note}</p>
         </div>
       )}
-    </div>
+    </>
   )
 }

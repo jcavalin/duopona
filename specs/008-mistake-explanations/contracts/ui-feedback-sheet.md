@@ -1,5 +1,9 @@
 # UI Contract: Feedback Sheet with Explanation
 
+> The wrong-answer layout below is superseded by feature 010: the explanation is collapsed behind a
+> "Why?" toggle and moved out of the status region. See
+> `specs/010-collapsible-explanations/contracts/ui-feedback-sheet.md`.
+
 ## F1. Wrong-answer sheet
 
 Replaces the bottom bar after a **wrong** answer (right-answer sheet unchanged: "pona! Correct.").
