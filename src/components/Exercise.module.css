@@ -199,6 +199,33 @@
   color: transparent;
 }
 
+/* Tiles can be dragged (009): a press-and-drag moves the word, not the page, and selects no text */
+.tile {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Where a dragged word will land (009 contract W1): same size as the tile, looks like an empty place */
+.tileSlot {
+  border-color: transparent;
+  background: var(--line);
+  color: transparent;
+}
+
+/* The copy of the dragged word that follows the pointer; above the sticky bottom bar */
+.tileGhost {
+  position: fixed;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  pointer-events: none;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 25%);
+}
+
 /* Feedback sheet: replaces the bottom bar */
 .sheet {
   display: flex;

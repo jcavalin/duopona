@@ -32,6 +32,11 @@ exercise means (and what your wrong pick means, if it is a course word). For exe
 practise grammar, it also names the grammar point, the lesson it comes from and a short note on
 why the answer follows it.
 
+In word-bank exercises you can fix the order of a sentence before checking it: drag a placed
+word to a new spot, or focus it and use the left and right arrow keys. You can also drag a word
+from the bank straight into the spot where it belongs. A tap still adds a word at the end or
+sends a placed word back.
+
 Practice never changes lesson progress. Progress is saved under `duopona:progress`, word
 mistakes under `duopona:words` and the streak under `duopona:streak`, all in `localStorage`.
 
