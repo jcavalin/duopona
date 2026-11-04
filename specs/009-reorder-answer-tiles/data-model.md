@@ -22,7 +22,8 @@ while the exercise is on screen.
 | `width` | number | Ghost width, the pressed tile's width |
 
 A separate ref holds the press before it becomes a drag (`pointerId`, start point, grab offset),
-and a one-shot flag that ignores the `click` following a drag (research R2).
+and a one-shot flag that ignores the `click` following a drag (research R2). The flag is cleared
+on every `pointerdown`, so it can only affect the click of the press that set it.
 
 ### Lifecycle
 

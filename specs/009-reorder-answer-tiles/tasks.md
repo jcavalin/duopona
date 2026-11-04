@@ -81,14 +81,14 @@ and Check grades it.
 
 - [ ] T004 [US1] In src/components/WordBank.tsx add pointer dragging of **placed** tiles per research R2–R7, data-model and contract W1:
   - Local state `drag: { tile: number; from: 'line' | 'bank'; index: number | null; x: number; y: number; width: number } | null` (only `from: 'line'` in this story) and a ref for the press `{ tile, pointerId, startX, startY, offsetX, offsetY, dragging }`; a ref flag `suppressClick`; refs to the answer line div, the bank div, and a `Map<number, HTMLButtonElement>` of placed tile buttons (callback refs that set/delete by tile index).
-  - `onPointerDown` (ignored when `disabled`, or mouse with `button !== 0`): record the press and grab offset from `getBoundingClientRect()`.
-  - `onPointerMove`: ignore other `pointerId`s; start the drag only once the pointer is "≥ 6 px" from the start (`Math.hypot`), then call `event.currentTarget.setPointerCapture?.(event.pointerId)` and set `drag` with `index` = the tile's position in `placed`. On every move update `x`/`y` (pointer minus grab offset) and, **only while the pointer is over the answer line's box extended 24 px down**, `index = dropIndex(<rects of the other placed tiles, in placed order>, clientX, clientY)`.
+  - `onPointerDown`: first clear `suppressClick` (research R2: a drop that unmounts the pressed button gets no click, so the flag must not outlive its press). Then ignore the press when `disabled`, for a mouse with `button !== 0`, or when a press is already active ("Only one drag at a time", data-model); otherwise record the press and grab offset from `getBoundingClientRect()`.
+  - `onPointerMove`: ignore other `pointerId`s; start the drag only once the pointer is "≥ 6 px" from the start (`Math.hypot`), then call `event.currentTarget.setPointerCapture?.(event.pointerId)` and set `drag` with `index` = the tile's position in `placed`. On every move update `x`/`y` (pointer minus grab offset) and, **only while the pointer is over the answer line's box extended 16 px down** (it must not overlap the bank's area extended 8 px up: the line's `margin-bottom` is 28 px, research R5), `index = dropIndex(<rects of the other placed tiles, in placed order>, clientX, clientY)`.
   - `onPointerUp`: if no drag started, do nothing (the native `click` handles the tap). Otherwise set `suppressClick`, clear `drag`, and commit: pointer over the bank's box extended 8 px up → remove the tile from `placed`; else `placed` = preview order (data-model: "`others = placed` without `drag.tile`; ... inserted into `others` at `drag.index`").
   - `onPointerCancel`: clear `drag` and the press; `placed` unchanged.
   - `onClick` on a placed tile: if `suppressClick` is set, clear it and return; else remove (today's tap).
   - Render the answer line from the **preview order** while `drag` is set (from `placed` otherwise). The dragged tile stays the **same keyed button** (never unmounted: R4) with an extra slot class; render the ghost `<span aria-hidden="true">` with the tile classes plus a ghost class at `style={{ left: x, top: y, width }}` outside `.screen-body` (next to the bottom bar).
   - No change to bank buttons yet except keeping `focusOnMount` on the first one.
-- [ ] T005 [US1] In src/components/Exercise.module.css (contract W1, W4): `.answerTile` (and the bank `.tile` buttons, which US3 drags) `touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none`; `.tileSlot` = the `tilePlaceholder` look (transparent text and border, `--line` background) so the gap keeps the tile's size; `.tileGhost` `position: fixed; z-index: 2` (above the sticky `.bottom-bar` at z-index 1), `pointer-events: none`, a soft shadow, `margin: 0`. Nothing may scroll horizontally at 360 px
+- [ ] T005 [US1] In src/components/Exercise.module.css (contract W1, W4): `.tile` (shared by placed and bank tiles, so no new class is needed) `touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none`; `.tileSlot` = the `tilePlaceholder` look (transparent text and border, `--line` background) so the gap keeps the tile's size; `.tileGhost` `position: fixed; z-index: 2` (above the sticky `.bottom-bar` at z-index 1), `pointer-events: none`, a soft shadow, `margin: 0`. Nothing may scroll horizontally at 360 px
 - [ ] T006 [US1] Run `npm run lint`, `npm run build`, `npm test`; all existing tests must pass unchanged (taps still go through `click`)
 
 ### Tests for User Story 1
@@ -101,6 +101,8 @@ and Check grades it.
   - dropping at the same spot → order unchanged and word still placed;
   - dropping outside both (y −100) after moving over a new position → word at that last position;
   - `pointerCancel` mid-drag → order unchanged;
+  - drop a placed word on the bank **without** firing a click afterwards (the button unmounts), then a plain tap (pointerDown/Up + click, no movement) on another placed word → that word is removed (the ignore flag did not swallow it, research R2);
+  - a second `pointerDown` (`pointerId: 2`) on another tile mid-drag → ignored; the first drag completes normally;
   - moving one of the two `li` tiles never moves the other;
   - row 2 to the start of row 1 (US1-4, place 5 tiles first);
   - re-render with `disabled={true}` → pointer drags and taps change nothing (FR-008).
@@ -150,12 +152,12 @@ in the middle and the bank shows its empty place.
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] In src/components/WordBank.tsx (research R3–R6, contract W2): give **bank** tile buttons the same pointer handlers with `from: 'bank'` and initial `index: null`; while over the answer line (box extended 24 px down) `index = dropIndex(<rects of all placed tiles>, x, y)`, otherwise `index = null`. While dragging, the bank button stays mounted (R4) and is styled as the bank's empty place (`tilePlaceholder` look); the line shows an `aria-hidden` slot `<span>` at `index` when not null. On drop: "bank | answer line (`index !== null`) | `placed` = preview order (tile inserted)"; "bank | elsewhere | unchanged". A bank tap (no drag) still appends; the click after a drag is suppressed. Tap and the first-tile `focusOnMount` unchanged
+- [ ] T015 [US3] In src/components/WordBank.tsx (research R3–R6, contract W2): give **bank** tile buttons the same pointer handlers with `from: 'bank'` and initial `index: null`; while over the answer line (box extended 16 px down) `index = dropIndex(<rects of all placed tiles>, x, y)`, otherwise `index = null`. While dragging, the bank button stays mounted (R4) and is styled as the bank's empty place (`tilePlaceholder` look); the line shows an `aria-hidden` slot `<span>` at `index` when not null. On drop: "bank | answer line (`index !== null`) | `placed` = preview order (tile inserted)"; "bank | elsewhere | unchanged". A bank tap (no drag) still appends; the click after a drag is suppressed. Tap and the first-tile `focusOnMount` unchanged
 - [ ] T016 [US3] Run `npm run lint`, `npm run build`, `npm test`
 
 ### Tests for User Story 3
 
-- [ ] T017 [US3] Extend tests/integration/wordBank.test.tsx (extend the layout stub so bank buttons sit inside the bank box): place `kulupu` and `wawa`; drag `sina` from the bank to between them → line reads `kulupu sina wawa` and the bank shows `sina`'s place empty (no `sina` button in the bank); mid-drag over the line a slot is present; drag a bank word and drop it at y −100 → stays in the bank, line unchanged; drag over the line then away and drop → stays in the bank; a bank press with < 6 px movement → appended at the end (SC-002a); `pointerCancel` → nothing changes
+- [ ] T017 [US3] Extend tests/integration/wordBank.test.tsx (extend the layout stub so bank buttons sit inside the bank box): place `kulupu` and `wawa`; drag `sina` from the bank to between them → line reads `kulupu sina wawa` and the bank shows `sina`'s place empty (no `sina` button in the bank); mid-drag over the line a slot is present; drag a bank word and drop it at y −100 → stays in the bank, line unchanged; drag over the line then away and drop → stays in the bank; a bank press with < 6 px movement → appended at the end (SC-002a); `pointerCancel` → nothing changes; drop a bank word into the line **without** firing a click afterwards, then tap another bank word → it is appended (research R2)
 
 ### Validation for User Story 3
 

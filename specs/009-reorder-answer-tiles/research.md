@@ -21,7 +21,10 @@ chosen spot). These are the design decisions.
 - **Decision**: A press becomes a drag only after the pointer moves 6 px or more from where it
   went down. Below that, nothing happens on move and the normal `click` runs (tap removes a
   placed word, tap adds a bank word: FR-003, FR-004a). After a real drag, the `click` that the
-  browser fires on release is ignored once.
+  browser fires on release is ignored once. The ignore flag is cleared on every `pointerdown`,
+  because some drops unmount the pressed button (a placed word dropped on the bank, a bank word
+  dropped into the line), so no click arrives to clear it, and a stuck flag would swallow the
+  learner's next tap.
 - **Rationale**: Keeps today's tap behaviour exactly (SC-002, SC-002a) and makes drags start
   immediately, with no long press (spec Assumptions). 6 px absorbs a shaky finger (spec edge
   case) without feeling sticky.
@@ -64,7 +67,9 @@ chosen spot). These are the design decisions.
   before the pointer: a tile is before the pointer when the pointer is below the tile's row
   (`y > bottom`), or on its row (`y ≥ top`) and right of its centre. This works across wrapped
   rows (FR-002, US1-4). The preview position is updated only while the pointer is over the
-  answer line (its box, extended 24 px down so the bottom row is easy to hit). A sibling
+  answer line (its box, extended 16 px down so the bottom row is easy to hit). The line
+  and bank drop areas must not overlap: the line's `margin-bottom` is 28 px, and the two
+  extensions (16 px down, 8 px up) leave a 4 px neutral strip between them. A sibling
   `moveItem(list, from, to)` does the array move for drops and arrow keys.
 - **Rationale**: Measuring the other tiles each move (≤ ~12 tiles) is cheap and needs no layout
   model. Pure functions can be unit-tested without layout, which jsdom does not have.
