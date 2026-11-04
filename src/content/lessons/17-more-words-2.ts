@@ -24,8 +24,8 @@ const lesson: Lesson = {
     { id: 'sike', type: 'multipleChoice', direction: 'tp-en', prompt: 'sike', options: ['picture / writing / symbol', 'box / container / bowl', 'circle / round / ball'], answer: 'circle / round / ball' },
     { id: 'sitelen', type: 'multipleChoice', direction: 'en-tp', prompt: 'picture / writing / symbol', options: ['lipu', 'sitelen', 'kule', 'mani'], answer: 'sitelen' },
     { id: 'ko', type: 'multipleChoice', direction: 'tp-en', prompt: 'ko', options: ['money / wealth', 'paste / powder / dough', 'air / wind / spirit'], answer: 'paste / powder / dough' },
-    { id: 'tenpo-pimeja-la-mi-lukin-e-mun', type: 'wordBank', direction: 'en-tp', prompt: 'At night, I see the moon.', answer: ['tenpo', 'pimeja', 'la', 'mi', 'lukin', 'e', 'mun'], distractors: ['li'], practisesGrammar: true },
-    { id: 'mani-li-lon-insa-poki', type: 'wordBank', direction: 'en-tp', prompt: 'The money is inside the box.', answer: ['mani', 'li', 'lon', 'insa', 'poki'], distractors: ['sewi'], practisesGrammar: true },
+    { id: 'tenpo-pimeja-la-mi-lukin-e-mun', type: 'wordBank', direction: 'en-tp', prompt: 'At night, I see the moon.', answer: ['tenpo', 'pimeja', 'la', 'mi', 'lukin', 'e', 'mun'], distractors: ['li'], practisesGrammar: true, grammarNote: 'The time comes before la; then mi lukin e mun, with e before what is seen.' },
+    { id: 'mani-li-lon-insa-poki', type: 'wordBank', direction: 'en-tp', prompt: 'The money is inside the box.', answer: ['mani', 'li', 'lon', 'insa', 'poki'], distractors: ['sewi'], practisesGrammar: true, grammarNote: '“Inside the box” is lon insa poki: lon, the place word, then the thing it belongs to.' },
     { id: 'musi-ni-li-nasa', type: 'wordBank', direction: 'tp-en', prompt: 'musi ni li nasa', answer: ['this', 'game', 'is', 'strange'], distractors: ['round', 'dead'] },
   ],
 }

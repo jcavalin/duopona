@@ -60,7 +60,7 @@ describe('sessionSlice', () => {
   it('correct multiple-choice answer shows correct feedback and continue removes the exercise', () => {
     let s = run(null, startLesson(lesson.id), submitAnswer(first.answer))!
     expect(s.status).toBe('feedback')
-    expect(s.feedback).toEqual({ correct: true, correctAnswer: first.answer })
+    expect(s.feedback).toEqual({ correct: true, correctAnswer: first.answer, given: first.answer })
     s = run(s, continueLesson())!
     expect(s.queue).toEqual(ids.slice(1))
     expect(s.feedback).toBeNull()
@@ -69,7 +69,7 @@ describe('sessionSlice', () => {
 
   it('wrong answer records the miss once and moves the exercise to the end on continue', () => {
     let s = run(null, startLesson(lesson.id), submitAnswer(firstWrong))!
-    expect(s.feedback).toEqual({ correct: false, correctAnswer: first.answer })
+    expect(s.feedback).toEqual({ correct: false, correctAnswer: first.answer, given: firstWrong })
     expect(s.missedOnce).toEqual([firstKey])
     // Feedback still refers to the current exercise
     expect(selectCurrentExercise(view(s))?.id).toBe(first.id)
@@ -83,7 +83,11 @@ describe('sessionSlice', () => {
       s = run(s, submitAnswer(correctAnswerFor(s)), continueLesson())
     }
     const wrongOrder = run(s, submitAnswer([...wordBank.answer].reverse()))!
-    expect(wrongOrder.feedback).toEqual({ correct: false, correctAnswer: wordBank.answer.join(' ') })
+    expect(wrongOrder.feedback).toEqual({
+      correct: false,
+      correctAnswer: wordBank.answer.join(' '),
+      given: [...wordBank.answer].reverse(),
+    })
     const caseInsensitive = run(s, submitAnswer(wordBank.answer.map((w) => w.toUpperCase())))!
     expect(caseInsensitive.feedback?.correct).toBe(true)
   })

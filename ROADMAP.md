@@ -29,6 +29,8 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   by owner decision.
 - **007 – Daily goal & streak**: one finished session a day, streak and best streak on the home
   screen (`specs/007-daily-goal-streak/`). The phone check was skipped by owner decision.
+- **008 – Mistake explanations**: word meanings, grammar point and book lesson after a wrong
+  answer (`specs/008-mistake-explanations/`). The phone check was skipped by owner decision.
 
 ## Ideas (not yet evaluated)
 
@@ -38,8 +40,6 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   brainstormed: speaker buttons, listening exercises and the Letters and Sounds lesson, in
   stages; sound source still open (generated espeak-ng files from phonemes, a more natural
   speech tool, or human recordings).
-- Mistake explanations: when the learner answers wrong, explain why the right answer is right
-  (e.g. the grammar point or word meaning involved), not only show it.
 - sitelen pona (Toki Pona glyphs).
 - Light theme following the device setting (004 ships dark only; the light palette is in the
   design canvas history).

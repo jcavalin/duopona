@@ -577,3 +577,81 @@ describe('lesson complete (004 US3)', () => {
     expect(screen.queryByText('Unlocked')).not.toBeInTheDocument()
   })
 })
+
+describe('mistake explanations (feature 008)', () => {
+  const youAndI = lessons.find((l) => l.id === 'you-and-i')!
+
+  /** Marks every lesson before `target` completed so it can be started */
+  function unlock(target: Lesson) {
+    const before = lessons.slice(0, lessons.indexOf(target))
+    const done = Object.fromEntries(
+      before.map((l) => [l.id, { firstTryCorrect: 1, total: l.exercises.length, completedAt: '2026-11-04T00:00:00Z' }]),
+    )
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, completedLessons: done }))
+  }
+
+  /** Answers right until the exercise with `id` is current */
+  async function playUntil(user: User, id: string) {
+    while (currentExercise().id !== id) {
+      await answer(user, true)
+      await user.click(screen.getByRole('button', { name: 'Continue' }))
+    }
+  }
+
+  it('a wrong pick shows the answer word and the pick with their meanings; a right answer shows none', async () => {
+    unlock(youAndI)
+    const { user } = renderApp()
+    await startLesson(user, youAndI)
+
+    // First exercise answered right: no explanation
+    await answer(user, true)
+    const right = screen.getByRole('status')
+    expect(right).toHaveTextContent('pona! Correct.')
+    expect(within(right).queryByRole('list')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+
+    // "group / community": the helper's wrong pick is the first other option, kili
+    await playUntil(user, 'kulupu')
+    await answer(user, false)
+    const status = screen.getByRole('status')
+    expect(status).toHaveTextContent('Not quite. Correct answer: kulupu')
+    expect(within(status).getByRole('listitem')).toHaveTextContent('kulupu: group / community')
+    expect(status).toHaveTextContent('kili means fruit / vegetable')
+    expect(screen.getByRole('button', { name: 'Continue' })).toHaveFocus()
+
+    // The missed exercise comes back at the end with the same explanation
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    await playUntil(user, 'kulupu')
+    await answer(user, false)
+    expect(screen.getByRole('status')).toHaveTextContent('kulupu: group / communitykili means fruit / vegetable')
+  })
+
+  it('a missed grammar exercise names the grammar point, its lesson and the note (US2)', async () => {
+    unlock(youAndI)
+    const { user } = renderApp()
+    await startLesson(user, youAndI)
+    await playUntil(user, 'mi-wawa')
+    await answer(user, false)
+    const exercise = youAndI.exercises.find((e) => e.id === 'mi-wawa')!
+    const status = screen.getByRole('status')
+    expect(status).toHaveTextContent('Correct answer: mi wawa')
+    expect(status).toHaveTextContent('mi and sina need no li')
+    expect(status).toHaveTextContent('Lesson 4 · You and I')
+    expect(status).toHaveTextContent(exercise.type === 'wordBank' ? exercise.grammarNote! : '')
+  })
+
+  it('a wrong sentence lists its Toki Pona words in order', async () => {
+    unlock(youAndI)
+    const { user } = renderApp()
+    await startLesson(user, youAndI)
+    await playUntil(user, 'kulupu-sina-li-wawa')
+    await answer(user, false)
+    const items = within(screen.getByRole('status')).getAllByRole('listitem').map((li) => li.textContent)
+    expect(items).toEqual([
+      `kulupu: ${getMeaning('kulupu')}`,
+      `sina: ${getMeaning('sina')}`,
+      `li: ${getMeaning('li')}`,
+      `wawa: ${getMeaning('wawa')}`,
+    ])
+  })
+})
