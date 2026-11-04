@@ -27,10 +27,10 @@ A small **daily goal** encourages a little practice every day: finish one lesson
 review a day. The flame in the top bar shows your **streak** (days in a row you met the goal);
 missing a day resets it, and your best streak is kept.
 
-When you answer wrong, the feedback explains the right answer: what each Toki Pona word in the
-exercise means (and what your wrong pick means, if it is a course word). For exercises that
-practise grammar, it also names the grammar point, the lesson it comes from and a short note on
-why the answer follows it.
+When you answer wrong, the feedback shows the right answer, and a **Why?** button opens an
+explanation of it: what each Toki Pona word in the exercise means (and what your wrong pick
+means, if it is a course word). For exercises that practise grammar, it also names the grammar
+point, the lesson it comes from and a short note on why the answer follows it.
 
 In word-bank exercises you can fix the order of a sentence before checking it: drag a placed
 word to a new spot, or focus it and use the left and right arrow keys. You can also drag a word

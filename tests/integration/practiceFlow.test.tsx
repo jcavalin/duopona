@@ -287,9 +287,12 @@ describe('mistake explanations in practice (008 US2)', () => {
     await user.click(within(screen.getByRole('group', { name: 'Word bank' })).getAllByRole('button', { name: ex.distractors[0] })[0])
     await user.click(screen.getByRole('button', { name: 'Check' }))
 
-    const status = screen.getByRole('status')
-    expect(status).toHaveTextContent(pi.grammar.title)
-    expect(status).toHaveTextContent(`${pi.chapter} · ${pi.title}`)
-    expect(status).toHaveTextContent(ex.grammarNote!)
+    // 010: the explanation opens on "Why?"
+    const toggle = screen.getByRole('button', { name: 'Why?' })
+    await user.click(toggle)
+    const card = document.getElementById(toggle.getAttribute('aria-controls')!)!
+    expect(card).toHaveTextContent(pi.grammar.title)
+    expect(card).toHaveTextContent(`From ${pi.chapter} · ${pi.title}`)
+    expect(card).toHaveTextContent(ex.grammarNote!)
   })
 })

@@ -39,6 +39,14 @@ export function WrongIcon(props: IconProps) {
   )
 }
 
+export function ChevronDownIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M6 9l6 6 6-6" />
+    </Stroke>
+  )
+}
+
 export function CheckIcon(props: IconProps) {
   return (
     <Stroke {...props}>
