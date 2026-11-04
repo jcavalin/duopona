@@ -5,15 +5,12 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-(none)
+- **012 – Mascot & app icon** (`specs/012-mascot-app-icon/`): design in
+  [docs/design/mascot.md](docs/design/mascot.md).
 
 ## Next
 
-- **Mascot & app icon**: an original purple-sprout mascot replaces
-  the prompt icons on exercise screens and reacts to answers (idle, sad on a wrong answer, happy on a right one, celebrating on
-  the summary instead of the star badge); the app icon becomes the mascot on the dark background.
-  Design, SVGs, ready-made icon files and open points: [docs/design/mascot.md](docs/design/mascot.md).
-  `/speckit-specify Add the Duopona mascot and new app icon as designed in docs/design/mascot.md`
+(none)
 
 ## Done
 
