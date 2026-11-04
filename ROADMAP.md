@@ -5,7 +5,8 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-(none)
+- **008 – Mistake explanations**: word meanings, grammar point and book lesson after a wrong
+  answer (`specs/008-mistake-explanations/`).
 
 ## Next
 
@@ -38,8 +39,6 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   brainstormed: speaker buttons, listening exercises and the Letters and Sounds lesson, in
   stages; sound source still open (generated espeak-ng files from phonemes, a more natural
   speech tool, or human recordings).
-- Mistake explanations: when the learner answers wrong, explain why the right answer is right
-  (e.g. the grammar point or word meaning involved), not only show it.
 - sitelen pona (Toki Pona glyphs).
 - Light theme following the device setting (004 ships dark only; the light palette is in the
   design canvas history).
