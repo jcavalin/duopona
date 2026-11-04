@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-04
 
-**Status**: Draft
+**Status**: Implemented (phone check M5 deferred by owner decision, task T016)
 
 **Input**: User description: "Change Duopona's brand colours to purple as described in
 docs/design/purple-theme.md"
