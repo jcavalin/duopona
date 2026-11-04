@@ -8,6 +8,7 @@ import { routes } from '../../src/router'
 import { makeStore } from '../../src/store'
 import { getMeaning } from '../../src/content/vocabulary'
 import { STORAGE_KEY } from '../../src/store/persistence'
+import { centre, dragTo, stubWordBankLayout } from './wordBankLayout'
 
 const lesson = lessons[0]
 const total = lesson.exercises.length
@@ -117,6 +118,30 @@ describe('first lesson flow', () => {
     for (const word of ex.answer) {
       await user.click(bank().getAllByRole('button', { name: word })[0])
     }
+    await user.click(screen.getByRole('button', { name: 'Check' }))
+    expect(screen.getByRole('status')).toHaveTextContent('pona! Correct.')
+  })
+
+  it('a sentence placed out of order and fixed by dragging is graded right (009 FR-007)', async () => {
+    const { user } = renderApp()
+    await startLesson(user)
+    while (currentExercise().type !== 'wordBank') {
+      await answer(user, true)
+      await user.click(screen.getByRole('button', { name: 'Continue' }))
+    }
+    const ex = currentExercise()
+    if (ex.type !== 'wordBank') throw new Error('expected a word bank')
+    const bank = () => within(screen.getByRole('group', { name: 'Word bank' }))
+    const line = () => within(screen.getByRole('group', { name: 'Your answer' }))
+    // Last word first: wrong order
+    const order = [ex.answer[ex.answer.length - 1], ...ex.answer.slice(0, -1)]
+    for (const word of order) await user.click(bank().getAllByRole('button', { name: word })[0])
+    const layout = stubWordBankLayout()
+    const tiles = line().getAllByRole('button')
+    const end = centre(tiles[tiles.length - 1])
+    dragTo(tiles[0], end.x + 30, end.y)
+    layout.mockRestore()
+    expect(line().getAllByRole('button').map((b) => b.textContent)).toEqual(ex.answer)
     await user.click(screen.getByRole('button', { name: 'Check' }))
     expect(screen.getByRole('status')).toHaveTextContent('pona! Correct.')
   })

@@ -5,7 +5,7 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-(none)
+**009 – Reorder answer tiles**: drag or arrow-key placed words into a new order, and drag bank words into a chosen spot (`specs/009-reorder-answer-tiles/`).
 
 ## Next
 

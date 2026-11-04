@@ -21,7 +21,8 @@ chosen spot). These are the design decisions.
 - **Decision**: A press becomes a drag only after the pointer moves 6 px or more from where it
   went down. Below that, nothing happens on move and the normal `click` runs (tap removes a
   placed word, tap adds a bank word: FR-003, FR-004a). After a real drag, the `click` that the
-  browser fires on release is ignored once. The ignore flag is cleared on every `pointerdown`,
+  browser fires on release is ignored once (a cancel sets nothing: no click follows it), and
+  keyboard clicks (`detail === 0`) are never ignored. The ignore flag is cleared on every `pointerdown`,
   because some drops unmount the pressed button (a placed word dropped on the bank, a bank word
   dropped into the line), so no click arrives to clear it, and a stuck flag would swallow the
   learner's next tap.
@@ -48,17 +49,23 @@ chosen spot). These are the design decisions.
   translating the real tile with CSS transforms (its layout slot moves under it as the order
   changes, so offsets must be recomputed after every reorder).
 
-## R4. Keeping pointer capture: the pressed element must stay mounted
+## R4. Following the pointer: window listeners, and the pressed element stays mounted
 
+- **Revised during implementation (2026-11-04)**: pointer capture proved unreliable. React moves
+  the dragged button in the DOM when the preview order changes, and moving a node releases its
+  capture, so in Chrome the release landed on another element and the press stayed stuck. Moves,
+  releases and cancels are therefore followed with `window` listeners for as long as a press
+  lasts (registered once per mounted word bank); `setPointerCapture` is not used. The rest of
+  this section still holds, so the pressed button keeps its identity and styling.
 - **Decision**: The pressed button is never unmounted during its drag. A dragged **line** tile
   stays the same keyed button in the line, styled as an empty slot (the gap). A dragged **bank**
   tile stays the same button in the bank, styled as the bank's existing empty place
   (`tilePlaceholder` look); its gap in the line is a separate `aria-hidden` span. Tiles keep
   their index keys, so repeated words stay distinct (edge case).
-- **Rationale**: Pointer capture is released if the capturing element leaves the DOM, which would
-  end the drag halfway.
-- **Alternatives**: Listening on `window` instead of capturing (works, but needs manual
-  add/remove of listeners and loses the per-element handlers React already gives).
+- **Rationale**: Keeping the same keyed button lets the slot style follow it and keeps repeated
+  words distinct.
+- **Alternatives**: Pointer capture on the pressed button (the first implementation; lost when
+  React moves the node, see above).
 
 ## R5. Where the word will land
 
@@ -137,7 +144,6 @@ chosen spot). These are the design decisions.
     answer line order, what `onSubmit` receives, tap-vs-drag, drop on bank, drop outside,
     cancel, bank to chosen spot, arrow keys with focus, and the hint's `aria-describedby`.
     One `lessonFlow.test.tsx` test checks the full app grades a reordered answer.
-  - The code calls `setPointerCapture` through optional chaining so it runs in jsdom.
   - Real touch on phones is manual check S-D1 (Principle IV exception), which the owner may waive.
 - **Rationale**: Everything except the real touch gesture is simulated automatically
   (Principle IV).
