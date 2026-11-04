@@ -94,7 +94,8 @@ shows only "pona! Correct."
 
 ### Validation for User Story 1
 
-- [ ] T012 [US1] Manual check in Chrome with the user running `npm run dev`: quickstart S1 and S3; record results under this task
+- [X] T012 [US1] Manual check in Chrome with the user running `npm run dev`: quickstart S1 and S3; record results under this task
+  - **Result (2026-11-04)**: Chrome against `npm run dev`, window 500×850. S3: first exercise (mi) right → "pona! Correct." only, no list. S1: "group / community", picked tomo → "Not quite", "Correct answer: kulupu", "kulupu: group / community", "tomo means house / building / room"; Continue visible. The divider spanned only the text width on short explanations: `.sheetText` now `flex: 1` (fixed during this check). Learner data backed up first and restored afterwards; no console errors
 
 **Checkpoint**: word meanings shown after wrong answers; MVP shippable
 
@@ -129,7 +130,8 @@ and a short note on why the right answer follows it, in every session kind (FR-0
 
 ### Validation for User Story 2
 
-- [ ] T023 [US2] Manual check in Chrome with the user running `npm run dev`: quickstart S2, S4 (360×740, the grammar exercise with the longest note plus most words) and S5; record results under this task, including the owner's opinion of the explanation's look (no mockup exists) and a skim of a few notes
+- [X] T023 [US2] Manual check in Chrome with the user running `npm run dev`: quickstart S2, S4 (360×740, the grammar exercise with the longest note plus most words) and S5; record results under this task, including the owner's opinion of the explanation's look (no mockup exists) and a skim of a few notes
+  - **Result (2026-11-04)**: S2: "I am strong." built as mi li wawa → "mi wawa", mi and wawa meanings, "mi and sina need no li", "Lesson 4 · You and I", the note; all explanation text 17 px (lesson line 15 px). S4: 360×740 same-origin iframe, longest explanation in the course (Hunting, "In the daytime, the hunter goes to the plants.", 8 words + grammar): sheet capped at 555 px (75%), row scrolls (554 px content in 441 px), Continue at 657–712 px of 740, no horizontal scroll (scrollWidth 345). S5: practice over 13 completed lessons, "At night, I stay in the house." missed → "Colours, and setting the scene with la", "Lesson 14 · Colours and la", its note. Progress was temporarily set to 13 completed lessons for S4/S5 and restored from the backup (words records created by the run removed). Owner's opinion of the look and a skim of the notes: pending
 
 **Checkpoint**: grammar explanations complete
 
