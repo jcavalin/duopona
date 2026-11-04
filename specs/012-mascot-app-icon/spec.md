@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-04
 
-**Status**: Draft
+**Status**: Implemented (phone check M7 deferred by owner decision, task T021)
 
 **Input**: User description: "Add the Duopona mascot and new app icon as designed in
 docs/design/mascot.md"

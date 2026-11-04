@@ -5,8 +5,7 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-- **012 – Mascot & app icon** (`specs/012-mascot-app-icon/`): design in
-  [docs/design/mascot.md](docs/design/mascot.md).
+(none)
 
 ## Next
 
@@ -42,6 +41,10 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 - **011 – Purple brand colours**: purple brand on a violet-grey background, with green kept
   only for correct answers (`specs/011-purple-brand-colours/`). The phone check was deferred by
   owner decision (to be run later).
+- **012 – Mascot & app icon**: a purple sprout mascot next to each exercise prompt reacts to
+  answers (sad / happy) and celebrates on the summary; it is also the app icon
+  (`specs/012-mascot-app-icon/`). The phone check was deferred by owner decision (to be run
+  later).
 
 ## Ideas (not yet evaluated)
 
