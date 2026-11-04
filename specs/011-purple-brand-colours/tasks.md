@@ -114,7 +114,13 @@ no other element uses `--success*`.
 - [X] T011 [P] In tests/integration/lessonFlow.test.tsx add `describe('011 correct colours')`: after a right answer, the "Continue" button has class `success` and not `danger`; after a wrong answer it has `danger` and not `success`. Reuse the file's existing helpers for answering an exercise
 - [X] T012 Run `npm test`, `npm run lint`, `npm run build` and `npm run test:pwa`; all pass. Record the counts under this task
   - **Result (2026-11-04)**: `npm test` 632 passed (17 files; +30 theme, +1 integration); lint clean; build ok (precache 12 entries, 503.00 KiB); `npm run test:pwa` 26 passed
-- [ ] T013 Manual check: ask the user to run `npm run dev`, then in Chrome with device emulation (390 × 844) run quickstart M1–M4 against mockups 01–07. Record the results under this task. Save the user's dev `localStorage` before the check and restore it afterwards. On a mismatch, fix the token or rule and re-check
+- [X] T013 Manual check: ask the user to run `npm run dev`, then in Chrome with device emulation (390 × 844) run quickstart M1–M4 against mockups 01–07. Record the results under this task. Save the user's dev `localStorage` before the check and restore it afterwards. On a mismatch, fix the token or rule and re-check
+  - **Result (2026-11-04)**, Chrome against the user's `npm run dev` (500 px wide; the window would not go narrower):
+    - **M1**: violet-grey `#16151f` background, purple banner, Practice button and current node with tinted ring, lilac wordmark; no green. Matches 01.
+    - **M2**: intro: lilac label and words, grammar card `#221c3d` (02). Exercise: purple progress fill, selected option purple-tinted with lilac text, purple Check (03).
+    - **M3**: wrong sheet unchanged (red, "Why?" toggle); no element uses an old or success green.
+    - **M4**: correct sheet green (background, circle, "pona! Correct.", Continue), matches 06. The summary screen (07) was not played through; its colours come from `--primary*` and `--gold*` tokens covered by tests/unit/theme.test.ts.
+    - The user's dev `localStorage` was saved before and restored after.
 
 ---
 
