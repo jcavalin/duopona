@@ -14,3 +14,30 @@ Thumbs.db
 *.tsbuildinfo
 resources/
 !tests/build/
+
+# Personal shell/tool config that ended up in the project folder
+.bash_profile
+.bashrc
+.profile
+.zprofile
+.zshrc
+.gitconfig
+.gitmodules
+.ripgreprc
+.mcp.json
+.idea
+.vscode
+.vitest/
+
+# Local Claude Code config (the speckit skills in .claude/skills stay tracked)
+.claude/agents
+.claude/commands
+.claude/hooks
+.claude/launch.json
+.claude/loop.md
+.claude/output-styles
+.claude/routines
+.claude/scheduled_tasks.json
+.claude/settings.json
+.claude/settings.local.json
+.claude/workflows
