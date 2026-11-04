@@ -53,7 +53,7 @@ exercises only). These are the design decisions.
 
 - **Decision**: The sheet stays a bottom sheet. The text area (title, correct answer,
   explanation) becomes one live region (`role="status"` on a `div`, since it now contains a
-  list) and scrolls inside the sheet when needed; the sheet is capped at `max-height: 75dvh`
+  list); the row holding the icon and status region scrolls inside the sheet when needed; the sheet is capped at `max-height: 75dvh`
   and the Continue button stays outside the scroll area, always visible. Explanation text is
   17 px regular weight under the bold answer, words as a list of "word: meaning" lines, the
   grammar part as a small heading (grammar title), a lesson line ("Lesson 4 · You and I") and

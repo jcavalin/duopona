@@ -77,9 +77,9 @@ why the right answer is right.
 
 ### Edge Cases
 
-- A right answer with no course words in it (e.g. an English answer for an English → Toki Pona
-  exercise where the Toki Pona prompt holds the words): the words listed are those of the Toki
-  Pona side of the exercise, whichever side that is, the same words feature 006 counts as tested.
+- The words listed are always those of the exercise's Toki Pona side: the prompt for Toki Pona →
+  English, the answer for English → Toki Pona (the words 006 counts as tested). Words that appear
+  only in the English side are not listed.
 - A word appearing twice in a sentence is listed once.
 - A wrong pick that is not a single course word (an English option, or a wrong Toki Pona phrase
   such as "sin lipu"): no "means" line for the pick; the right-answer explanation still shows.
@@ -100,8 +100,8 @@ why the right answer is right.
 - **FR-003**: For a multiple-choice exercise, when the learner's pick is a single course word
   different from the right answer, the explanation MUST also state that word's meaning.
 - **FR-004**: When the missed exercise practises its lesson's grammar point, the explanation
-  MUST name the grammar point's title and the exercise's book lesson (chapter reference and
-  title), in every session kind (lesson, practice, review).
+  MUST name the grammar point's title and the exercise's lesson: its chapter reference (e.g.
+  "Lesson 4", or "Dictionary" for the extra lessons) and title, in every session kind (lesson, practice, review).
 - **FR-005**: Each of the course's exercises marked as practising grammar (49) MUST carry a short
   note (one or two sentences) on why its right answer follows the grammar point, shown with the
   grammar point after a wrong answer. Other exercises get no note. Notes are written as part of
@@ -134,9 +134,9 @@ why the right answer is right.
   pick shows that word's meaning.
 - **SC-004**: At 360 px width, the feedback sheet with the longest explanation in the course is
   fully readable and Continue is reachable without horizontal scrolling.
-- **SC-005**: A learner can read the explanation and continue in under 15 seconds for a typical
-  sentence exercise (explanations stay short: at most one line per word plus a one- or
-  two-sentence grammar note).
+- **SC-005**: Explanations stay short enough to read and continue within about 15 seconds: at
+  most one line per course word plus a grammar note of ≤ 2 sentences and ≤ 160 characters
+  (enforced by course content tests; judged by the owner in the 360 px check).
 
 ## Assumptions
 
