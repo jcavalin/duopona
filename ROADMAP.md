@@ -5,14 +5,10 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-(none)
+- **011 – Purple brand colours** (`specs/011-purple-brand-colours/`): design in
+  [docs/design/purple-theme.md](docs/design/purple-theme.md).
 
 ## Next
-
-- **Purple brand colours**: swap the green brand for purple to set Duopona apart from Duolingo;
-  green stays only for "correct" (new `--success*` tokens). Token-by-token table, new tokens and
-  manifest colours: [docs/design/purple-theme.md](docs/design/purple-theme.md). Do before the mascot.
-  `/speckit-specify Change Duopona's brand colours to purple as described in docs/design/purple-theme.md`
 
 - **Mascot & app icon** (after Purple brand colours): an original purple-sprout mascot replaces
   the prompt icons on exercise screens and reacts to answers (idle, sad on a wrong answer, happy on a right one, celebrating on
