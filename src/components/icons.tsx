@@ -77,15 +77,6 @@ export function LockIcon(props: IconProps) {
   )
 }
 
-export function DropIcon(props: IconProps) {
-  return (
-    <Stroke {...props}>
-      <path d="M12 3c3 4 6 7.2 6 10.5a6 6 0 0 1-12 0C6 10.2 9 7 12 3z" />
-      <path d="M9.5 14.5a2.6 2.6 0 0 0 2.2 2.3" />
-    </Stroke>
-  )
-}
-
 export function BubbleIcon(props: IconProps) {
   return (
     <Stroke {...props}>

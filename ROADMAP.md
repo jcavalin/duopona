@@ -9,11 +9,7 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## Next
 
-- **Mascot & app icon**: an original purple-sprout mascot replaces
-  the prompt icons on exercise screens and reacts to answers (idle, sad on a wrong answer, happy on a right one, celebrating on
-  the summary instead of the star badge); the app icon becomes the mascot on the dark background.
-  Design, SVGs, ready-made icon files and open points: [docs/design/mascot.md](docs/design/mascot.md).
-  `/speckit-specify Add the Duopona mascot and new app icon as designed in docs/design/mascot.md`
+(none)
 
 ## Done
 
@@ -45,6 +41,10 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 - **011 – Purple brand colours**: purple brand on a violet-grey background, with green kept
   only for correct answers (`specs/011-purple-brand-colours/`). The phone check was deferred by
   owner decision (to be run later).
+- **012 – Mascot & app icon**: a purple sprout mascot next to each exercise prompt reacts to
+  answers (sad / happy) and celebrates on the summary; it is also the app icon
+  (`specs/012-mascot-app-icon/`). The phone check was deferred by owner decision (to be run
+  later).
 
 ## Ideas (not yet evaluated)
 

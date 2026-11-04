@@ -42,9 +42,11 @@ mistakes under `duopona:words` and the streak under `duopona:streak`, all in `lo
 
 The app has one dark, Duolingo-style look with a purple brand: a lesson path on the home
 screen, chunky buttons and colored feedback sheets. Green is used only for correct answers.
-Design reference, mockups and color tokens:
-[docs/design/ui-redesign.md](docs/design/ui-redesign.md) and
-[docs/design/purple-theme.md](docs/design/purple-theme.md).
+A purple sprout mascot stands next to each exercise prompt and reacts to your answer (sad or
+happy), celebrates on the session summary, and is the app icon. Design reference, mockups and
+color tokens: [docs/design/ui-redesign.md](docs/design/ui-redesign.md),
+[docs/design/purple-theme.md](docs/design/purple-theme.md) and
+[docs/design/mascot.md](docs/design/mascot.md).
 
 All sentences, exercises and explanations are original to Duopona; only the chapter order, word
 lists and grammar topics follow the book.
@@ -107,10 +109,11 @@ To publish again without a commit: Actions → "Check and deploy" → "Run workf
   which words an exercise tests
 - `src/components/`, `src/routes/` — UI and pages (`#/` lesson path, `#/lesson/:id`,
   `#/practice/practice` and `#/practice/review`);
-  `src/components/icons.tsx` holds the inline SVG icons, `src/index.css` the color tokens (`--primary*` purple brand, `--success*`
+  `src/components/icons.tsx` holds the inline SVG icons, `src/components/Mascot.tsx` shows the
+  mascot drawings from `src/assets/mascot/`, `src/index.css` the color tokens (`--primary*` purple brand, `--success*`
   green for correct answers) and shared layout classes
-- `public/` — app icons (`icon.svg` is the source; regenerate the PNGs with
-  `npx @vite-pwa/assets-generator@2`, config in `pwa-assets.config.mjs`); `public/fonts/` —
+- `public/` — app icons (the mascot; copied from `docs/design/app-icon/`, don't regenerate
+  them); `public/fonts/` —
   the Nunito font (Latin subset, SIL Open Font License in `OFL.txt`), self-hosted so it works
   offline
 - `vite.config.ts` — build, PWA manifest and service-worker settings

@@ -2,7 +2,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent
 import type { WordBankExercise } from '../content/types'
 import { dropIndex, moveItem } from '../lib/reorder'
 import { shuffle } from '../lib/shuffle'
-import { BubbleIcon } from './icons'
+import Mascot, { exerciseExpression } from './Mascot'
 import { focusOnMount } from './focusOnMount'
 import styles from './Exercise.module.css'
 
@@ -10,6 +10,8 @@ interface Props {
   header: ReactNode
   exercise: WordBankExercise
   disabled: boolean
+  /** Set while feedback shows: the mascot's expression (012 research R3) */
+  result?: 'correct' | 'wrong'
   onSubmit: (answer: string[]) => void
 }
 
@@ -62,7 +64,7 @@ function within(el: Element | null, x: number, y: number, reachUp: number, reach
   return x >= r.left && x <= r.left + r.width && y >= r.top - reachUp && y <= r.bottom + reachDown
 }
 
-export default function WordBank({ header, exercise, disabled, onSubmit }: Props) {
+export default function WordBank({ header, exercise, disabled, result, onSubmit }: Props) {
   // Tiles are tracked by index so repeated words stay distinct.
   const [tiles] = useState(() => shuffle([...exercise.answer, ...exercise.distractors]))
   const [placed, setPlaced] = useState<number[]>([])
@@ -204,9 +206,7 @@ export default function WordBank({ header, exercise, disabled, onSubmit }: Props
           {exercise.practisesGrammar && <span className={`label ${styles.grammarTag}`}>Grammar</span>}
         </div>
         <div className={styles.promptRow}>
-          <span className={styles.promptIcon} aria-hidden="true">
-            <BubbleIcon size={32} />
-          </span>
+          <Mascot expression={exerciseExpression(result)} className={styles.promptMascot} />
           <h2 className={styles.prompt}>{exercise.prompt}</h2>
         </div>
         <p id={hintId} className="visually-hidden">

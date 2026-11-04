@@ -11,7 +11,8 @@ Seven 390×844 phone screens, linked for click-through (Play mode).
 ## Screens
 
 Mockups now show the purple theme ([purple-theme.md](purple-theme.md)) and, on 03–07, the
-mascot instead of the prompt icon and star badge ([mascot.md](mascot.md)); neither is implemented yet.
+mascot instead of the prompt icon and star badge ([mascot.md](mascot.md)); both are implemented
+(features 011 and 012).
 
 | # | Mockup | Current code | Main changes |
 |---|--------|--------------|--------------|

@@ -215,3 +215,25 @@ describe('sub-path (specs/005-github-pages-deploy/contracts/sub-path.md)', () =>
     }
   })
 })
+
+describe('mascot and app icon (feature 012)', () => {
+  it('emits and precaches the four mascot drawings', () => {
+    for (const expression of ['idle', 'sad', 'happy', 'celebrate']) {
+      const pattern = new RegExp(`^assets/mascot-${expression}-[A-Za-z0-9_-]+\\.svg$`)
+      const emitted = distFiles.filter((f) => pattern.test(f))
+      expect(emitted, expression).toHaveLength(1)
+      expect(precachedUrls).toContain(emitted[0])
+    }
+  })
+
+  it('ships the mascot icons from docs/design/app-icon unchanged', () => {
+    const design = join(process.cwd(), 'docs/design/app-icon')
+    for (const file of ['icon.svg', 'pwa-192x192.png', 'pwa-512x512.png', 'maskable-icon-512x512.png', 'apple-touch-icon-180x180.png']) {
+      expect(readFileSync(join(DIST, file)).equals(readFileSync(join(design, file))), file).toBe(true)
+    }
+  })
+
+  it('precaches icon.svg exactly once', () => {
+    expect(precachedUrls.filter((u) => u === 'icon.svg')).toHaveLength(1)
+  })
+})

@@ -297,3 +297,13 @@ describe('drop a bank word into a chosen spot (US3)', () => {
     expect(lineWords()).toEqual(['kulupu'])
   })
 })
+
+describe('mascot (feature 012)', () => {
+  it('shows the idle mascot without a result and the sad one with result="wrong"', () => {
+    const { rerender } = renderBank()
+    const mascot = () => document.querySelector('img[data-expression]')
+    expect(mascot()).toHaveAttribute('data-expression', 'idle')
+    rerender(<WordBank header={null} exercise={fixture} disabled result="wrong" onSubmit={onSubmit} />)
+    expect(mascot()).toHaveAttribute('data-expression', 'sad')
+  })
+})

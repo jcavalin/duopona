@@ -1,6 +1,7 @@
-// Icon PNGs from public/icon.svg: `npx @vite-pwa/assets-generator@2` (run once, commit the PNGs).
-// The source is full-bleed, so no padding (no white ring on Android); research R6.
-const resizeOptions = { fit: 'contain', background: '#2da44e' }
+// Not used for the current icons: since feature 012 the icons are hand-made in
+// docs/design/app-icon/ (a different mascot scale per purpose) and copied into public/.
+// Don't regenerate them with `npx @vite-pwa/assets-generator@2`; copy the design files instead.
+const resizeOptions = { fit: 'contain', background: '#16151f' }
 export default {
   headLinkOptions: { preset: '2023' },
   preset: {

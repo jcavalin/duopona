@@ -32,7 +32,8 @@ export default defineConfig({
       },
       workbox: {
         // Icons and manifest are added by the plugin (manifest icons + includeAssets)
-        globPatterns: ['**/*.{js,css,html,woff2}'],
+        // Mascot drawings (012 research R4); icon.svg comes from includeAssets, so only assets/
+        globPatterns: ['**/*.{js,css,html,woff2}', 'assets/*.svg'],
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
       },

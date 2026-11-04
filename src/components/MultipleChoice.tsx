@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import type { MultipleChoiceExercise } from '../content/types'
 import { shuffle } from '../lib/shuffle'
-import { DropIcon } from './icons'
+import Mascot, { exerciseExpression } from './Mascot'
 import { focusOnMount } from './focusOnMount'
 import styles from './Exercise.module.css'
 
@@ -37,9 +37,7 @@ export default function MultipleChoice({ header, exercise, disabled, result, onS
         {header}
         <h1 className={styles.instruction}>{instruction}</h1>
         <div className={styles.promptRow}>
-          <span className={styles.promptIcon} aria-hidden="true">
-            <DropIcon size={32} />
-          </span>
+          <Mascot expression={exerciseExpression(result)} className={styles.promptMascot} />
           <h2 className={styles.prompt}>{exercise.prompt}</h2>
         </div>
         <div className={styles.options} role="group" aria-label="Options">

@@ -50,7 +50,13 @@ export default function ExerciseScreen({ onQuit, quitLabel = 'Quit lesson', prog
           onSubmit={(a) => dispatch(submitAndRecord(a))}
         />
       ) : (
-        <WordBank key={key} header={topBar} exercise={exercise} disabled={!!feedback} onSubmit={(a) => dispatch(submitAndRecord(a))} />
+        <WordBank
+          key={key}
+          header={topBar}
+          exercise={exercise}
+          disabled={!!feedback}
+          result={feedback ? (feedback.correct ? 'correct' : 'wrong') : undefined}
+          onSubmit={(a) => dispatch(submitAndRecord(a))} />
       )}
 
       {feedback && <FeedbackBanner feedback={feedback} exerciseKey={exerciseKey} onContinue={() => dispatch(continueAndRecord())} />}
