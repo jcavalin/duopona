@@ -5,7 +5,7 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
 
 ## In progress
 
-**009 – Reorder answer tiles**: drag or arrow-key placed words into a new order, and drag bank words into a chosen spot (`specs/009-reorder-answer-tiles/`).
+(none)
 
 ## Next
 
@@ -31,6 +31,9 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   screen (`specs/007-daily-goal-streak/`). The phone check was skipped by owner decision.
 - **008 – Mistake explanations**: word meanings, grammar point and book lesson after a wrong
   answer (`specs/008-mistake-explanations/`). The phone check was skipped by owner decision.
+- **009 – Reorder answer tiles**: drag or arrow-key placed words into a new order, and drag bank
+  words into a chosen spot (`specs/009-reorder-answer-tiles/`). The phone check was deferred by
+  owner decision (to be run later).
 
 ## Ideas (not yet evaluated)
 

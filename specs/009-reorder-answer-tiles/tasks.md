@@ -186,9 +186,12 @@ in the middle and the bank shows its empty place.
 ## Phase 6: Polish & Cross-Cutting Concerns
 
 - [X] T019 [P] Update README.md: in the features section mention that sentence answers can be reordered by dragging words (or with the arrow keys) and that bank words can be dragged into place
-- [ ] T020 Ask the user to run quickstart S-D1 on iPhone (Safari) and Android (Chrome), in the browser or installed; record results under this task (the owner may waive it under the constitution's recorded-waiver rule, Principle IV; then mark `[~]` with the date and "owner decision" and name the waived check in spec.md **Status**)
-- [ ] T021 Set spec.md **Status** to `Implemented` (or `Implemented (…)` naming skipped manual checks) and mark the requirements checklist unchanged; in ROADMAP.md move the T001 entry from **In progress** to **Done** with the same text, leaving **In progress** as `(none)`
-- [ ] T022 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the test count vs. T001's baseline under this task
+- [~] T020 Ask the user to run quickstart S-D1 on iPhone (Safari) and Android (Chrome), in the browser or installed; record results under this task (the owner may waive it under the constitution's recorded-waiver rule, Principle IV; then mark `[~]` with the date and "owner decision" and name the waived check in spec.md **Status**)
+  - **Deferred (2026-11-04)**: owner decision (constitution IV waiver): merged before the phone check; the owner will run S-D1 later. The owner's opinion of the gap and ghost look (T010) is also still open
+- [X] T021 Set spec.md **Status** to `Implemented` (or `Implemented (…)` naming skipped manual checks) and mark the requirements checklist unchanged; in ROADMAP.md move the T001 entry from **In progress** to **Done** with the same text, leaving **In progress** as `(none)`
+  - **Result (2026-11-04)**: Status `Implemented (phone check S-D1 deferred by owner decision, task T020)`; requirements checklist left as is (16/16); ROADMAP updated
+- [X] T022 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the test count vs. T001's baseline under this task
+  - **Result (2026-11-04)**: `npm test` 595 passed (baseline 563, +32); lint clean; build ok (precache 12 entries, 501.13 KiB); `npm run test:pwa` 26 passed
 
 ---
 

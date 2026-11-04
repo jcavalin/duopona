@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-04
 
-**Status**: Draft
+**Status**: Implemented (phone check S-D1 deferred by owner decision, task T020)
 
 **Input**: User description: "It would be nice to be possible to drag and drop the option when we
 are formulating a phrase. Imagine that the user selected an incorrect order at the beginning of
