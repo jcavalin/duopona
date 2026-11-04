@@ -120,8 +120,8 @@ no other element uses `--success*`.
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T014 [P] Update README.md: where it describes the look or the colour tokens (around lines 44 and 108), mention the purple brand and green used only for "correct"
-- [ ] T015 [P] Update docs/design/purple-theme.md: add one line at the top saying it was implemented in `specs/011-purple-brand-colours/`, and that the progress-shadow and banner-text rows had no hard-coded values to change
+- [X] T014 [P] Update README.md: where it describes the look or the colour tokens (around lines 44 and 108), mention the purple brand and green used only for "correct"
+- [X] T015 [P] Update docs/design/purple-theme.md: add one line at the top saying it was implemented in `specs/011-purple-brand-colours/`, and that the progress-shadow and banner-text rows had no hard-coded values to change
 - [ ] T016 Ask the user to run quickstart M5 on a phone (Constitution V); record the results under this task. The owner may waive it under the recorded-waiver rule (Principle IV): then mark `[~]` with the date and "owner decision", and name the waived check in spec.md **Status**
 - [ ] T017 Set spec.md **Status** to `Implemented`, or to `Implemented (…)` naming any waived manual check. In ROADMAP.md, move the 011 entry from **In progress** to **Done** as a short summary in the style of the other Done items, keeping the specs path; leave **In progress** as `(none)`
 - [ ] T018 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the test count vs. T001's baseline under this task
