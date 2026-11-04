@@ -47,7 +47,8 @@ repository root.
 
 ## Phase 1: Setup
 
-- [ ] T001 Record the baseline: run `npm test` and `npm run test:pwa` (after `npm run build`) and note the pass counts under this task
+- [X] T001 Record the baseline: run `npm test` and `npm run test:pwa` (after `npm run build`) and note the pass counts under this task
+  - **Baseline (2026-11-04)**: `npm test` 601 passed (16 files); `npm run test:pwa` 26 passed
 
 ---
 
@@ -66,8 +67,9 @@ FR-008).
 **Independent Test**: Every screen matches mockups 01–07 in colour, apart from the correct sheet
 (US2).
 
-- [ ] T002 [US1] In src/index.css `:root`, set the new values (purple-theme.md token table): `--bg: #16151f`, `--text: #efeef5`, `--text-muted: #a3a1b3`, `--line: #2e2c3d`, `--line-deep: #201e2c`, `--icon-muted: #9592a8`, `--primary: #6d3fd9`, `--primary-deep: #4f27a8`, `--primary-text: #b69cff`, `--primary-text-strong: #d9cbff`, `--primary-tint: #2b2150`, `--grammar-tint: #221c3d`. Leave every other token unchanged
-- [ ] T003 [US1] Search `src/` (all `.css`, `.tsx`, `.ts`) for hard-coded copies of the old values (`#131f24`, `#eef2f4`, `#9aa8b0`, `#2e3d45`, `#1e2a30`, `#8c9aa2`, `#0b7f63`, `#075e49`, `#3ddba6`, `#7ff0c8`, `#17392f`, `#18302a`, `#097257`, `#cff1e5`, `#e6f7f1`, case-insensitive) and green `rgb()`/`rgba()` values, and replace any found outside `:root` with the matching token (research R1 found none; confirm)
+- [X] T002 [US1] In src/index.css `:root`, set the new values (purple-theme.md token table): `--bg: #16151f`, `--text: #efeef5`, `--text-muted: #a3a1b3`, `--line: #2e2c3d`, `--line-deep: #201e2c`, `--icon-muted: #9592a8`, `--primary: #6d3fd9`, `--primary-deep: #4f27a8`, `--primary-text: #b69cff`, `--primary-text-strong: #d9cbff`, `--primary-tint: #2b2150`, `--grammar-tint: #221c3d`. Leave every other token unchanged
+- [X] T003 [US1] Search `src/` (all `.css`, `.tsx`, `.ts`) for hard-coded copies of the old values (`#131f24`, `#eef2f4`, `#9aa8b0`, `#2e3d45`, `#1e2a30`, `#8c9aa2`, `#0b7f63`, `#075e49`, `#3ddba6`, `#7ff0c8`, `#17392f`, `#18302a`, `#097257`, `#cff1e5`, `#e6f7f1`, case-insensitive) and green `rgb()`/`rgba()` values, and replace any found outside `:root` with the matching token (research R1 found none; confirm)
+  - **Result (2026-11-04)**: none found; the only `rgb()` is the neutral black sheet shadow in Exercise.module.css
 
 **Checkpoint**: Brand is purple. The correct sheet is temporarily purple too, until US2.
 
@@ -80,10 +82,11 @@ FR-008).
 **Independent Test**: A right answer shows the green sheet with a green Continue (mockup 06), and
 no other element uses `--success*`.
 
-- [ ] T004 [US2] In src/index.css `:root`, add `--success: #0b7f63;`, `--success-deep: #075e49;` and `--success-text: #7ff0c8;` next to the existing `--success-tint: #163a2e;`. After `.primary-button.danger`, add `.primary-button.success { background: var(--success); border-bottom-color: var(--success-deep); }` (same shape as `.danger`)
-- [ ] T005 [P] [US2] In src/components/Exercise.module.css: `.sheetCorrect .sheetIcon` background → `var(--success)`; `.sheetCorrect .sheetText` colour → `var(--success-text)` (research R2)
-- [ ] T006 [P] [US2] In src/components/FeedbackBanner.tsx, give the Continue button `className={`primary-button ${correct ? 'success' : 'danger'}`}`. Keep `ref={focusOnMount}`, `onClick` and the name "Continue"
-- [ ] T007 [US2] Check that `--success`, `--success-deep` and `--success-text` are used only by `.primary-button.success`, `.sheetCorrect .sheetIcon` and `.sheetCorrect .sheetText` (grep `src/`)
+- [X] T004 [US2] In src/index.css `:root`, add `--success: #0b7f63;`, `--success-deep: #075e49;` and `--success-text: #7ff0c8;` next to the existing `--success-tint: #163a2e;`. After `.primary-button.danger`, add `.primary-button.success { background: var(--success); border-bottom-color: var(--success-deep); }` (same shape as `.danger`)
+- [X] T005 [P] [US2] In src/components/Exercise.module.css: `.sheetCorrect .sheetIcon` background → `var(--success)`; `.sheetCorrect .sheetText` colour → `var(--success-text)` (research R2)
+- [X] T006 [P] [US2] In src/components/FeedbackBanner.tsx, give the Continue button `className={`primary-button ${correct ? 'success' : 'danger'}`}`. Keep `ref={focusOnMount}`, `onClick` and the name "Continue"
+- [X] T007 [US2] Check that `--success`, `--success-deep` and `--success-text` are used only by `.primary-button.success`, `.sheetCorrect .sheetIcon` and `.sheetCorrect .sheetText` (grep `src/`)
+  - **Result (2026-11-04)**: `--success`/`--success-deep` only in `.primary-button.success`; `--success` and `--success-text` only in `.sheetCorrect .sheetIcon` / `.sheetText`; `--success-tint` unchanged on `.sheetCorrect`
 
 **Checkpoint**: US1 + US2 complete. The app is purple and "correct" is green.
 
@@ -95,8 +98,8 @@ no other element uses `--success*`.
 
 **Independent Test**: The built manifest and index.html carry `#16151F`.
 
-- [ ] T008 [P] [US3] In vite.config.ts set the manifest `background_color: '#16151F'` and `theme_color: '#16151F'`; in index.html set `<meta name="theme-color" content="#16151F" />`
-- [ ] T009 [US3] In tests/build/pwa.test.ts change the expected `background_color`, `theme_color` and theme-color meta from `#131F24` to `#16151F` (research R5)
+- [X] T008 [P] [US3] In vite.config.ts set the manifest `background_color: '#16151F'` and `theme_color: '#16151F'`; in index.html set `<meta name="theme-color" content="#16151F" />`
+- [X] T009 [US3] In tests/build/pwa.test.ts change the expected `background_color`, `theme_color` and theme-color meta from `#131F24` to `#16151F` (research R5)
 
 **Checkpoint**: US3 complete.
 
@@ -104,12 +107,13 @@ no other element uses `--success*`.
 
 ## Phase 6: Tests (after the code, Constitution IV)
 
-- [ ] T010 [P] Create tests/unit/theme.test.ts (research R6), reading files with `node:fs` (`readFileSync`, plus a small recursive walk of `src/` for `*.css`):
+- [X] T010 [P] Create tests/unit/theme.test.ts (research R6), reading files with `node:fs` (`readFileSync`, plus a small recursive walk of `src/` for `*.css`):
   - parse `:root` custom properties in src/index.css with a regex (`/--([\w-]+):\s*(#[0-9a-fA-F]{6})/g`) and assert every T002 and T004 value (lowercase compare);
   - assert that no `src/**/*.css` contains any old neutral/brand value from T003 (case-insensitive), except `#0b7f63`, `#075e49` and `#7ff0c8`, which may appear only as the values of `--success`, `--success-deep` and `--success-text`;
   - compute WCAG contrast from the parsed tokens (relative luminance, `(L1+0.05)/(L2+0.05)`) and assert ≥ 4.5 for: `--text`/`--bg`, `--text-muted`/`--bg`, `--primary-text`/`--bg`, `--primary-text`/`--primary-tint`, `--primary-text`/`--grammar-tint`, `--primary-text-strong`/`--grammar-tint`, `#ffffff`/`--primary`, `#ffffff`/`--success`, `--success-text`/`--success-tint`; and ≥ 3 for `--icon-muted`/`--bg` and `--primary-text` (focus ring) on `--bg`, `--success-tint` and `--error-tint`
-- [ ] T011 [P] In tests/integration/lessonFlow.test.tsx add `describe('011 correct colours')`: after a right answer, the "Continue" button has class `success` and not `danger`; after a wrong answer it has `danger` and not `success`. Reuse the file's existing helpers for answering an exercise
-- [ ] T012 Run `npm test`, `npm run lint`, `npm run build` and `npm run test:pwa`; all pass. Record the counts under this task
+- [X] T011 [P] In tests/integration/lessonFlow.test.tsx add `describe('011 correct colours')`: after a right answer, the "Continue" button has class `success` and not `danger`; after a wrong answer it has `danger` and not `success`. Reuse the file's existing helpers for answering an exercise
+- [X] T012 Run `npm test`, `npm run lint`, `npm run build` and `npm run test:pwa`; all pass. Record the counts under this task
+  - **Result (2026-11-04)**: `npm test` 632 passed (17 files; +30 theme, +1 integration); lint clean; build ok (precache 12 entries, 503.00 KiB); `npm run test:pwa` 26 passed
 - [ ] T013 Manual check: ask the user to run `npm run dev`, then in Chrome with device emulation (390 × 844) run quickstart M1–M4 against mockups 01–07. Record the results under this task. Save the user's dev `localStorage` before the check and restore it afterwards. On a mismatch, fix the token or rule and re-check
 
 ---

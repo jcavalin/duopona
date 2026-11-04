@@ -812,3 +812,21 @@ describe('collapsible explanation (feature 010)', () => {
     expect(opened).toEqual(closed)
   })
 })
+
+describe('correct colours (feature 011)', () => {
+  it('gives the correct sheet a success Continue and the wrong sheet a danger one', async () => {
+    const { user } = renderApp()
+    await startLesson(user)
+
+    await answer(user, true)
+    const right = screen.getByRole('button', { name: 'Continue' })
+    expect(right).toHaveClass('primary-button', 'success')
+    expect(right).not.toHaveClass('danger')
+    await user.click(right)
+
+    await answer(user, false)
+    const wrong = screen.getByRole('button', { name: 'Continue' })
+    expect(wrong).toHaveClass('primary-button', 'danger')
+    expect(wrong).not.toHaveClass('success')
+  })
+})

@@ -128,8 +128,8 @@ describe('app identity (contracts/app-identity.md)', () => {
   it('opens full-screen with the app colors and any orientation', () => {
     expect(manifest.display).toBe('standalone')
     // Dark only (specs/004-ui-redesign/contracts/app-identity-changes.md)
-    expect(manifest.background_color).toBe('#131F24')
-    expect(manifest.theme_color).toBe('#131F24')
+    expect(manifest.background_color).toBe('#16151F')
+    expect(manifest.theme_color).toBe('#16151F')
     expect(manifest).not.toHaveProperty('orientation')
   })
 
@@ -155,7 +155,7 @@ describe('app identity (contracts/app-identity.md)', () => {
 
   it('colors the browser bars dark in every color scheme (004)', () => {
     const themeColors = indexHtml.match(/<meta name="theme-color"[^>]*>/g) ?? []
-    expect(themeColors).toEqual(['<meta name="theme-color" content="#131F24" />'])
+    expect(themeColors).toEqual(['<meta name="theme-color" content="#16151F" />'])
     expect(indexHtml).toContain('<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />')
   })
 
