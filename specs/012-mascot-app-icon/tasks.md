@@ -138,8 +138,8 @@ on the next exercise.
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T019 [P] Update README.md where the exercise screens or summary are described: mention the mascot that reacts to answers and the mascot app icon
-- [ ] T020 [P] Update docs/design/mascot.md and docs/design/ui-redesign.md line 14: say the mascot is implemented in `specs/012-mascot-app-icon/`, and record the open-point defaults (instant switch, no mascot on path/intro, no name)
+- [X] T019 [P] Update README.md where the exercise screens or summary are described: mention the mascot that reacts to answers and the mascot app icon
+- [X] T020 [P] Update docs/design/mascot.md and docs/design/ui-redesign.md line 14: say the mascot is implemented in `specs/012-mascot-app-icon/`, and record the open-point defaults (instant switch, no mascot on path/intro, no name)
 - [ ] T021 Ask the user to run quickstart M7 on a phone (Constitution V); record the results under this task. The owner may waive it (Principle IV): then mark `[~]` with the date and "owner decision", and name it in spec.md **Status**
 - [ ] T022 Set spec.md **Status** to `Implemented` (or `Implemented (…)` naming any waived check). In ROADMAP.md move 012 from **In progress** to **Done** as a short summary with its specs path; leave **In progress** as `(none)`
 - [ ] T023 Final gate: `npm test`, `npm run lint`, `npm run build`, `npm run test:pwa` all pass; record the counts vs. T001 under this task

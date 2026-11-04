@@ -1,5 +1,9 @@
 # Mascot and app icon
 
+> Implemented in [`specs/012-mascot-app-icon/`](../../specs/012-mascot-app-icon/). Open points
+> settled there: expressions switch instantly (no animation), no mascot on the path or intro,
+> no name.
+
 Design reference for the "Mascot & app icon" item in [ROADMAP.md](../../ROADMAP.md). Turn it into
 a feature with `/speckit-specify` when it is picked up; this file is the input, not the spec.
 Builds on the dark UI of feature 004 ([ui-redesign.md](ui-redesign.md)); same canvas, second row.
