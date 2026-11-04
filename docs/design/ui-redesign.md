@@ -10,12 +10,17 @@ Seven 390×844 phone screens, linked for click-through (Play mode).
 
 ## Screens
 
+Mockups now show the purple theme ([purple-theme.md](purple-theme.md)) and, on 03–07, the
+mascot instead of the prompt icon and star badge ([mascot.md](mascot.md)); neither is implemented yet.
+
 | # | Mockup | Current code | Main changes |
 |---|--------|--------------|--------------|
 | 1 | [Lesson path](mockups/01-lesson-path.png) | `HomeRoute`, `LessonList` | Card list → vertical zigzag path of round nodes; course banner; top bar with wordmark and "done / total" counter; credit footer kept |
 | 2 | [Lesson intro](mockups/02-lesson-intro.png) | `LessonIntro` | New words as 2-column chips (word + meaning); grammar in a tinted card; full-width Start in a bottom bar; X to go back |
 | 3 | [Multiple choice](mockups/03-multiple-choice.png) | `ExerciseScreen`, `MultipleChoice` | Top bar: X (quit), progress bar, "n/total"; prompt in a bubble next to an icon; options as numbered cards; Check in a bottom bar |
 | 4 | [Wrong answer](mockups/04-wrong-answer.png) | `FeedbackBanner` | Bottom sheet replaces the action bar: red tint, "Not quite", correct answer, red Continue; options disabled, the chosen one red |
+| 4a | [Wrong + explanation hidden](mockups/04a-wrong-explanation-hidden.png) | `FeedbackBanner` (`ExplanationBlock`) | Mistake explanation (feature 008) collapsed by default; a "Why?" toggle (chevron down) next to the correct answer |
+| 4b | [Wrong + explanation shown](mockups/04b-wrong-explanation-shown.png) | `FeedbackBanner` (`ExplanationBlock`) | Toggle reads "Hide" (chevron up); explanation in a darker card inside the sheet: word meanings, picked-word meaning, grammar title + source lesson + note; sheet grows up to ~60% of the screen, only the explanation scrolls, Continue always visible |
 | 5 | [Word bank](mockups/05-word-bank.png) | `WordBank` | Answer on two ruled lines; used tiles leave a grey placeholder in the bank; "Grammar" tag when `practisesGrammar` is true |
 | 6 | [Correct answer](mockups/06-correct-answer.png) | `FeedbackBanner` | Green-tinted sheet, "pona! Correct.", Continue |
 | 7 | [Lesson complete](mockups/07-lesson-complete.png) | `LessonSummary` | Gold star badge; "Correct X / Y" and "Unlocked <next lesson>" stat cards; Continue + "Replay lesson" |
@@ -26,11 +31,18 @@ Seven 390×844 phone screens, linked for click-through (Play mode).
 ![02-lesson-intro](mockups/02-lesson-intro.png)
 ![03-multiple-choice](mockups/03-multiple-choice.png)
 ![04-wrong-answer](mockups/04-wrong-answer.png)
+![04a-wrong-explanation-hidden](mockups/04a-wrong-explanation-hidden.png)
+![04b-wrong-explanation-shown](mockups/04b-wrong-explanation-shown.png)
 ![05-word-bank](mockups/05-word-bank.png)
 ![06-correct-answer](mockups/06-correct-answer.png)
 ![07-lesson-complete](mockups/07-lesson-complete.png)
+![08-mascot-expressions](mockups/08-mascot-expressions.png)
+![09-app-icon](mockups/09-app-icon.png)
 
 ## Tokens (dark theme)
+
+> Superseded by [purple-theme.md](purple-theme.md) (planned): the mockups now show purple.
+> The table below is the green palette that feature 004 shipped.
 
 | Token | Value | Use |
 |-------|-------|-----|
@@ -72,3 +84,8 @@ Seven 390×844 phone screens, linked for click-through (Play mode).
   canvas history (first version).
 - Keyboard shortcuts 1–3 shown on option cards: decide whether to implement or drop the numbers.
 - Do after "PWA & mobile compliance" (Constitution governance: PWA must be the next feature).
+- Mistake explanation toggle (4a/4b): a real `<button>` with `aria-expanded` / `aria-controls`;
+  collapsed again on every new mistake; focus stays on Continue (`focusOnMount`); the
+  explanation text stays out of the `role="status"` announcement until opened. New tokens:
+  toggle border `#6B2B32`, pressed bg `#4A2328`, text `#FFC2C6`; explanation card bg `#2A1316`,
+  border `#5A262C`, text `#FFD9DB`, source-lesson label `#E7A3A8`.
