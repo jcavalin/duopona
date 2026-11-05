@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router'
 import ExerciseScreen from '../components/ExerciseScreen'
 import LessonIntro from '../components/LessonIntro'
@@ -31,6 +31,13 @@ export default function LessonRoute() {
       dispatch(quitLesson())
     }
   }, [lessonId, dispatch])
+
+  // Intro, exercises and summary share one route, so switching between them is not a navigation:
+  // start each at the top instead of at the previous screen's scroll offset
+  const screenKind = !started ? 'intro' : session?.status === 'finished' ? 'summary' : 'exercises'
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [screenKind])
 
   if (!lesson) return <Navigate to="/" replace />
 
