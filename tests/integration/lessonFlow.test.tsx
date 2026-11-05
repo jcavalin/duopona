@@ -81,6 +81,17 @@ describe('first lesson flow', () => {
     expect(screen.getByRole('button', { name: 'Check' })).toBeDisabled()
   })
 
+  it('the introduction and the exercises open scrolled to the top', async () => {
+    const { user } = renderApp()
+    vi.mocked(window.scrollTo).mockClear()
+    await openLesson(user)
+    expect(screen.getByRole('button', { name: 'Start' })).toBeInTheDocument()
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0)
+    vi.mocked(window.scrollTo).mockClear()
+    await user.click(screen.getByRole('button', { name: 'Start' }))
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0)
+  })
+
   it('shows "pona! Correct." for a right answer and the correct answer for a wrong one', async () => {
     const { user } = renderApp()
     await startLesson(user)
