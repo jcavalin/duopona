@@ -63,5 +63,13 @@ export default function PracticeRoute() {
       />
     )
   }
-  return <ExerciseScreen onQuit={goHome} quitLabel="Quit practice" progressLabel="Practice progress" />
+  return (
+    <ExerciseScreen
+      onQuit={goHome}
+      quitLabel="Quit practice"
+      progressLabel="Practice progress"
+      leaveTitle="Leave this practice?"
+      leaveMessage="Your progress in this practice will be lost."
+    />
+  )
 }

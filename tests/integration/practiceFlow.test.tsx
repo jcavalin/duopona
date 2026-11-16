@@ -129,6 +129,8 @@ describe('practice session (006 US1)', () => {
     const { user, store, router } = renderApp('/practice/practice')
     await answer(user, store, true)
     await user.click(screen.getByRole('button', { name: 'Quit practice' }))
+    // 013: quitting asks first
+    await user.click(screen.getByRole('button', { name: 'Leave' }))
     expect(router.state.location.pathname).toBe('/')
     expect(store.getState().session).toBeNull()
     expect(localStorage.getItem(STORAGE_KEY)).toBe(saved)
@@ -194,6 +196,7 @@ describe('word records (006 US2)', () => {
     const words = testedWords(current(store))
     await answer(user, store, false)
     await user.click(screen.getByRole('button', { name: 'Quit lesson' }))
+    await user.click(screen.getByRole('button', { name: 'Leave' }))
     for (const w of words) expect(mistakes(store)[w]).toBe(1)
 
     const reloaded = makeStore()
@@ -322,5 +325,36 @@ describe('mascot in practice (feature 012)', () => {
 
     await playToEnd(user, store)
     expect(mascot()).toHaveAttribute('data-expression', 'celebrate')
+  })
+})
+
+describe('leave confirmation in practice (feature 013 US3)', () => {
+  async function expectPracticeDialog(user: User) {
+    await user.click(screen.getByRole('button', { name: 'Quit practice' }))
+    expect(screen.getByRole('dialog', { name: 'Leave this practice?' })).toHaveAccessibleDescription(
+      'Your progress in this practice will be lost.',
+    )
+    await user.click(screen.getByRole('button', { name: 'Keep learning' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Quit practice' })).toBeInTheDocument()
+  }
+
+  it('practice asks with practice wording, and "Keep learning" stays', async () => {
+    completeLessons(l1.id)
+    const { user, store, router } = renderApp('/practice/practice')
+    await answer(user, store, true)
+    await expectPracticeDialog(user)
+    expect(router.state.location.pathname).toBe('/practice/practice')
+    expect(store.getState().session).not.toBeNull()
+  })
+
+  it('weak-word review asks with practice wording too', async () => {
+    completeLessons(l1.id)
+    saveMistakes({ [testedWords(l1.exercises[0])[0]]: 1 })
+    const { user, store, router } = renderApp()
+    await user.click(screen.getByRole('button', { name: 'Review weak words' }))
+    await expectPracticeDialog(user)
+    expect(router.state.location.pathname).toBe('/practice/review')
+    expect(store.getState().session).not.toBeNull()
   })
 })

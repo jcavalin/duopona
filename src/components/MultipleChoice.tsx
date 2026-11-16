@@ -24,6 +24,8 @@ export default function MultipleChoice({ header, exercise, disabled, result, onS
     if (disabled) return
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.ctrlKey || event.metaKey || event.altKey) return
+      // Number keys must not change the answer behind the leave dialog (013 research R7)
+      if (event.target instanceof Element && event.target.closest('dialog')) return
       const n = Number(event.key)
       if (Number.isInteger(n) && n >= 1 && n <= options.length) setSelected(options[n - 1])
     }

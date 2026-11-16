@@ -1,4 +1,4 @@
-import { cleanup, render, screen, within } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { createMemoryRouter, RouterProvider } from 'react-router'
@@ -185,6 +185,8 @@ describe('first lesson flow', () => {
     await startLesson(user)
     await answer(user, true)
     await user.click(screen.getByRole('button', { name: 'Quit lesson' }))
+    // 013: quitting mid-lesson asks first
+    await user.click(screen.getByRole('button', { name: 'Leave' }))
     expect(screen.getByRole('heading', { name: 'duopona' })).toBeInTheDocument()
     expect(store.getState().session).toBeNull()
     await startLesson(user)
@@ -196,6 +198,9 @@ describe('first lesson flow', () => {
     await startLesson(user)
     await answer(user, true)
     await router.navigate(-1)
+    // 013: Back mid-lesson asks first
+    await screen.findByRole('dialog', { name: 'Leave this lesson?' })
+    await user.click(screen.getByRole('button', { name: 'Leave' }))
     expect(await screen.findByRole('heading', { name: 'duopona' })).toBeInTheDocument()
     expect(store.getState().session).toBeNull()
   })
@@ -257,6 +262,7 @@ describe('saved progress (US2)', () => {
     await startLesson(user)
     await answer(user, true)
     await user.click(screen.getByRole('button', { name: 'Quit lesson' }))
+    await user.click(screen.getByRole('button', { name: 'Leave' }))
     expect(card()).not.toHaveAccessibleName(/completed/)
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull()
   })
@@ -883,5 +889,156 @@ describe('mascot (feature 012)', () => {
     await completeLesson(user)
     expect(mascot()).toHaveAttribute('data-expression', 'celebrate')
     expect(document.querySelectorAll('img[data-expression]')).toHaveLength(1)
+  })
+})
+
+describe('leave confirmation (feature 013)', () => {
+  const quit = () => screen.getByRole('button', { name: 'Quit lesson' })
+  const dialog = () => screen.getByRole('dialog', { name: 'Leave this lesson?' })
+  const optionButtons = () => within(screen.getByRole('group', { name: 'Options' })).getAllByRole('button')
+
+  /** Starts Lesson 1 and answers its first exercise right, so the learner is on 2/n */
+  async function startAndAnswerOne() {
+    const app = renderApp()
+    await startLesson(app.user)
+    await answer(app.user, true)
+    await app.user.click(screen.getByRole('button', { name: 'Continue' }))
+    return app
+  }
+
+  async function playUntil(user: User, id: string) {
+    while (currentExercise().id !== id) {
+      await answer(user, true)
+      await user.click(screen.getByRole('button', { name: 'Continue' }))
+    }
+  }
+
+  it('X opens the dialog instead of leaving, with focus on "Keep learning" (US1 AC1)', async () => {
+    const { user, router, store } = await startAndAnswerOne()
+    await user.click(quit())
+    expect(dialog()).toHaveAccessibleDescription('Your progress in this lesson will be lost.')
+    expect(screen.getByRole('button', { name: 'Keep learning' })).toHaveFocus()
+    expect(screen.getByRole('button', { name: 'Leave' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe(`/lesson/${lesson.id}`)
+    expect(store.getState().session).not.toBeNull()
+  })
+
+  it('"Keep learning" returns to the same exercise with focus on X (US1 AC2)', async () => {
+    const { user, router, store } = await startAndAnswerOne()
+    const step = store.getState().session!.step
+    await user.click(quit())
+    await user.click(screen.getByRole('button', { name: 'Keep learning' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(screen.getByText(`2/${total}`)).toBeInTheDocument()
+    expect(store.getState().session!.step).toBe(step)
+    expect(router.state.location.pathname).toBe(`/lesson/${lesson.id}`)
+    expect(quit()).toHaveFocus()
+  })
+
+  it('Escape (the dialog closing) acts like "Keep learning" (US1 AC3)', async () => {
+    const { user, store } = await startAndAnswerOne()
+    await user.click(quit())
+    // jsdom has no real Escape handling for modals; a browser closes the dialog and fires `close`
+    fireEvent(dialog(), new Event('close'))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(store.getState().session).not.toBeNull()
+    expect(quit()).toHaveFocus()
+  })
+
+  it('a tap on the backdrop acts like "Keep learning", a tap inside the box does not (US1 AC3)', async () => {
+    const { user, store } = await startAndAnswerOne()
+    await user.click(quit())
+    await user.click(screen.getByText('Your progress in this lesson will be lost.'))
+    expect(dialog()).toBeInTheDocument()
+    await user.click(dialog())
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(store.getState().session).not.toBeNull()
+  })
+
+  it('"Keep learning" keeps the feedback sheet and its opened explanation (FR-003)', async () => {
+    const { user } = renderApp()
+    await startLesson(user)
+    await answer(user, false)
+    await user.click(screen.getByRole('button', { name: 'Why?' }))
+    await user.click(quit())
+    await user.click(screen.getByRole('button', { name: 'Keep learning' }))
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Hide' })).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('"Keep learning" keeps tiles already placed in a word-bank answer (FR-003)', async () => {
+    const { user } = renderApp()
+    await startLesson(user)
+    await playUntil(user, 'ni-li-meli')
+    await user.click(within(screen.getByRole('group', { name: 'Word bank' })).getByRole('button', { name: 'ni' }))
+    await user.click(quit())
+    await user.click(screen.getByRole('button', { name: 'Keep learning' }))
+    expect(within(screen.getByRole('group', { name: 'Your answer' })).getByRole('button', { name: 'ni' })).toBeInTheDocument()
+  })
+
+  it('number keys do not pick an option behind the dialog (FR-005)', async () => {
+    const { user } = renderApp()
+    await startLesson(user)
+    await user.click(quit())
+    await user.keyboard('1')
+    await user.click(screen.getByRole('button', { name: 'Keep learning' }))
+    for (const option of optionButtons()) expect(option).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByRole('button', { name: 'Check' })).toBeDisabled()
+  })
+
+  it('a double click on X never leaves and opens at most one dialog', async () => {
+    const { user, router, store } = await startAndAnswerOne()
+    await user.dblClick(quit())
+    expect(screen.queryAllByRole('dialog').length).toBeLessThanOrEqual(1)
+    expect(router.state.location.pathname).toBe(`/lesson/${lesson.id}`)
+    expect(store.getState().session).not.toBeNull()
+  })
+
+  it('the introduction and the summary still leave without asking (FR-007)', async () => {
+    const { user, router } = renderApp()
+    await openLesson(user)
+    await user.click(screen.getByRole('button', { name: 'Back to lessons' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/')
+
+    await startLesson(user)
+    while (!screen.queryByRole('button', { name: 'Replay lesson' })) {
+      await answer(user, true)
+      await user.click(screen.getByRole('button', { name: 'Continue' }))
+    }
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/')
+  })
+
+  it('Back mid-lesson opens the dialog; "Keep learning" stays and a later Back asks again (US4 AC1-2)', async () => {
+    const { user, router, store } = await startAndAnswerOne()
+    await router.navigate(-1)
+    await screen.findByRole('dialog', { name: 'Leave this lesson?' })
+    expect(router.state.location.pathname).toBe(`/lesson/${lesson.id}`)
+    await user.click(screen.getByRole('button', { name: 'Keep learning' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(store.getState().session).not.toBeNull()
+    await router.navigate(-1)
+    expect(await screen.findByRole('dialog', { name: 'Leave this lesson?' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe(`/lesson/${lesson.id}`)
+  })
+
+  it('Back again while the dialog is open keeps it open and does not leave (US4 AC4, research R3)', async () => {
+    const { router, store } = await startAndAnswerOne()
+    await router.navigate(-1)
+    await screen.findByRole('dialog', { name: 'Leave this lesson?' })
+    await router.navigate(-1)
+    expect(await screen.findByRole('dialog', { name: 'Leave this lesson?' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe(`/lesson/${lesson.id}`)
+    expect(store.getState().session).not.toBeNull()
+  })
+
+  it('Back from the introduction leaves without asking (FR-007)', async () => {
+    const { user, router } = renderApp()
+    await openLesson(user)
+    await router.navigate(-1)
+    expect(await screen.findByRole('heading', { name: 'duopona' })).toBeInTheDocument()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 })
