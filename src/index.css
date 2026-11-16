@@ -191,6 +191,43 @@ button:disabled {
   text-transform: uppercase;
 }
 
+/* Leave confirmation dialog (013, research R5); native modal, centred in the top layer */
+.leave-dialog {
+  width: calc(100% - 32px);
+  max-width: 340px;
+  max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 32px);
+  margin: auto;
+  padding: 0;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--line-deep);
+  color: var(--text);
+}
+
+.leave-dialog::backdrop {
+  background: rgb(0 0 0 / 60%);
+}
+
+.leave-dialog-body {
+  padding: 24px 20px 16px;
+  text-align: center;
+}
+
+.leave-dialog-title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.leave-dialog-message {
+  margin: 0 0 20px;
+  color: var(--text-muted);
+}
+
+.leave-dialog .text-button.leave-dialog-leave {
+  color: var(--error-text);
+}
+
 .label {
   font-size: 13px;
   font-weight: 900;

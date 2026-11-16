@@ -125,6 +125,7 @@ describe('streak counter (007 US1)', () => {
     await app.user.click(await screen.findByRole('button', { name: 'Start' }))
     await answer(app.user, app.store, true)
     await app.user.click(screen.getByRole('button', { name: 'Quit lesson' }))
+    await app.user.click(screen.getByRole('button', { name: 'Leave' }))
     expectStreak(0, false)
     expect(localStorage.getItem(STREAK_KEY)).toBeNull()
   })

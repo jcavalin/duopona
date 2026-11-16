@@ -1,8 +1,11 @@
+import { useEffect, useRef } from 'react'
+import { useBlocker } from 'react-router'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { continueAndRecord, submitAndRecord } from '../store/lessonThunks'
 import { selectCurrentExercise, selectCurrentKey, selectPosition, selectSession } from '../store/sessionSlice'
 import FeedbackBanner from './FeedbackBanner'
 import { CloseIcon } from './icons'
+import LeaveDialog from './LeaveDialog'
 import MultipleChoice from './MultipleChoice'
 import WordBank from './WordBank'
 import styles from './Exercise.module.css'
@@ -12,14 +15,39 @@ interface Props {
   /** Accessible names; lessons keep the defaults, practice passes its own (006 contract S3) */
   quitLabel?: string
   progressLabel?: string
+  /** Leave confirmation wording (013 contract ui-leave-dialog.md); practice passes its own */
+  leaveTitle?: string
+  leaveMessage?: string
 }
 
-export default function ExerciseScreen({ onQuit, quitLabel = 'Quit lesson', progressLabel = 'Lesson progress' }: Props) {
+/** X and Back are confirmed first (013): leaving the exercise screen is held until "Leave". */
+export default function ExerciseScreen({
+  onQuit,
+  quitLabel = 'Quit lesson',
+  progressLabel = 'Lesson progress',
+  leaveTitle = 'Leave this lesson?',
+  leaveMessage = 'Your progress in this lesson will be lost.',
+}: Props) {
   const dispatch = useAppDispatch()
   const session = useAppSelector(selectSession)
   const exercise = useAppSelector(selectCurrentExercise)
   const exerciseKey = useAppSelector(selectCurrentKey)
   const { done, total } = useAppSelector(selectPosition)
+  const quitRef = useRef<HTMLButtonElement>(null)
+
+  // X navigates home and Back pops history; both are held here while exercises show (research R1).
+  // The intro and summary don't render this screen, so they are never blocked (FR-007).
+  const blocker = useBlocker(({ currentLocation, nextLocation }) => currentLocation.pathname !== nextLocation.pathname)
+
+  // Focus X once the dialog is gone: while the modal is open X is inert and ignores focus() (research R4)
+  const wasBlocked = useRef(false)
+  useEffect(() => {
+    if (blocker.state === 'blocked') wasBlocked.current = true
+    else if (blocker.state === 'unblocked' && wasBlocked.current) {
+      wasBlocked.current = false
+      quitRef.current?.focus()
+    }
+  }, [blocker.state])
 
   if (!session || !exercise || !exerciseKey) return null
   const feedback = session.status === 'feedback' ? session.feedback : undefined
@@ -27,7 +55,7 @@ export default function ExerciseScreen({ onQuit, quitLabel = 'Quit lesson', prog
 
   const topBar = (
     <div className={styles.topBar}>
-      <button type="button" className="icon-button" aria-label={quitLabel} onClick={onQuit}>
+      <button ref={quitRef} type="button" className="icon-button" aria-label={quitLabel} onClick={onQuit}>
         <CloseIcon size={28} />
       </button>
       <progress className={styles.progress} value={done} max={total} aria-label={progressLabel} />
@@ -60,6 +88,10 @@ export default function ExerciseScreen({ onQuit, quitLabel = 'Quit lesson', prog
       )}
 
       {feedback && <FeedbackBanner feedback={feedback} exerciseKey={exerciseKey} onContinue={() => dispatch(continueAndRecord())} />}
+
+      {blocker.state === 'blocked' && (
+        <LeaveDialog title={leaveTitle} message={leaveMessage} onStay={() => blocker.reset()} onLeave={() => blocker.proceed()} />
+      )}
     </div>
   )
 }
