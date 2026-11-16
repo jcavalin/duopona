@@ -37,6 +37,10 @@ word to a new spot, or focus it and use the left and right arrow keys. You can a
 from the bank straight into the spot where it belongs. A tap still adds a word at the end or
 sends a placed word back.
 
+Leaving a lesson, practice or review part-way through (the X button, or Back) asks first:
+**Keep learning** returns to the same exercise, **Leave** ends the session, whose progress is
+not kept.
+
 Practice never changes lesson progress. Progress is saved under `duopona:progress`, word
 mistakes under `duopona:words` and the streak under `duopona:streak`, all in `localStorage`.
 

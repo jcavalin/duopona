@@ -45,6 +45,10 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   answers (sad / happy) and celebrates on the summary; it is also the app icon
   (`specs/012-mascot-app-icon/`). The phone check was deferred by owner decision (to be run
   later).
+- **013 – Confirm before leaving a lesson**: X or Back during a lesson, practice or review asks
+  "Leave this lesson?" first, so a stray tap no longer loses progress
+  (`specs/013-confirm-leave-lesson/`). The phone check was deferred by owner decision (to be run
+  later).
 
 ## Ideas (not yet evaluated)
 
