@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useBlocker } from 'react-router'
+import { useStrings } from '../i18n/useStrings'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { continueAndRecord, submitAndRecord } from '../store/lessonThunks'
 import { selectCurrentExercise, selectCurrentKey, selectPosition, selectSession } from '../store/sessionSlice'
@@ -12,22 +13,18 @@ import styles from './Exercise.module.css'
 
 interface Props {
   onQuit: () => void
-  /** Accessible names; lessons keep the defaults, practice passes its own (006 contract S3) */
-  quitLabel?: string
-  progressLabel?: string
-  /** Leave confirmation wording (013 contract ui-leave-dialog.md); practice passes its own */
-  leaveTitle?: string
-  leaveMessage?: string
+  /** Picks the accessible names (006 contract S3) and the leave wording (013); default 'lesson' */
+  kind?: 'lesson' | 'practice'
 }
 
 /** X and Back are confirmed first (013): leaving the exercise screen is held until "Leave". */
-export default function ExerciseScreen({
-  onQuit,
-  quitLabel = 'Quit lesson',
-  progressLabel = 'Lesson progress',
-  leaveTitle = 'Leave this lesson?',
-  leaveMessage = 'Your progress in this lesson will be lost.',
-}: Props) {
+export default function ExerciseScreen({ onQuit, kind = 'lesson' }: Props) {
+  const s = useStrings()
+  const practice = kind === 'practice'
+  const quitLabel = practice ? s.quitPractice : s.quitLesson
+  const progressLabel = practice ? s.practiceProgress : s.lessonProgress
+  const leaveTitle = practice ? s.leavePracticeTitle : s.leaveLessonTitle
+  const leaveMessage = practice ? s.leavePracticeMessage : s.leaveLessonMessage
   const dispatch = useAppDispatch()
   const session = useAppSelector(selectSession)
   const exercise = useAppSelector(selectCurrentExercise)
@@ -87,7 +84,7 @@ export default function ExerciseScreen({
           onSubmit={(a) => dispatch(submitAndRecord(a))} />
       )}
 
-      {feedback && <FeedbackBanner feedback={feedback} exerciseKey={exerciseKey} onContinue={() => dispatch(continueAndRecord())} />}
+      {feedback && <FeedbackBanner feedback={feedback} exerciseKey={exerciseKey} language={session.language} onContinue={() => dispatch(continueAndRecord())} />}
 
       {blocker.state === 'blocked' && (
         <LeaveDialog title={leaveTitle} message={leaveMessage} onStay={() => blocker.reset()} onLeave={() => blocker.proceed()} />

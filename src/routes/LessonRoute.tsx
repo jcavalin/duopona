@@ -3,7 +3,8 @@ import { Navigate, useNavigate, useParams } from 'react-router'
 import ExerciseScreen from '../components/ExerciseScreen'
 import LessonIntro from '../components/LessonIntro'
 import LessonSummary from '../components/LessonSummary'
-import { getLesson, lessons } from '../content/lessons'
+import { courses, getLesson } from '../content/lessons'
+import { useLanguage } from '../i18n/useStrings'
 import { today } from '../lib/days'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { selectIsUnlocked } from '../store/progressSlice'
@@ -14,7 +15,8 @@ export default function LessonRoute() {
   const { lessonId = '' } = useParams()
   const unlocked = useAppSelector(selectIsUnlocked(lessonId))
   // Unknown and locked lessons are not playable (FR-012)
-  const lesson = unlocked ? getLesson(lessonId) : undefined
+  const language = useLanguage()
+  const lesson = unlocked ? getLesson(lessonId, language) : undefined
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const session = useAppSelector(selectSession)
@@ -45,7 +47,7 @@ export default function LessonRoute() {
 
   if (!started) {
     const start = () => {
-      dispatch(startLesson(lesson.id))
+      dispatch(startLesson(lesson.id, language))
       setStartedId(lesson.id)
     }
     return <LessonIntro lesson={lesson} onStart={start} onBack={goHome} />
@@ -54,7 +56,8 @@ export default function LessonRoute() {
   if (!session || session.lessonId !== lesson.id) return null
 
   if (session.status === 'finished') {
-    const next = lessons[lessons.findIndex((l) => l.id === lesson.id) + 1]
+    const course = courses[language]
+    const next = course[course.findIndex((l) => l.id === lesson.id) + 1]
     return (
       <LessonSummary
         subtitle={lesson.title}

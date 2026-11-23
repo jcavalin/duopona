@@ -1,3 +1,4 @@
+import { useStrings } from '../i18n/useStrings'
 import { FlameIcon } from './icons'
 import Mascot from './Mascot'
 import { focusOnMount } from './focusOnMount'
@@ -21,8 +22,8 @@ interface Props {
 
 /** Lesson or practice complete (mockup 07, contract S5). */
 export default function LessonSummary({
-  heading = 'Lesson complete!',
-  replayLabel = 'Replay lesson',
+  heading,
+  replayLabel,
   subtitle,
   nextLessonTitle,
   firstTryCorrect,
@@ -31,32 +32,33 @@ export default function LessonSummary({
   onContinue,
   onReplay,
 }: Props) {
+  const s = useStrings()
   return (
     <div className="screen">
       <div className={`screen-body ${styles.summary}`}>
         <Mascot expression="celebrate" className={styles.summaryMascot} />
-        <h1 className={styles.summaryTitle}>{heading}</h1>
+        <h1 className={styles.summaryTitle}>{heading ?? s.lessonComplete}</h1>
         <p className={styles.summaryLesson}>{subtitle}</p>
-        {streak !== undefined && <p className={styles.goalMet}>Daily goal met</p>}
+        {streak !== undefined && <p className={styles.goalMet}>{s.dailyGoalMet}</p>}
         <div className={styles.stats}>
           <div className={`${styles.stat} ${styles.statCorrect}`}>
-            <p className={`label ${styles.statLabel}`}>Correct</p>
+            <p className={`label ${styles.statLabel}`}>{s.statCorrect}</p>
             <p className={styles.statValue}>
               {firstTryCorrect} / {total}
             </p>
           </div>
           {nextLessonTitle && (
             <div className={`${styles.stat} ${styles.statUnlocked}`}>
-              <p className={`label ${styles.statLabel}`}>Unlocked</p>
+              <p className={`label ${styles.statLabel}`}>{s.statUnlocked}</p>
               <p className={`${styles.statValue} ${styles.statNext}`}>{nextLessonTitle}</p>
             </div>
           )}
           {streak !== undefined && (
             <div className={`${styles.stat} ${styles.statStreak}`}>
-              <p className={`label ${styles.statLabel}`}>Streak</p>
+              <p className={`label ${styles.statLabel}`}>{s.statStreak}</p>
               <p className={styles.statValue}>
                 <FlameIcon size={26} />
-                {streak} {streak === 1 ? 'day' : 'days'}
+                {s.dayCount(streak)}
               </p>
             </div>
           )}
@@ -64,10 +66,10 @@ export default function LessonSummary({
       </div>
       <div className="bottom-bar">
         <button type="button" className="primary-button" onClick={onContinue} ref={focusOnMount}>
-          Continue
+          {s.continue}
         </button>
         <button type="button" className="text-button" onClick={onReplay}>
-          {replayLabel}
+          {replayLabel ?? s.replayLesson}
         </button>
       </div>
     </div>

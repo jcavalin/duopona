@@ -1,11 +1,14 @@
 import { makeStore } from '../../src/store'
 import {
   loadProgress,
+  loadSettings,
   loadStreak,
   loadWords,
   saveProgress,
+  saveSettings,
   saveStreak,
   saveWords,
+  SETTINGS_KEY,
   STORAGE_KEY,
   STREAK_KEY,
   WORDS_KEY,
@@ -194,5 +197,35 @@ describe('streak storage (007 contract streak-storage)', () => {
     localStorage.setItem(STORAGE_KEY, 'garbage')
     localStorage.setItem(WORDS_KEY, 'garbage')
     expect(loadStreak()).toEqual(valid)
+  })
+})
+
+describe('settings storage (014 contract settings-storage.md)', () => {
+  const fallback = { language: 'pt-BR', chosen: false }
+
+  it.each([
+    ['missing', null],
+    ['invalid JSON', '{nope'],
+    ['not an object', '"pt-BR"'],
+    ['null', 'null'],
+    ['wrong version', JSON.stringify({ version: 2, language: 'en' })],
+    ['short code', JSON.stringify({ version: 1, language: 'pt' })],
+    ['unknown language', JSON.stringify({ version: 1, language: 'fr' })],
+  ])('falls back to the device language when the value is %s', (_case, raw) => {
+    if (raw !== null) localStorage.setItem(SETTINGS_KEY, raw)
+    expect(loadSettings('pt-BR')).toEqual(fallback)
+    expect(localStorage.getItem(SETTINGS_KEY)).toBe(raw)
+  })
+
+  it('loads a saved choice', () => {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ version: 1, language: 'pt-BR' }))
+    expect(loadSettings('en')).toEqual({ language: 'pt-BR', chosen: true })
+  })
+
+  it('saves only a chosen language', () => {
+    saveSettings({ language: 'pt-BR', chosen: false })
+    expect(localStorage.getItem(SETTINGS_KEY)).toBeNull()
+    saveSettings({ language: 'pt-BR', chosen: true })
+    expect(JSON.parse(localStorage.getItem(SETTINGS_KEY)!)).toEqual({ version: 1, language: 'pt-BR' })
   })
 })

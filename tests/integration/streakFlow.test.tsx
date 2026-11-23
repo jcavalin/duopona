@@ -10,6 +10,10 @@ import { makeStore } from '../../src/store'
 import { STORAGE_KEY, STREAK_KEY, WORDS_KEY } from '../../src/store/persistence'
 import { selectCurrentExercise } from '../../src/store/sessionSlice'
 
+// These tests play several whole sessions (about 3.6 s alone); under a full parallel run they can
+// pass the default 5 s limit, so they get more room.
+vi.setConfig({ testTimeout: 15_000 })
+
 type Store = ReturnType<typeof makeStore>
 type User = ReturnType<typeof userEvent.setup>
 

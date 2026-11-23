@@ -1,4 +1,6 @@
+import { isLanguage, type Language } from '../i18n/language'
 import { emptyProgress, type LearnerProgress, type LessonResult } from './progressSlice'
+import type { Settings } from './settingsSlice'
 import { emptyStreak, type StreakRecord } from './streakSlice'
 import { emptyWords, type WordStats } from './wordsSlice'
 
@@ -94,5 +96,34 @@ export function saveStreak(streak: StreakRecord): void {
     )
   } catch {
     // Storage full or disabled: keep working with the in-memory streak.
+  }
+}
+
+/** See specs/014-portuguese-language/contracts/settings-storage.md; independent of the other keys. */
+export const SETTINGS_KEY = 'duopona:settings'
+const SETTINGS_VERSION = 1
+
+/** The saved language choice, or `fallback` (the device language) when nothing valid is saved. */
+export function loadSettings(fallback: Language): Settings {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY)
+    if (raw === null) return { language: fallback, chosen: false }
+    const data: unknown = JSON.parse(raw)
+    if (typeof data !== 'object' || data === null) return { language: fallback, chosen: false }
+    const { version, language } = data as Record<string, unknown>
+    if (version !== SETTINGS_VERSION || !isLanguage(language)) return { language: fallback, chosen: false }
+    return { language, chosen: true }
+  } catch {
+    return { language: fallback, chosen: false }
+  }
+}
+
+/** Saves only a language the learner chose; a detected one is never written. */
+export function saveSettings(settings: Settings): void {
+  if (!settings.chosen) return
+  try {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ version: SETTINGS_VERSION, language: settings.language }))
+  } catch {
+    // Storage full or disabled: keep working with the in-memory choice.
   }
 }

@@ -1,3 +1,6 @@
+import type { Language } from '../i18n/language'
+import { vocabulary as vocabularyPtBR } from './pt-BR/vocabulary'
+
 /**
  * Every course word with a short English gloss (1–3 common senses).
  * Glosses are written for Duopona, consistent in meaning with the book's
@@ -139,6 +142,10 @@ export const vocabulary: Record<string, string> = {
   poki: 'box / container / bowl',
 }
 
-export function getMeaning(word: string): string | undefined {
-  return Object.hasOwn(vocabulary, word) ? vocabulary[word] : undefined
+/** Glosses per study language; both have the same Toki Pona keys (014 contract, rule P3). */
+export const vocabularies: Record<Language, Record<string, string>> = { en: vocabulary, 'pt-BR': vocabularyPtBR }
+
+export function getMeaning(word: string, language: Language = 'en'): string | undefined {
+  const glosses = vocabularies[language]
+  return Object.hasOwn(glosses, word) ? glosses[word] : undefined
 }

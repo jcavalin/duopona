@@ -49,6 +49,10 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   "Leave this lesson?" first, so a stray tap no longer loses progress
   (`specs/013-confirm-leave-lesson/`). The phone check was deferred by owner decision (to be run
   later).
+- **014 – Study in Brazilian Portuguese**: the whole course and interface in English or
+  Brazilian Portuguese, starting in the device language, with a settings gear on the home screen
+  to switch (`specs/014-portuguese-language/`). The owner's review of the Portuguese text and the
+  phone checks were deferred by owner decision (to be run later).
 
 ## Ideas (not yet evaluated)
 

@@ -22,21 +22,23 @@
 .counter {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   margin: 0;
   font-size: 20px;
   font-weight: 900;
+  /* "2 / 17" must not wrap next to the settings gear at 360 px (014) */
+  white-space: nowrap;
 }
 
 .counter svg {
   color: var(--primary-text);
 }
 
-/* Streak and lessons counters (007 contract U1) */
+/* Streak and lessons counters (007 contract U1), then the settings gear (014) */
 .counters {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
 }
 
 .streakMet svg {
@@ -266,4 +268,11 @@ a.nodeLink:active .node {
   align-items: center;
   min-height: 44px;
   color: var(--primary-text);
+}
+
+/* Settings gear after the counters (014 contract ui-settings.md) */
+.settings {
+  /* The 44 px target keeps its size; only the empty space around the icon overlaps */
+  margin: 0 -10px 0 -12px;
+  color: var(--text-muted);
 }

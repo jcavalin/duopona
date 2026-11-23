@@ -1,3 +1,5 @@
+import type { Language } from '../../i18n/language'
+import { lessons as lessonsPtBR } from '../pt-BR/lessons'
 import type { Exercise, Lesson } from '../types'
 import wordsAndSentences from './01-words-and-sentences'
 import nounsAndAdjectives from './02-nouns-and-adjectives'
@@ -38,13 +40,14 @@ export const lessons: Lesson[] = [
   moreWords2,
 ]
 
-export function getLesson(id: string): Lesson | undefined {
-  return lessons.find((lesson) => lesson.id === id)
-}
+/**
+ * The course in each study language (014 research R2): same lessons, ids and Toki Pona; only
+ * the other text differs (contract course-content-pt.md, rule P1).
+ */
+export const courses: Record<Language, Lesson[]> = { en: lessons, 'pt-BR': lessonsPtBR }
 
-/** Where a lesson comes from, as shown to the learner: a book chapter, or the extra dictionary lessons. */
-export function sourceLabel(lesson: Lesson): string {
-  return lesson.chapter === 'Dictionary' ? 'Extra: dictionary words' : `Book: ${lesson.chapter}`
+export function getLesson(id: string, language: Language = 'en'): Lesson | undefined {
+  return courses[language].find((lesson) => lesson.id === id)
 }
 
 /** Identifies an exercise across the course: exercise ids are only unique within a lesson. */
@@ -53,8 +56,8 @@ export function exerciseKey(lessonId: string, exerciseId: string): string {
 }
 
 /** The exercise for a key from `exerciseKey()`, or undefined if it does not exist. */
-export function getExercise(key: string): Exercise | undefined {
+export function getExercise(key: string, language: Language = 'en'): Exercise | undefined {
   const slash = key.indexOf('/')
   if (slash < 0) return undefined
-  return getLesson(key.slice(0, slash))?.exercises.find((e) => e.id === key.slice(slash + 1))
+  return getLesson(key.slice(0, slash), language)?.exercises.find((e) => e.id === key.slice(slash + 1))
 }
