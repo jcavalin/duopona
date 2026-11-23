@@ -1,6 +1,6 @@
-import { sourceLabel } from '../content/lessons'
 import type { Lesson } from '../content/types'
 import { getMeaning } from '../content/vocabulary'
+import { useLanguage, useStrings } from '../i18n/useStrings'
 import { CloseIcon } from './icons'
 import styles from './LessonIntro.module.css'
 
@@ -12,26 +12,28 @@ interface Props {
 
 /** Shown before the exercises: new words with meanings and the grammar point (FR-013 of 002; mockup 02). */
 export default function LessonIntro({ lesson, onStart, onBack }: Props) {
+  const s = useStrings()
+  const language = useLanguage()
   return (
     <div className="screen">
       <div className="screen-body">
-        <button type="button" className="icon-button" aria-label="Back to lessons" onClick={onBack}>
+        <button type="button" className="icon-button" aria-label={s.backToLessons} onClick={onBack}>
           <CloseIcon size={28} />
         </button>
         <p className={`label ${styles.overline}`}>
-          {sourceLabel(lesson)} · {lesson.exercises.length} exercises
+          {s.sourceLabel(lesson.chapter)} · {s.exerciseCount(lesson.exercises.length)}
         </p>
         <h1 className={styles.title}>{lesson.title}</h1>
 
         <section aria-labelledby="new-words">
           <h2 id="new-words" className={styles.heading}>
-            New words
+            {s.newWords}
           </h2>
           <dl className={styles.words}>
             {lesson.newWords.map((word) => (
               <div key={word} className={styles.word}>
                 <dt>{word}</dt>
-                <dd>{getMeaning(word)}</dd>
+                <dd>{getMeaning(word, language)}</dd>
               </div>
             ))}
           </dl>
@@ -48,7 +50,7 @@ export default function LessonIntro({ lesson, onStart, onBack }: Props) {
       <div className="bottom-bar">
         {/* No autoFocus: it would scroll the page past the title and new words on phones */}
         <button type="button" className="primary-button" onClick={onStart}>
-          Start
+          {s.start}
         </button>
       </div>
     </div>

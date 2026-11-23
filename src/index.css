@@ -266,3 +266,65 @@ button:disabled {
     animation: none !important;
   }
 }
+
+/* Settings dialog (014 contract ui-settings.md); reuses the leave dialog's box */
+.settings-dialog-body {
+  padding: 16px 20px 20px;
+}
+
+.settings-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.settings-dialog-header .leave-dialog-title {
+  margin: 0;
+}
+
+.settings-dialog-header .icon-button {
+  margin: 0 -10px 0 0;
+}
+
+.settings-fieldset {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.settings-fieldset legend {
+  margin-bottom: 8px;
+  padding: 0;
+  color: var(--text-muted);
+}
+
+.settings-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.settings-option:has(input:checked) {
+  border-color: var(--primary-text);
+  background: var(--primary-tint);
+  color: var(--primary-text);
+}
+
+.settings-option input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--primary-text);
+}

@@ -1,5 +1,6 @@
+import type { Language } from '../i18n/language'
 import { getExercise, getLesson } from './lessons'
-import { vocabulary } from './vocabulary'
+import { vocabularies } from './vocabulary'
 import { testedWords } from './words'
 
 export interface WordMeaning {
@@ -25,12 +26,18 @@ export interface Explanation {
   grammar: GrammarExplanation | null
 }
 
-/** The explanation for a missed exercise, or null if the key is unknown (research R1, R3). */
-export function explainMistake(key: string, given: string | string[]): Explanation | null {
-  const exercise = getExercise(key)
-  if (!exercise) return null
+/**
+ * The explanation for a missed exercise, or null if the key is unknown (research R1, R3), in the
+ * session's study language (014). The tested words come from the Toki Pona side, which is the same
+ * in every language (014 rule P1).
+ */
+export function explainMistake(key: string, given: string | string[], language: Language = 'en'): Explanation | null {
+  const exercise = getExercise(key, language)
+  const english = getExercise(key)
+  if (!exercise || !english) return null
+  const vocabulary = vocabularies[language]
 
-  const words = testedWords(exercise).map((word) => ({ word, meaning: vocabulary[word] }))
+  const words = testedWords(english).map((word) => ({ word, meaning: vocabulary[word] }))
 
   let wrongPick: WordMeaning | null = null
   if (exercise.type === 'multipleChoice' && typeof given === 'string') {
@@ -41,7 +48,7 @@ export function explainMistake(key: string, given: string | string[]): Explanati
   }
 
   let grammar: GrammarExplanation | null = null
-  const lesson = getLesson(key.slice(0, key.indexOf('/')))
+  const lesson = getLesson(key.slice(0, key.indexOf('/')), language)
   if (lesson && exercise.type === 'wordBank' && exercise.practisesGrammar && exercise.grammarNote) {
     grammar = { title: lesson.grammar.title, lesson: `${lesson.chapter} · ${lesson.title}`, note: exercise.grammarNote }
   }

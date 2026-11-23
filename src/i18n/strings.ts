@@ -1,0 +1,166 @@
+import type { Language } from './language'
+
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+
+/** Interface text in English; its shape is the contract every other language must fill (014 research R1). */
+const en = {
+  // Home
+  wordmark: 'duopona',
+  streakLabel: (streak: number, metToday: boolean) =>
+    `${streak} day streak, ${metToday ? 'practised today' : 'not practised today'}`,
+  lessonsDoneLabel: (done: number, total: number) => `${done} of ${total} lessons done`,
+  courseProgress: (done: number, total: number) => `Course · ${done} of ${total} done`,
+  bannerTitle: 'Learn Toki Pona',
+  bannerFollowing: 'Following',
+  bookTitle: 'Toki Pona: The Language of Good',
+  dailyGoal: 'Daily goal',
+  sessionsToday: (done: number, goal: number) => `${done} / ${goal} session today`,
+  bestStreak: (n: number) => `Best streak: ${plural(n, 'day', 'days')}`,
+  practice: 'Practice',
+  reviewWeakWords: 'Review weak words',
+  hintFinishLesson: 'Finish a lesson to unlock practice.',
+  hintNoWeakWords: 'No weak words yet.',
+  startPill: 'Start',
+  lessonLocked: (title: string) => `${title}, locked`,
+  lessonStart: (title: string) => `${title}, start`,
+  lessonCompleted: (title: string, correct: number, total: number) => `${title}, completed, ${correct} of ${total}`,
+  footerBasedOn: 'Course based on',
+  footerBy: 'by Sonja Lang',
+  // Settings (014 contract ui-settings.md)
+  settings: 'Settings',
+  closeSettings: 'Close settings',
+  language: 'Language',
+  // Lesson introduction
+  backToLessons: 'Back to lessons',
+  /** Where a lesson comes from: a book chapter, or the extra dictionary lessons */
+  sourceLabel: (chapter: string) => (chapter === 'Dictionary' ? 'Extra: dictionary words' : `Book: ${chapter}`),
+  exerciseCount: (n: number) => plural(n, 'exercise', 'exercises'),
+  newWords: 'New words',
+  start: 'Start',
+  // Exercises
+  quitLesson: 'Quit lesson',
+  lessonProgress: 'Lesson progress',
+  quitPractice: 'Quit practice',
+  practiceProgress: 'Practice progress',
+  chooseMeaning: 'Choose the meaning',
+  chooseTokiPona: 'Choose the Toki Pona',
+  writeInStudyLanguage: 'Write this in English',
+  writeInTokiPona: 'Write this in Toki Pona',
+  options: 'Options',
+  yourAnswer: 'Your answer',
+  wordBank: 'Word bank',
+  tileHint: 'Press to remove. Drag or use the left and right arrow keys to move.',
+  grammarTag: 'Grammar',
+  check: 'Check',
+  // Feedback and explanations
+  correct: 'Correct.',
+  notQuite: 'Not quite',
+  correctAnswer: 'Correct answer:',
+  why: 'Why?',
+  hide: 'Hide',
+  means: 'means',
+  fromLesson: (lesson: string) => `From ${lesson}`,
+  continue: 'Continue',
+  // Leave dialog (013)
+  leaveLessonTitle: 'Leave this lesson?',
+  leaveLessonMessage: 'Your progress in this lesson will be lost.',
+  leavePracticeTitle: 'Leave this practice?',
+  leavePracticeMessage: 'Your progress in this practice will be lost.',
+  keepLearning: 'Keep learning',
+  leave: 'Leave',
+  // Summary
+  lessonComplete: 'Lesson complete!',
+  replayLesson: 'Replay lesson',
+  practiceComplete: 'Practice complete!',
+  practiseAgain: 'Practise again',
+  dailyGoalMet: 'Daily goal met',
+  statCorrect: 'Correct',
+  statUnlocked: 'Unlocked',
+  statStreak: 'Streak',
+  dayCount: (n: number) => plural(n, 'day', 'days'),
+  subtitlePractice: 'Practice',
+  subtitleWeakWords: 'Weak words',
+}
+
+export type Strings = typeof en
+
+/** Interface text in Brazilian Portuguese (014). */
+const ptBR: Strings = {
+  // Home
+  wordmark: 'duopona',
+  streakLabel: (streak, metToday) =>
+    `Sequência de ${plural(streak, 'dia', 'dias')}, ${metToday ? 'praticou hoje' : 'ainda não praticou hoje'}`,
+  lessonsDoneLabel: (done, total) => `${done} de ${total} lições concluídas`,
+  courseProgress: (done, total) => `Curso · ${done} de ${total} concluídas`,
+  bannerTitle: 'Aprenda Toki Pona',
+  bannerFollowing: 'Seguindo',
+  bookTitle: 'Toki Pona: The Language of Good',
+  dailyGoal: 'Meta diária',
+  sessionsToday: (done, goal) => `${done} / ${goal} sessão hoje`,
+  bestStreak: (n) => `Melhor sequência: ${plural(n, 'dia', 'dias')}`,
+  practice: 'Praticar',
+  reviewWeakWords: 'Revisar palavras fracas',
+  hintFinishLesson: 'Conclua uma lição para liberar a prática.',
+  hintNoWeakWords: 'Ainda não há palavras fracas.',
+  startPill: 'Começar',
+  lessonLocked: (title) => `${title}, bloqueada`,
+  lessonStart: (title) => `${title}, começar`,
+  lessonCompleted: (title, correct, total) => `${title}, concluída, ${correct} de ${total}`,
+  footerBasedOn: 'Curso baseado em',
+  footerBy: 'de Sonja Lang',
+  // Settings
+  settings: 'Configurações',
+  closeSettings: 'Fechar configurações',
+  language: 'Idioma',
+  // Lesson introduction
+  backToLessons: 'Voltar às lições',
+  sourceLabel: (chapter) => (chapter === 'Dicionário' ? 'Extra: palavras do dicionário' : `Livro: ${chapter}`),
+  exerciseCount: (n) => plural(n, 'exercício', 'exercícios'),
+  newWords: 'Palavras novas',
+  start: 'Começar',
+  // Exercises
+  quitLesson: 'Sair da lição',
+  lessonProgress: 'Progresso da lição',
+  quitPractice: 'Sair da prática',
+  practiceProgress: 'Progresso da prática',
+  chooseMeaning: 'Escolha o significado',
+  chooseTokiPona: 'Escolha em toki pona',
+  writeInStudyLanguage: 'Escreva em português',
+  writeInTokiPona: 'Escreva em toki pona',
+  options: 'Opções',
+  yourAnswer: 'Sua resposta',
+  wordBank: 'Banco de palavras',
+  tileHint: 'Toque para remover. Arraste ou use as setas para a esquerda e para a direita para mover.',
+  grammarTag: 'Gramática',
+  check: 'Verificar',
+  // Feedback and explanations
+  correct: 'Correto.',
+  notQuite: 'Não é bem isso',
+  correctAnswer: 'Resposta correta:',
+  why: 'Por quê?',
+  hide: 'Ocultar',
+  means: 'significa',
+  fromLesson: (lesson) => `Fonte: ${lesson}`,
+  continue: 'Continuar',
+  // Leave dialog
+  leaveLessonTitle: 'Sair desta lição?',
+  leaveLessonMessage: 'Seu progresso nesta lição será perdido.',
+  leavePracticeTitle: 'Sair desta prática?',
+  leavePracticeMessage: 'Seu progresso nesta prática será perdido.',
+  keepLearning: 'Continuar aprendendo',
+  leave: 'Sair',
+  // Summary
+  lessonComplete: 'Lição concluída!',
+  replayLesson: 'Refazer lição',
+  practiceComplete: 'Prática concluída!',
+  practiseAgain: 'Praticar de novo',
+  dailyGoalMet: 'Meta diária cumprida',
+  statCorrect: 'Acertos',
+  statUnlocked: 'Liberada',
+  statStreak: 'Sequência',
+  dayCount: (n) => plural(n, 'dia', 'dias'),
+  subtitlePractice: 'Prática',
+  subtitleWeakWords: 'Palavras fracas',
+}
+
+export const strings: Record<Language, Strings> = { en, 'pt-BR': ptBR }

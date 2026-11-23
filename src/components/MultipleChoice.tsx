@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import type { MultipleChoiceExercise } from '../content/types'
+import { useStrings } from '../i18n/useStrings'
 import { shuffle } from '../lib/shuffle'
 import Mascot, { exerciseExpression } from './Mascot'
 import { focusOnMount } from './focusOnMount'
@@ -17,7 +18,8 @@ interface Props {
 export default function MultipleChoice({ header, exercise, disabled, result, onSubmit }: Props) {
   const [options] = useState(() => shuffle(exercise.options))
   const [selected, setSelected] = useState<string | null>(null)
-  const instruction = exercise.direction === 'tp-en' ? 'Choose the meaning' : 'Choose the Toki Pona'
+  const s = useStrings()
+  const instruction = exercise.direction === 'tp-en' ? s.chooseMeaning : s.chooseTokiPona
 
   // Number keys 1–n select the matching option; they never submit (research R5)
   useEffect(() => {
@@ -42,7 +44,7 @@ export default function MultipleChoice({ header, exercise, disabled, result, onS
           <Mascot expression={exerciseExpression(result)} className={styles.promptMascot} />
           <h2 className={styles.prompt}>{exercise.prompt}</h2>
         </div>
-        <div className={styles.options} role="group" aria-label="Options">
+        <div className={styles.options} role="group" aria-label={s.options}>
           {options.map((option, index) => (
             <button
               key={option}
@@ -65,7 +67,7 @@ export default function MultipleChoice({ header, exercise, disabled, result, onS
       {!disabled && (
         <div className="bottom-bar">
           <button type="button" className="primary-button" disabled={selected === null} onClick={() => selected && onSubmit(selected)}>
-            Check
+            {s.check}
           </button>
         </div>
       )}

@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef } from 'react'
+import { useStrings } from '../i18n/useStrings'
 
 interface Props {
   title: string
@@ -12,6 +13,7 @@ interface Props {
  * The browser makes the screen behind it inert, draws the backdrop and closes it on Escape.
  */
 export default function LeaveDialog({ title, message, onStay, onLeave }: Props) {
+  const s = useStrings()
   const ref = useRef<HTMLDialogElement>(null)
   const stayRef = useRef<HTMLButtonElement>(null)
   const titleId = useId()
@@ -47,10 +49,10 @@ export default function LeaveDialog({ title, message, onStay, onLeave }: Props) 
           {message}
         </p>
         <button ref={stayRef} type="button" className="primary-button" onClick={onStay}>
-          Keep learning
+          {s.keepLearning}
         </button>
         <button type="button" className="text-button leave-dialog-leave" onClick={onLeave}>
-          Leave
+          {s.leave}
         </button>
       </div>
     </dialog>

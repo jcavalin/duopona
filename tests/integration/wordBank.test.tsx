@@ -1,7 +1,10 @@
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import type { ReactNode } from 'react'
+import { Provider } from 'react-redux'
 import WordBank from '../../src/components/WordBank'
 import type { WordBankExercise } from '../../src/content/types'
+import { makeStore } from '../../src/store'
 import { centre, dragTo, stubWordBankLayout, tap } from './wordBankLayout'
 
 // Feature 009: reordering answer tiles. Layout is stubbed (jsdom has none, research R10).
@@ -18,7 +21,10 @@ let onSubmit: ReturnType<typeof vi.fn<(answer: string[]) => void>>
 
 function renderBank(disabled = false) {
   onSubmit = vi.fn()
-  return render(<WordBank header={null} exercise={fixture} disabled={disabled} onSubmit={onSubmit} />)
+  // The component reads its interface text from the store (014); rerender keeps this wrapper
+  const store = makeStore()
+  const wrapper = ({ children }: { children: ReactNode }) => <Provider store={store}>{children}</Provider>
+  return render(<WordBank header={null} exercise={fixture} disabled={disabled} onSubmit={onSubmit} />, { wrapper })
 }
 
 const line = () => within(screen.getByRole('group', { name: 'Your answer' }))

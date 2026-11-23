@@ -1,3 +1,4 @@
+/** 'tp-en': Toki Pona → study language; 'en-tp': study language → Toki Pona (names kept from before 014) */
 export type Direction = 'tp-en' | 'en-tp'
 
 export interface MultipleChoiceExercise {

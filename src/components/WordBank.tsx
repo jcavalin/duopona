@@ -1,6 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from 'react'
 import type { WordBankExercise } from '../content/types'
 import { dropIndex, moveItem } from '../lib/reorder'
+import { useStrings } from '../i18n/useStrings'
 import { shuffle } from '../lib/shuffle'
 import Mascot, { exerciseExpression } from './Mascot'
 import { focusOnMount } from './focusOnMount'
@@ -78,7 +79,8 @@ export default function WordBank({ header, exercise, disabled, result, onSubmit 
   const placedRefs = useRef(new Map<number, HTMLButtonElement>())
   const refocus = useRef<number | null>(null)
   const hintId = useId()
-  const instruction = exercise.direction === 'tp-en' ? 'Write this in English' : 'Write this in Toki Pona'
+  const s = useStrings()
+  const instruction = exercise.direction === 'tp-en' ? s.writeInStudyLanguage : s.writeInTokiPona
 
   // Latest committed order, for the window listeners below
   const placedRef = useRef(placed)
@@ -203,16 +205,16 @@ export default function WordBank({ header, exercise, disabled, result, onSubmit 
         {header}
         <div className={styles.titleRow}>
           <h1 className={styles.instruction}>{instruction}</h1>
-          {exercise.practisesGrammar && <span className={`label ${styles.grammarTag}`}>Grammar</span>}
+          {exercise.practisesGrammar && <span className={`label ${styles.grammarTag}`}>{s.grammarTag}</span>}
         </div>
         <div className={styles.promptRow}>
           <Mascot expression={exerciseExpression(result)} className={styles.promptMascot} />
           <h2 className={styles.prompt}>{exercise.prompt}</h2>
         </div>
         <p id={hintId} className="visually-hidden">
-          Press to remove. Drag or use the left and right arrow keys to move.
+          {s.tileHint}
         </p>
-        <div ref={lineRef} className={styles.answerLine} role="group" aria-label="Your answer">
+        <div ref={lineRef} className={styles.answerLine} role="group" aria-label={s.yourAnswer}>
           {previewOrder(placed, drag).map((index) =>
             drag?.from === 'bank' && drag.tile === index ? (
               // Where a dragged bank word will land; the word itself is still in the bank (contract W2)
@@ -239,7 +241,7 @@ export default function WordBank({ header, exercise, disabled, result, onSubmit 
             ),
           )}
         </div>
-        <div ref={bankRef} className={styles.bank} role="group" aria-label="Word bank">
+        <div ref={bankRef} className={styles.bank} role="group" aria-label={s.wordBank}>
           {tiles.map((word, index) =>
             placed.includes(index) ? (
               <span key={index} className={styles.tilePlaceholder} aria-hidden="true">
@@ -275,7 +277,7 @@ export default function WordBank({ header, exercise, disabled, result, onSubmit 
       {!disabled && (
         <div className="bottom-bar">
           <button type="button" className="primary-button" disabled={placed.length === 0} onClick={() => onSubmit(placed.map((i) => tiles[i]))}>
-            Check
+            {s.check}
           </button>
         </div>
       )}

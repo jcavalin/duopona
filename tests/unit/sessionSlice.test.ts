@@ -180,3 +180,31 @@ describe('getExercise', () => {
     expect(getExercise('toki')).toBeUndefined()
   })
 })
+
+describe('session language (014 research R3)', () => {
+  const key = 'verbs/jo'
+  const enJo = getExercise(key) as MultipleChoiceExercise
+  const ptJo = getExercise(key, 'pt-BR') as MultipleChoiceExercise
+
+  it('defaults to English and stores the language it was started in', () => {
+    expect(run(null, startLesson('verbs'))!.language).toBe('en')
+    expect(run(null, startLesson('verbs', 'pt-BR'))!.language).toBe('pt-BR')
+    expect(run(null, startPractice({ kind: 'practice', keys: [key] }))!.language).toBe('en')
+    expect(run(null, startPractice({ kind: 'practice', keys: [key], language: 'pt-BR' }))!.language).toBe('pt-BR')
+  })
+
+  it('checks answers and shows the right answer in the session language', () => {
+    const start = startPractice({ kind: 'practice', keys: [key], language: 'pt-BR' })
+    expect(selectCurrentExercise({ session: run(null, start) })).toBe(ptJo)
+    const right = run(null, start, submitAnswer(ptJo.answer))!
+    expect(right.feedback).toMatchObject({ correct: true, correctAnswer: 'ter / segurar' })
+    expect(run(null, start, submitAnswer(enJo.answer))!.feedback?.correct).toBe(false)
+  })
+
+  it('checks a Portuguese word bank against the Portuguese tiles', () => {
+    const wb = getExercise('verbs/jan-li-pali-e-tomo', 'pt-BR') as WordBankExercise
+    const start = startPractice({ kind: 'practice', keys: ['verbs/jan-li-pali-e-tomo'], language: 'pt-BR' })
+    expect(run(null, start, submitAnswer(wb.answer))!.feedback).toMatchObject({ correct: true, correctAnswer: 'a pessoa faz a casa' })
+    expect(getLesson('verbs', 'pt-BR')!.title).toBe('Verbos')
+  })
+})

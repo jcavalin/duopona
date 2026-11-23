@@ -3,6 +3,7 @@ import { Navigate, useNavigate, useParams } from 'react-router'
 import ExerciseScreen from '../components/ExerciseScreen'
 import LessonSummary from '../components/LessonSummary'
 import { today } from '../lib/days'
+import { useStrings } from '../i18n/useStrings'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { startPracticeSession } from '../store/lessonThunks'
 import { selectCanPractice } from '../store/progressSlice'
@@ -10,8 +11,7 @@ import { selectStreak } from '../store/streakSlice'
 import { quitLesson, selectFirstTryCorrect, selectSession, selectTotal } from '../store/sessionSlice'
 import { selectCanReview } from '../store/wordsSlice'
 
-const SUBTITLES = { practice: 'Practice', review: 'Weak words' } as const
-type Kind = keyof typeof SUBTITLES
+type Kind = 'practice' | 'review'
 
 function isKind(value: string): value is Kind {
   return value === 'practice' || value === 'review'
@@ -21,6 +21,7 @@ function isKind(value: string): value is Kind {
 export default function PracticeRoute() {
   const { kind = '' } = useParams()
   const dispatch = useAppDispatch()
+  const s = useStrings()
   const navigate = useNavigate()
   const canPractice = useAppSelector(selectCanPractice)
   const canReview = useAppSelector(selectCanReview)
@@ -51,9 +52,9 @@ export default function PracticeRoute() {
   if (session.status === 'finished') {
     return (
       <LessonSummary
-        heading="Practice complete!"
-        subtitle={SUBTITLES[kind]}
-        replayLabel="Practise again"
+        heading={s.practiceComplete}
+        subtitle={kind === 'practice' ? s.subtitlePractice : s.subtitleWeakWords}
+        replayLabel={s.practiseAgain}
         firstTryCorrect={firstTryCorrect}
         total={total}
         streak={session.goalMet ? streak : undefined}
@@ -64,12 +65,6 @@ export default function PracticeRoute() {
     )
   }
   return (
-    <ExerciseScreen
-      onQuit={goHome}
-      quitLabel="Quit practice"
-      progressLabel="Practice progress"
-      leaveTitle="Leave this practice?"
-      leaveMessage="Your progress in this practice will be lost."
-    />
+    <ExerciseScreen onQuit={goHome} kind="practice" />
   )
 }

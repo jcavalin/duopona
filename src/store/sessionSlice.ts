@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { exerciseKey, getExercise, getLesson } from '../content/lessons'
 import type { Exercise } from '../content/types'
+import type { Language } from '../i18n/language'
 
 export interface Feedback {
   correct: boolean
@@ -27,6 +28,8 @@ export interface LessonSession {
   step: number
   /** This session's finish met today's daily goal (007 research R5); not saved */
   goalMet: boolean
+  /** Study language, fixed for the whole session (014 research R3) */
+  language: Language
 }
 
 type SessionState = LessonSession | null
@@ -43,7 +46,7 @@ function formatAnswer(exercise: Exercise): string {
   return exercise.type === 'multipleChoice' ? exercise.answer : exercise.answer.join(' ')
 }
 
-function newSession(kind: SessionKind, lessonId: string | null, keys: string[]): LessonSession {
+function newSession(kind: SessionKind, lessonId: string | null, keys: string[], language: Language): LessonSession {
   return {
     kind,
     lessonId,
@@ -54,6 +57,7 @@ function newSession(kind: SessionKind, lessonId: string | null, keys: string[]):
     status: 'answering',
     step: 0,
     goalMet: false,
+    language,
   }
 }
 
@@ -61,25 +65,32 @@ const sessionSlice = createSlice({
   name: 'session',
   initialState: null as SessionState,
   reducers: {
-    startLesson(_state, action: PayloadAction<string>) {
-      const lesson = getLesson(action.payload)
-      if (!lesson) return null
-      return newSession(
-        'lesson',
-        lesson.id,
-        lesson.exercises.map((e) => exerciseKey(lesson.id, e.id)),
-      )
+    startLesson: {
+      reducer(_state, action: PayloadAction<{ lessonId: string; language: Language }>) {
+        const { lessonId, language } = action.payload
+        const lesson = getLesson(lessonId, language)
+        if (!lesson) return null
+        return newSession(
+          'lesson',
+          lesson.id,
+          lesson.exercises.map((e) => exerciseKey(lesson.id, e.id)),
+          language,
+        )
+      },
+      prepare(lessonId: string, language: Language = 'en') {
+        return { payload: { lessonId, language } }
+      },
     },
     /** Exercises chosen from several lessons (feature 006); an empty list starts nothing. */
-    startPractice(_state, action: PayloadAction<{ kind: 'practice' | 'review'; keys: string[] }>) {
-      const { kind, keys } = action.payload
+    startPractice(_state, action: PayloadAction<{ kind: 'practice' | 'review'; keys: string[]; language?: Language }>) {
+      const { kind, keys, language = 'en' } = action.payload
       if (keys.length === 0) return null
-      return newSession(kind, null, keys)
+      return newSession(kind, null, keys, language)
     },
     submitAnswer(state, action: PayloadAction<string | string[]>) {
       if (!state || state.status !== 'answering') return
       const key = state.queue[0]
-      const exercise = getExercise(key)
+      const exercise = getExercise(key, state.language)
       if (!exercise) return
       const correct = isCorrectAnswer(exercise, action.payload)
       if (!correct && !state.missedOnce.includes(key)) {
@@ -120,7 +131,7 @@ export function selectCurrentKey(state: WithSession): string | undefined {
 
 export function selectCurrentExercise(state: WithSession): Exercise | undefined {
   const key = selectCurrentKey(state)
-  return key === undefined ? undefined : getExercise(key)
+  return key === undefined || !state.session ? undefined : getExercise(key, state.session.language)
 }
 
 export function selectTotal(state: WithSession): number {

@@ -2,7 +2,8 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { createMemoryRouter, RouterProvider } from 'react-router'
-import { lessons, sourceLabel } from '../../src/content/lessons'
+import { lessons } from '../../src/content/lessons'
+import { strings } from '../../src/i18n/strings'
 import type { Exercise, Lesson } from '../../src/content/types'
 import { routes } from '../../src/router'
 import { makeStore } from '../../src/store'
@@ -380,7 +381,7 @@ describe('lesson introduction (US3)', () => {
     const { user, store } = renderApp()
     await openLesson(user)
     expect(screen.getByRole('heading', { level: 1, name: lesson.title })).toBeInTheDocument()
-    expect(screen.getByText(`${sourceLabel(lesson)} · ${total} exercises`)).toBeInTheDocument()
+    expect(screen.getByText(`${strings.en.sourceLabel(lesson.chapter)} · ${total} exercises`)).toBeInTheDocument()
     for (const word of lesson.newWords) {
       const term = screen.getByText(word, { selector: 'dt' })
       expect(term.nextElementSibling).toHaveTextContent(getMeaning(word)!)

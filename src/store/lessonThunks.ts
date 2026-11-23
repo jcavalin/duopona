@@ -13,6 +13,7 @@ import {
   startPractice,
   submitAnswer,
 } from './sessionSlice'
+import { selectLanguage } from './settingsSlice'
 import { goalMet, selectMetToday } from './streakSlice'
 import { wordsKnown, wordsMissed } from './wordsSlice'
 
@@ -82,10 +83,11 @@ export function startPracticeSession(kind: 'practice' | 'review') {
   return (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState()
     const keys = availableKeys(Object.keys(state.progress.completedLessons))
+    const language = selectLanguage(state)
     if (kind === 'practice') {
-      dispatch(startPractice({ kind, keys: pickPractice(keys) }))
+      dispatch(startPractice({ kind, keys: pickPractice(keys), language }))
     } else if (hasReviewable(keys, state.words.mistakes)) {
-      dispatch(startPractice({ kind, keys: pickReview(keys, state.words.mistakes) }))
+      dispatch(startPractice({ kind, keys: pickReview(keys, state.words.mistakes), language }))
     }
   }
 }

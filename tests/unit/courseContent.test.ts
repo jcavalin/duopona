@@ -1,8 +1,10 @@
 // Content rules for every course lesson: specs/002-book-course/contracts/lesson-content.md
 import { explainMistake } from '../../src/content/explanations'
-import { exerciseKey, getLesson, lessons, sourceLabel } from '../../src/content/lessons'
-import type { Exercise } from '../../src/content/types'
-import { getMeaning } from '../../src/content/vocabulary'
+import { courses, exerciseKey, getLesson, lessons } from '../../src/content/lessons'
+import { strings } from '../../src/i18n/strings'
+import type { Exercise, Lesson } from '../../src/content/types'
+import { getMeaning, vocabularies } from '../../src/content/vocabulary'
+import { LANGUAGES } from '../../src/i18n/language'
 
 const BANNED = ['unpa', 'tu', 'luka', 'nanpa']
 
@@ -57,8 +59,8 @@ describe('course content', () => {
   })
 
   it('labels book chapters and the extra dictionary lessons', () => {
-    expect(sourceLabel(lessons[0])).toBe('Book: Lesson 2')
-    expect(sourceLabel(lessons[16])).toBe('Extra: dictionary words')
+    expect(strings.en.sourceLabel(lessons[0].chapter)).toBe('Book: Lesson 2')
+    expect(strings.en.sourceLabel(lessons[16].chapter)).toBe('Extra: dictionary words')
   })
 
   it('getLesson finds course lessons only', () => {
@@ -67,88 +69,93 @@ describe('course content', () => {
     expect(getLesson('basics-1')).toBeUndefined()
   })
 
-  lessons.forEach((lesson, index) => {
-    const introducedSoFar = new Set(lessons.slice(0, index + 1).flatMap((l) => l.newWords))
+  // Rules C2–C11 apply to every study language (014 contract course-content-pt.md)
+  describe.each(LANGUAGES)('%s', (language) => {
+    const course = courses[language]
 
-    describe(`${index + 1}. ${lesson.title}`, () => {
-      const wordBanks = lesson.exercises.filter((e) => e.type === 'wordBank')
+    course.forEach((lesson, index) => {
+      const introducedSoFar = new Set(course.slice(0, index + 1).flatMap((l) => l.newWords))
 
-      it('has 10–15 exercises with at least 3 word banks (C2)', () => {
-        expect(lesson.exercises.length).toBeGreaterThanOrEqual(10)
-        expect(lesson.exercises.length).toBeLessThanOrEqual(15)
-        expect(wordBanks.length).toBeGreaterThanOrEqual(3)
-      })
+      describe(`${index + 1}. ${lesson.title}`, () => {
+        const wordBanks = lesson.exercises.filter((e) => e.type === 'wordBank')
 
-      it('uses every new word in an exercise (C3)', () => {
-        const used = new Set(lesson.exercises.flatMap(tokiPonaTokens))
-        const unused = lesson.newWords.filter((w) => !used.has(w))
-        expect(unused).toEqual([])
-      })
+        it('has 10–15 exercises with at least 3 word banks (C2)', () => {
+          expect(lesson.exercises.length).toBeGreaterThanOrEqual(10)
+          expect(lesson.exercises.length).toBeLessThanOrEqual(15)
+          expect(wordBanks.length).toBeGreaterThanOrEqual(3)
+        })
 
-      it('uses no word before it is introduced (C4)', () => {
-        const early = lesson.exercises.flatMap((ex) =>
-          tokiPonaTokens(ex)
-            .filter((t) => !introducedSoFar.has(t))
-            .map((t) => `${ex.id}: ${t}`),
-        )
-        expect(early).toEqual([])
-      })
+        it('uses every new word in an exercise (C3)', () => {
+          const used = new Set(lesson.exercises.flatMap(tokiPonaTokens))
+          const unused = lesson.newWords.filter((w) => !used.has(w))
+          expect(unused).toEqual([])
+        })
 
-      it('practises its grammar point in at least 2 word banks (C5)', () => {
-        expect(wordBanks.filter((e) => e.practisesGrammar).length).toBeGreaterThanOrEqual(2)
-      })
+        it('uses no word before it is introduced (C4)', () => {
+          const early = lesson.exercises.flatMap((ex) =>
+            tokiPonaTokens(ex)
+              .filter((t) => !introducedSoFar.has(t))
+              .map((t) => `${ex.id}: ${t}`),
+          )
+          expect(early).toEqual([])
+        })
 
-      it('has a meaning for every new word (C6)', () => {
-        expect(lesson.newWords.filter((w) => getMeaning(w) === undefined)).toEqual([])
-      })
+        it('practises its grammar point in at least 2 word banks (C5)', () => {
+          expect(wordBanks.filter((e) => e.practisesGrammar).length).toBeGreaterThanOrEqual(2)
+        })
 
-      it('has grammar text of 1–4 paragraphs', () => {
-        expect(lesson.grammar.title).not.toBe('')
-        expect(lesson.grammar.explanation.length).toBeGreaterThanOrEqual(1)
-        expect(lesson.grammar.explanation.length).toBeLessThanOrEqual(4)
-      })
+        it('has a meaning for every new word (C6)', () => {
+          expect(lesson.newWords.filter((w) => getMeaning(w, language) === undefined)).toEqual([])
+        })
 
-      it('has no capitalised words, so no proper names (C10)', () => {
-        const capitalised = lesson.exercises.flatMap((ex) =>
-          tokiPonaText(ex)
-            .filter((text) => /[A-Z]/.test(text))
-            .map((text) => `${ex.id}: ${text}`),
-        )
-        expect(capitalised).toEqual([])
-      })
+        it('has grammar text of 1–4 paragraphs', () => {
+          expect(lesson.grammar.title).not.toBe('')
+          expect(lesson.grammar.explanation.length).toBeGreaterThanOrEqual(1)
+          expect(lesson.grammar.explanation.length).toBeLessThanOrEqual(4)
+        })
 
-      it('never uses excluded words (C10)', () => {
-        const banned = lesson.exercises.flatMap(tokiPonaTokens).filter((t) => BANNED.includes(t))
-        expect(banned).toEqual([])
-      })
+        it('has no capitalised words, so no proper names (C10)', () => {
+          const capitalised = lesson.exercises.flatMap((ex) =>
+            tokiPonaText(ex)
+              .filter((text) => /[A-Z]/.test(text))
+              .map((text) => `${ex.id}: ${text}`),
+          )
+          expect(capitalised).toEqual([])
+        })
 
-      it('has unique exercise ids and prompts (C11)', () => {
-        const ids = lesson.exercises.map((e) => e.id)
-        const prompts = lesson.exercises.map((e) => e.prompt)
-        expect(new Set(ids).size).toBe(ids.length)
-        expect(new Set(prompts).size).toBe(prompts.length)
-      })
+        it('never uses excluded words (C10)', () => {
+          const banned = lesson.exercises.flatMap(tokiPonaTokens).filter((t) => BANNED.includes(t))
+          expect(banned).toEqual([])
+        })
 
-      it.each(lesson.exercises.map((e) => [e.id, e] as const))('exercise %s is well-formed (C7, C8)', (_id, ex) => {
-        if (ex.type === 'multipleChoice') {
-          expect(ex.options.length).toBeGreaterThanOrEqual(3)
-          expect(ex.options.length).toBeLessThanOrEqual(4)
-          expect(new Set(ex.options).size).toBe(ex.options.length)
-          expect(ex.options).toContain(ex.answer)
-        } else {
-          expect(ex.answer.length).toBeGreaterThan(0)
-          expect(ex.answer.length).toBeLessThanOrEqual(8)
-          expect(ex.distractors.length).toBeGreaterThanOrEqual(1)
-          for (const d of ex.distractors) expect(ex.answer).not.toContain(d)
-          expect([...ex.answer].reverse()).not.toEqual(ex.answer)
-        }
+        it('has unique exercise ids and prompts (C11)', () => {
+          const ids = lesson.exercises.map((e) => e.id)
+          const prompts = lesson.exercises.map((e) => e.prompt)
+          expect(new Set(ids).size).toBe(ids.length)
+          expect(new Set(prompts).size).toBe(prompts.length)
+        })
+
+        it.each(lesson.exercises.map((e) => [e.id, e] as const))('exercise %s is well-formed (C7, C8)', (_id, ex) => {
+          if (ex.type === 'multipleChoice') {
+            expect(ex.options.length).toBeGreaterThanOrEqual(3)
+            expect(ex.options.length).toBeLessThanOrEqual(4)
+            expect(new Set(ex.options).size).toBe(ex.options.length)
+            expect(ex.options).toContain(ex.answer)
+          } else {
+            expect(ex.answer.length).toBeGreaterThan(0)
+            expect(ex.answer.length).toBeLessThanOrEqual(8)
+            expect(ex.distractors.length).toBeGreaterThanOrEqual(1)
+            for (const d of ex.distractors) expect(ex.answer).not.toContain(d)
+            expect([...ex.answer].reverse()).not.toEqual(ex.answer)
+          }
+        })
       })
     })
   })
 })
 
-describe('mistake explanations (feature 008)', () => {
-  const all = lessons.flatMap((lesson) => lesson.exercises.map((exercise) => ({ lesson, exercise })))
+describe.each(LANGUAGES)('mistake explanations (feature 008) in %s', (language) => {
+  const all = courses[language].flatMap((lesson) => lesson.exercises.map((exercise) => ({ lesson, exercise })))
 
   it('grammar notes appear exactly on the exercises that practise grammar, 49 in all (FR-005)', () => {
     let count = 0
@@ -167,7 +174,7 @@ describe('mistake explanations (feature 008)', () => {
 
   it('every exercise explains at least one word or a grammar point when missed (SC-001, SC-002)', () => {
     for (const { lesson, exercise } of all) {
-      const e = explainMistake(exerciseKey(lesson.id, exercise.id), 'x')!
+      const e = explainMistake(exerciseKey(lesson.id, exercise.id), 'x', language)!
       expect(e.words.length > 0 || e.grammar !== null, `${lesson.id}/${exercise.id}`).toBe(true)
       if (exercise.type === 'wordBank' && exercise.practisesGrammar) expect(e.grammar).not.toBeNull()
     }
@@ -177,10 +184,98 @@ describe('mistake explanations (feature 008)', () => {
     for (const { lesson, exercise } of all) {
       if (exercise.type !== 'multipleChoice') continue
       for (const option of exercise.options) {
-        if (option === exercise.answer || getMeaning(option) === undefined) continue
-        const e = explainMistake(exerciseKey(lesson.id, exercise.id), option)!
-        expect(e.wrongPick, `${lesson.id}/${exercise.id} ${option}`).toEqual({ word: option, meaning: getMeaning(option) })
+        if (option === exercise.answer || getMeaning(option, language) === undefined) continue
+        const e = explainMistake(exerciseKey(lesson.id, exercise.id), option, language)!
+        expect(e.wrongPick, `${lesson.id}/${exercise.id} ${option}`).toEqual({ word: option, meaning: getMeaning(option, language) })
       }
+    }
+  })
+})
+
+/** The text of a lesson that is not Toki Pona, field by field (014 contract, rules P2 and P2b). */
+function studyLanguageText(lesson: Lesson): [string, string][] {
+  const fields: [string, string][] = [
+    ['title', lesson.title],
+    ['chapter', lesson.chapter],
+    ['grammar.title', lesson.grammar.title],
+    ...lesson.grammar.explanation.map((p, i): [string, string] => [`grammar.explanation[${i}]`, p]),
+  ]
+  for (const ex of lesson.exercises) {
+    const at = (field: string) => `${ex.id}.${field}`
+    if (ex.direction === 'en-tp') fields.push([at('prompt'), ex.prompt])
+    if (ex.type === 'multipleChoice' && ex.direction === 'tp-en') {
+      ex.options.forEach((o, i) => fields.push([at(`options[${i}]`), o]))
+    }
+    if (ex.type === 'wordBank' && ex.direction === 'tp-en') {
+      fields.push([at('answer'), ex.answer.join(' ')], [at('distractors'), ex.distractors.join(' ')])
+    }
+    if (ex.type === 'wordBank' && ex.grammarNote !== undefined) fields.push([at('grammarNote'), ex.grammarNote])
+  }
+  return fields
+}
+
+/** Fields whose Portuguese text may equal the English one, with the reason (rule P2b). */
+const SAME_IN_BOTH = new Set([
+  'pi/title', // the lesson is named after the Toki Pona word
+])
+
+describe('Brazilian Portuguese course (014 contract course-content-pt.md)', () => {
+  const pt = courses['pt-BR']
+
+  it('has the same lessons, ids and new words, in order (P1)', () => {
+    expect(pt.map((l) => [l.id, l.newWords])).toEqual(lessons.map((l) => [l.id, l.newWords]))
+  })
+
+  lessons.forEach((en, index) => {
+    const lesson = pt[index]
+
+    describe(en.id, () => {
+      it('has the same exercises with the same Toki Pona side (P1)', () => {
+        const shape = (ex: Exercise) => [ex.id, ex.type, ex.direction, ex.type === 'wordBank' ? ex.practisesGrammar === true : false]
+        expect(lesson.exercises.map(shape)).toEqual(en.exercises.map(shape))
+        lesson.exercises.forEach((ex, i) => {
+          const english = en.exercises[i]
+          expect(tokiPonaText(ex), ex.id).toEqual(tokiPonaText(english))
+          if (ex.direction === 'en-tp' && ex.type === 'multipleChoice' && english.type === 'multipleChoice') {
+            expect(ex.answer, ex.id).toBe(english.answer)
+          }
+        })
+      })
+
+      it('has every other text present (P2)', () => {
+        const empty = studyLanguageText(lesson).filter(([, text]) => text.trim() === '')
+        expect(empty).toEqual([])
+        expect(lesson.grammar.explanation.length).toBeGreaterThanOrEqual(1)
+        expect(lesson.grammar.explanation.length).toBeLessThanOrEqual(4)
+      })
+
+      it('has every other text translated (P2b)', () => {
+        const english = new Map(studyLanguageText(en))
+        const untranslated = studyLanguageText(lesson)
+          .filter(([field, text]) => english.get(field) === text && !SAME_IN_BOTH.has(`${en.id}/${field}`))
+          .map(([field]) => field)
+        expect(untranslated).toEqual([])
+      })
+
+      it('has distinct multiple-choice options (P6)', () => {
+        for (const ex of lesson.exercises) {
+          if (ex.type === 'multipleChoice') expect(new Set(ex.options).size, ex.id).toBe(ex.options.length)
+        }
+      })
+
+      it('labels the chapter as in the English book (P7)', () => {
+        const expected = en.chapter === 'Dictionary' ? 'Dicionário' : en.chapter.replace(/^Lesson (\d+)$/, 'Lição $1')
+        expect(lesson.chapter).toBe(expected)
+      })
+    })
+  })
+
+  it('has a gloss for every English vocabulary word, and no others (P3)', () => {
+    const ptGlosses = vocabularies['pt-BR']
+    expect(Object.keys(ptGlosses)).toEqual(Object.keys(vocabularies.en))
+    for (const [word, gloss] of Object.entries(ptGlosses)) {
+      expect(gloss.trim(), word).not.toBe('')
+      expect(gloss, word).not.toBe(vocabularies.en[word])
     }
   })
 })
