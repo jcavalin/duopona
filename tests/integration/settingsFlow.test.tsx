@@ -69,8 +69,33 @@ describe('settings (014 US3)', () => {
     const { user } = renderApp()
     await openSettings(user)
     await user.keyboard('{ArrowDown}')
+    expect(screen.getByRole('radio', { name: 'Français' })).toBeChecked()
+    expect(screen.getByText('Apprends le toki pona')).toBeInTheDocument()
+    await user.keyboard('{ArrowDown}')
     expect(screen.getByRole('radio', { name: 'Português' })).toBeChecked()
     expect(screen.getByText('Aprenda Toki Pona')).toBeInTheDocument()
+  })
+
+  it('lists English, Français and Português, in that order, each in its own language (015)', async () => {
+    const { user } = renderApp()
+    const dialog = await openSettings(user)
+    const radios = within(dialog).getAllByRole('radio')
+    expect(radios.map((r) => r.closest('label')?.textContent)).toEqual(['English', 'Français', 'Português'])
+    expect(radios.map((r) => r.closest('label')?.getAttribute('lang'))).toEqual(['en', 'fr', 'pt-BR'])
+    // Flags are decorative
+    expect(dialog.querySelectorAll('svg.flag[aria-hidden="true"]')).toHaveLength(3)
+  })
+
+  it('switches the whole app to French and saves the choice (015 US3)', async () => {
+    const { user } = renderApp()
+    const dialog = await openSettings(user)
+    await user.click(within(dialog).getByRole('radio', { name: 'Français' }))
+    expect(screen.getByRole('dialog', { name: 'Paramètres' })).toBeInTheDocument()
+    expect(within(dialog).getByRole('group', { name: 'Langue' })).toBeInTheDocument()
+    expect(within(dialog).getByRole('button', { name: 'Fermer les paramètres' })).toBeInTheDocument()
+    expect(screen.getByText('Apprends le toki pona')).toBeInTheDocument()
+    expect(document.documentElement.lang).toBe('fr')
+    expect(JSON.parse(localStorage.getItem(SETTINGS_KEY)!)).toEqual({ version: 1, language: 'fr' })
   })
 
   it('keeps the choice after a reload', async () => {
@@ -92,7 +117,9 @@ describe('settings (014 US3)', () => {
     await openSettings(user)
     await user.click(screen.getByRole('radio', { name: 'Português' }))
     await user.click(screen.getByRole('radio', { name: 'English' }))
+    await user.click(screen.getByRole('radio', { name: 'Français' }))
     await user.click(screen.getByRole('radio', { name: 'Português' }))
+    await user.click(screen.getByRole('radio', { name: 'Français' }))
     expect({ ...store.getState(), settings: undefined }).toEqual(before)
   })
 

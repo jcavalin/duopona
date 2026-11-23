@@ -164,8 +164,8 @@ describe('starting in the device language (014 US2)', () => {
     expect(localStorage.getItem(SETTINGS_KEY)).toBeNull()
   })
 
-  it('a French device opens in English', () => {
-    vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['fr-FR'])
+  it('a German device opens in English', () => {
+    vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['de-DE'])
     renderApp(appLike())
     expect(screen.getByText('Learn Toki Pona')).toBeInTheDocument()
   })

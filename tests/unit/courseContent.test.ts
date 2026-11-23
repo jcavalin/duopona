@@ -4,7 +4,8 @@ import { courses, exerciseKey, getLesson, lessons } from '../../src/content/less
 import { strings } from '../../src/i18n/strings'
 import type { Exercise, Lesson } from '../../src/content/types'
 import { getMeaning, vocabularies } from '../../src/content/vocabulary'
-import { LANGUAGES } from '../../src/i18n/language'
+import { frenchTypographyErrors } from '../frenchTypography'
+import { LANGUAGES, type Language } from '../../src/i18n/language'
 
 const BANNED = ['unpa', 'tu', 'luka', 'nanpa']
 
@@ -214,20 +215,36 @@ function studyLanguageText(lesson: Lesson): [string, string][] {
   return fields
 }
 
-/** Fields whose Portuguese text may equal the English one, with the reason (rule P2b). */
-const SAME_IN_BOTH = new Set([
+type Translation = Exclude<Language, 'en'>
+const TRANSLATIONS = LANGUAGES.filter((l): l is Translation => l !== 'en')
+
+/**
+ * Fields whose text may equal the same field in another language, with the reason (rule P2b).
+ * Keys are `lessonId/field`; each entry applies to every pair of languages.
+ */
+const SAME_ACROSS = new Set([
   'pi/title', // the lesson is named after the Toki Pona word
+  'questions-and-answers/anu.prompt', // “ou” is the word for “or” in both Portuguese and French
+  'greetings-and-feelings/a.options[0]', // the same “ou” as a wrong option
+  'vocabulary/anu', // the same “ou” as a gloss
 ])
 
-describe('Brazilian Portuguese course (014 contract course-content-pt.md)', () => {
-  const pt = courses['pt-BR']
+/** How each translation labels the English book's chapters (rule P7) */
+const CHAPTERS: Record<Translation, { lesson: string; dictionary: string }> = {
+  'pt-BR': { lesson: 'Lição', dictionary: 'Dicionário' },
+  fr: { lesson: 'Leçon', dictionary: 'Dictionnaire' },
+}
+
+describe.each(TRANSLATIONS)('translated course: %s (014 course-content-pt.md, 015 course-content-fr.md)', (language) => {
+  const course = courses[language]
+  const others = LANGUAGES.filter((l) => l !== language)
 
   it('has the same lessons, ids and new words, in order (P1)', () => {
-    expect(pt.map((l) => [l.id, l.newWords])).toEqual(lessons.map((l) => [l.id, l.newWords]))
+    expect(course.map((l) => [l.id, l.newWords])).toEqual(lessons.map((l) => [l.id, l.newWords]))
   })
 
   lessons.forEach((en, index) => {
-    const lesson = pt[index]
+    const lesson = course[index]
 
     describe(en.id, () => {
       it('has the same exercises with the same Toki Pona side (P1)', () => {
@@ -249,12 +266,14 @@ describe('Brazilian Portuguese course (014 contract course-content-pt.md)', () =
         expect(lesson.grammar.explanation.length).toBeLessThanOrEqual(4)
       })
 
-      it('has every other text translated (P2b)', () => {
-        const english = new Map(studyLanguageText(en))
-        const untranslated = studyLanguageText(lesson)
-          .filter(([field, text]) => english.get(field) === text && !SAME_IN_BOTH.has(`${en.id}/${field}`))
+      // Compared with every other language, so text left over from English or from another
+      // translation is caught (015 analysis C1)
+      it.each(others)('has every other text different from %s (P2b)', (other) => {
+        const theirs = new Map(studyLanguageText(courses[other][index]))
+        const same = studyLanguageText(lesson)
+          .filter(([field, text]) => theirs.get(field) === text && !SAME_ACROSS.has(`${en.id}/${field}`))
           .map(([field]) => field)
-        expect(untranslated).toEqual([])
+        expect(same).toEqual([])
       })
 
       it('has distinct multiple-choice options (P6)', () => {
@@ -264,18 +283,43 @@ describe('Brazilian Portuguese course (014 contract course-content-pt.md)', () =
       })
 
       it('labels the chapter as in the English book (P7)', () => {
-        const expected = en.chapter === 'Dictionary' ? 'Dicionário' : en.chapter.replace(/^Lesson (\d+)$/, 'Lição $1')
+        const { lesson: word, dictionary } = CHAPTERS[language]
+        const expected = en.chapter === 'Dictionary' ? dictionary : en.chapter.replace(/^Lesson (\d+)$/, `${word} $1`)
         expect(lesson.chapter).toBe(expected)
       })
     })
   })
 
   it('has a gloss for every English vocabulary word, and no others (P3)', () => {
-    const ptGlosses = vocabularies['pt-BR']
-    expect(Object.keys(ptGlosses)).toEqual(Object.keys(vocabularies.en))
-    for (const [word, gloss] of Object.entries(ptGlosses)) {
+    const glosses = vocabularies[language]
+    expect(Object.keys(glosses)).toEqual(Object.keys(vocabularies.en))
+    for (const [word, gloss] of Object.entries(glosses)) {
       expect(gloss.trim(), word).not.toBe('')
-      expect(gloss, word).not.toBe(vocabularies.en[word])
+      if (SAME_ACROSS.has(`vocabulary/${word}`)) continue
+      for (const other of others) expect(gloss, `${word} vs ${other}`).not.toBe(vocabularies[other][word])
     }
+  })
+})
+
+describe('French course (015 contract course-content-fr.md)', () => {
+  const fr = courses.fr
+
+  it('puts a no-break space before ? ! ; : in all French text (F1)', () => {
+    const texts = [
+      ...fr.flatMap((lesson) => studyLanguageText(lesson).map(([field, text]): [string, string] => [`${lesson.id}/${field}`, text])),
+      ...Object.entries(vocabularies.fr).map(([word, gloss]): [string, string] => [`vocabulary/${word}`, gloss]),
+    ]
+    expect(texts.flatMap(([where, text]) => frenchTypographyErrors(text).map((e) => `${where}: ${e}`))).toEqual([])
+  })
+
+  it('keeps an elided word on one tile with its word (F2)', () => {
+    const bare = fr.flatMap((lesson) =>
+      lesson.exercises.flatMap((ex) =>
+        ex.type === 'wordBank' && ex.direction === 'tp-en'
+          ? [...ex.answer, ...ex.distractors].filter((tile) => /['’]$/.test(tile)).map((tile) => `${lesson.id}/${ex.id}: ${tile}`)
+          : [],
+      ),
+    )
+    expect(bare).toEqual([])
   })
 })

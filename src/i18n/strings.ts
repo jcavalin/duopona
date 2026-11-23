@@ -2,6 +2,9 @@ import type { Language } from './language'
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
 
+/** French uses the singular for 0 and 1 (015 research R5) */
+const pluralFr = (n: number, one: string, many: string) => `${n} ${n <= 1 ? one : many}`
+
 /** Interface text in English; its shape is the contract every other language must fill (014 research R1). */
 const en = {
   // Home
@@ -59,6 +62,8 @@ const en = {
   why: 'Why?',
   hide: 'Hide',
   means: 'means',
+  /** Between a word and its meaning in the "Why?" list */
+  wordMeaningSeparator: ': ',
   fromLesson: (lesson: string) => `From ${lesson}`,
   continue: 'Continue',
   // Leave dialog (013)
@@ -140,6 +145,7 @@ const ptBR: Strings = {
   why: 'Por quê?',
   hide: 'Ocultar',
   means: 'significa',
+  wordMeaningSeparator: ': ',
   fromLesson: (lesson) => `Fonte: ${lesson}`,
   continue: 'Continuar',
   // Leave dialog
@@ -163,4 +169,88 @@ const ptBR: Strings = {
   subtitleWeakWords: 'Palavras fracas',
 }
 
-export const strings: Record<Language, Strings> = { en, 'pt-BR': ptBR }
+/**
+ * Interface text in French (015), addressing the learner as "tu". A narrow no-break space (\u202f)
+ * goes before ? ! ; : so the mark never starts a line (research R5).
+ */
+const fr: Strings = {
+  // Home
+  wordmark: 'duopona',
+  streakLabel: (streak, metToday) =>
+    `Série de ${pluralFr(streak, 'jour', 'jours')}, ${metToday ? 'entraînement fait aujourd’hui' : 'pas encore d’entraînement aujourd’hui'}`,
+  lessonsDoneLabel: (done, total) => `${done} leçons terminées sur ${total}`,
+  courseProgress: (done, total) => `Cours · ${done} sur ${total} terminées`,
+  bannerTitle: 'Apprends le toki pona',
+  bannerFollowing: 'D’après',
+  bookTitle: 'Toki Pona: The Language of Good',
+  dailyGoal: 'Objectif du jour',
+  sessionsToday: (done, goal) => `${done} / ${goal} séance aujourd’hui`,
+  bestStreak: (n) => `Meilleure série\u202f: ${pluralFr(n, 'jour', 'jours')}`,
+  practice: 'S’entraîner',
+  reviewWeakWords: 'Revoir les mots difficiles',
+  hintFinishLesson: 'Termine une leçon pour débloquer l’entraînement.',
+  hintNoWeakWords: 'Aucun mot difficile pour l’instant.',
+  startPill: 'Commencer',
+  lessonLocked: (title) => `${title}, verrouillée`,
+  lessonStart: (title) => `${title}, commencer`,
+  lessonCompleted: (title, correct, total) => `${title}, terminée, ${correct} sur ${total}`,
+  footerBasedOn: 'Cours basé sur',
+  footerBy: 'de Sonja Lang',
+  // Settings
+  settings: 'Paramètres',
+  closeSettings: 'Fermer les paramètres',
+  language: 'Langue',
+  // Lesson introduction
+  backToLessons: 'Retour aux leçons',
+  sourceLabel: (chapter) =>
+    chapter === 'Dictionnaire' ? 'Extra\u202f: mots du dictionnaire' : `Livre\u202f: ${chapter}`,
+  exerciseCount: (n) => pluralFr(n, 'exercice', 'exercices'),
+  newWords: 'Nouveaux mots',
+  start: 'Commencer',
+  // Exercises
+  quitLesson: 'Quitter la leçon',
+  lessonProgress: 'Progression de la leçon',
+  quitPractice: 'Quitter l’entraînement',
+  practiceProgress: 'Progression de l’entraînement',
+  chooseMeaning: 'Choisis le sens',
+  chooseTokiPona: 'Choisis en toki pona',
+  writeInStudyLanguage: 'Écris ceci en français',
+  writeInTokiPona: 'Écris ceci en toki pona',
+  options: 'Choix',
+  yourAnswer: 'Ta réponse',
+  wordBank: 'Banque de mots',
+  tileHint: 'Appuie pour retirer. Fais glisser ou utilise les flèches gauche et droite pour déplacer.',
+  grammarTag: 'Grammaire',
+  check: 'Vérifier',
+  // Feedback and explanations
+  correct: 'Correct.',
+  notQuite: 'Pas tout à fait',
+  correctAnswer: 'Bonne réponse\u202f:',
+  why: 'Pourquoi\u202f?',
+  hide: 'Masquer',
+  means: 'veut dire',
+  wordMeaningSeparator: '\u202f: ',
+  fromLesson: (lesson) => `Source\u202f: ${lesson}`,
+  continue: 'Continuer',
+  // Leave dialog
+  leaveLessonTitle: 'Quitter cette leçon\u202f?',
+  leaveLessonMessage: 'Ta progression dans cette leçon sera perdue.',
+  leavePracticeTitle: 'Quitter cet entraînement\u202f?',
+  leavePracticeMessage: 'Ta progression dans cet entraînement sera perdue.',
+  keepLearning: 'Continuer à apprendre',
+  leave: 'Quitter',
+  // Summary
+  lessonComplete: 'Leçon terminée\u202f!',
+  replayLesson: 'Refaire la leçon',
+  practiceComplete: 'Entraînement terminé\u202f!',
+  practiseAgain: 'Recommencer',
+  dailyGoalMet: 'Objectif du jour atteint',
+  statCorrect: 'Réussies',
+  statUnlocked: 'Débloquée',
+  statStreak: 'Série',
+  dayCount: (n) => pluralFr(n, 'jour', 'jours'),
+  subtitlePractice: 'Entraînement',
+  subtitleWeakWords: 'Mots difficiles',
+}
+
+export const strings: Record<Language, Strings> = { en, 'pt-BR': ptBR, fr }

@@ -1,4 +1,5 @@
 import type { Language } from '../i18n/language'
+import { vocabulary as vocabularyFr } from './fr/vocabulary'
 import { vocabulary as vocabularyPtBR } from './pt-BR/vocabulary'
 
 /**
@@ -143,7 +144,7 @@ export const vocabulary: Record<string, string> = {
 }
 
 /** Glosses per study language; both have the same Toki Pona keys (014 contract, rule P3). */
-export const vocabularies: Record<Language, Record<string, string>> = { en: vocabulary, 'pt-BR': vocabularyPtBR }
+export const vocabularies: Record<Language, Record<string, string>> = { en: vocabulary, 'pt-BR': vocabularyPtBR, fr: vocabularyFr }
 
 export function getMeaning(word: string, language: Language = 'en'): string | undefined {
   const glosses = vocabularies[language]
