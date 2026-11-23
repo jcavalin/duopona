@@ -53,6 +53,10 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   Brazilian Portuguese, starting in the device language, with a settings gear on the home screen
   to switch (`specs/014-portuguese-language/`). The owner's review of the Portuguese text and the
   phone checks were deferred by owner decision (to be run later).
+- **015 – Study in French**: a third study language next to English and Brazilian Portuguese,
+  chosen in settings (with the France flag) or from any French device
+  (`specs/015-french-language/`). The owner's review of the French text and the phone checks were
+  deferred by owner decision (to be run later).
 
 ## Ideas (not yet evaluated)
 

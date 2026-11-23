@@ -152,3 +152,14 @@ export function FlagBR(props: IconProps) {
     </Flag>
   )
 }
+
+/** French: the flag of France */
+export function FlagFR(props: IconProps) {
+  return (
+    <Flag {...props}>
+      <rect width="10" height="20" fill="#002654" />
+      <rect x="10" width="10" height="20" fill="#fff" />
+      <rect x="20" width="10" height="20" fill="#ce1126" />
+    </Flag>
+  )
+}

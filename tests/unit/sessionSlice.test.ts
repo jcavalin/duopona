@@ -208,3 +208,28 @@ describe('session language (014 research R3)', () => {
     expect(getLesson('verbs', 'pt-BR')!.title).toBe('Verbos')
   })
 })
+
+describe('session language: French (015)', () => {
+  const key = 'verbs/jo'
+
+  it('stores French when started in French', () => {
+    expect(run(null, startLesson('verbs', 'fr'))!.language).toBe('fr')
+    expect(run(null, startPractice({ kind: 'practice', keys: [key], language: 'fr' }))!.language).toBe('fr')
+  })
+
+  it('checks answers and shows the right answer in French', () => {
+    const frJo = getExercise(key, 'fr') as MultipleChoiceExercise
+    const start = startPractice({ kind: 'practice', keys: [key], language: 'fr' })
+    expect(selectCurrentExercise({ session: run(null, start) })).toBe(frJo)
+    const wrong = run(null, start, submitAnswer('nourriture / manger / boire'))!
+    expect(wrong.feedback).toMatchObject({ correct: false, correctAnswer: 'avoir / tenir' })
+    expect(run(null, start, submitAnswer((getExercise(key, 'pt-BR') as MultipleChoiceExercise).answer))!.feedback?.correct).toBe(false)
+  })
+
+  it('checks a French word bank against the French tiles', () => {
+    const wb = getExercise('verbs/jan-li-pali-e-tomo', 'fr') as WordBankExercise
+    const start = startPractice({ kind: 'practice', keys: ['verbs/jan-li-pali-e-tomo'], language: 'fr' })
+    expect(run(null, start, submitAnswer(wb.answer))!.feedback).toMatchObject({ correct: true, correctAnswer: 'la personne fait la maison' })
+    expect(getLesson('verbs', 'fr')!.title).toBe('Verbes')
+  })
+})

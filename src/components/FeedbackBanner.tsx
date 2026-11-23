@@ -86,7 +86,9 @@ function ExplanationContent({ words, wrongPick, grammar }: Explanation) {
         <ul className={styles.explainWords}>
           {words.map(({ word, meaning }) => (
             <li key={word}>
-              <strong lang="tok">{word}</strong>: {meaning}
+              <strong lang="tok">{word}</strong>
+              {s.wordMeaningSeparator}
+              {meaning}
             </li>
           ))}
         </ul>
