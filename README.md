@@ -41,10 +41,11 @@ Leaving a lesson, practice or review part-way through (the X button, or Back) as
 **Keep learning** returns to the same exercise, **Leave** ends the session, whose progress is
 not kept.
 
-The course can be studied in **English** or **Brazilian Portuguese**: everything except Toki
-Pona itself (lesson texts, word meanings, exercises, explanations and buttons) follows the chosen
-language. The app starts in the device language (Portuguese for any Portuguese setting, English
-otherwise); the gear on the home screen opens the settings to change it.
+The course can be studied in **English**, **French** or **Brazilian Portuguese**: everything
+except Toki Pona itself (lesson texts, word meanings, exercises, explanations and buttons) follows
+the chosen language. The app starts in the device language (French for any French setting,
+Portuguese for any Portuguese setting, English otherwise); the gear on the home screen opens the
+settings to change it.
 
 Practice never changes lesson progress. Progress is saved under `duopona:progress`, word
 mistakes under `duopona:words`, the streak under `duopona:streak` and, once chosen in settings,
