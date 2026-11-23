@@ -1,5 +1,7 @@
 /** Small inline icons (research R6). Decorative: always hidden from assistive technology. */
 
+import { useId } from 'react'
+
 interface IconProps {
   size?: number
 }
@@ -100,5 +102,53 @@ export function GearIcon(props: IconProps) {
       <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" />
       <circle cx="12" cy="12" r="6.5" />
     </Stroke>
+  )
+}
+
+/** Simplified flags for the language choice (014). Drawn inline: emoji flags show as letters on Windows. */
+function Flag({ size = 28, children }: IconProps & { children: React.ReactNode }) {
+  const clipId = useId()
+  return (
+    <svg
+      className="flag"
+      viewBox="0 0 30 20"
+      width={size}
+      height={(size * 2) / 3}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <clipPath id={clipId}>
+        <rect width="30" height="20" rx="3" />
+      </clipPath>
+      <g clipPath={`url(#${clipId})`}>{children}</g>
+    </svg>
+  )
+}
+
+/** English: the United States flag, stars reduced to a grid of dots */
+export function FlagUS(props: IconProps) {
+  return (
+    <Flag {...props}>
+      <rect width="30" height="20" fill="#fff" />
+      {[0, 2, 4, 6, 8, 10, 12].map((i) => (
+        <rect key={i} y={(i * 20) / 13} width="30" height={20 / 13} fill="#b22234" />
+      ))}
+      <rect width="13" height={(20 * 7) / 13} fill="#3c3b6e" />
+      {[2.2, 6.5, 10.8].flatMap((x) =>
+        [2.2, 5.4, 8.6].map((y) => <circle key={`${x}-${y}`} cx={x} cy={y} r="0.9" fill="#fff" />),
+      )}
+    </Flag>
+  )
+}
+
+/** Brazilian Portuguese: the Brazil flag, without the motto and stars */
+export function FlagBR(props: IconProps) {
+  return (
+    <Flag {...props}>
+      <rect width="30" height="20" fill="#009c3b" />
+      <path d="M15 2.5L27 10L15 17.5L3 10Z" fill="#ffdf00" />
+      <circle cx="15" cy="10" r="4.6" fill="#002776" />
+      <path d="M10.6 9.2q4.6-1.4 8.8 1.4" stroke="#fff" strokeWidth="0.9" fill="none" />
+    </Flag>
   )
 }

@@ -4,12 +4,12 @@ import type { Language } from '../i18n/language'
 import { useLanguage, useStrings } from '../i18n/useStrings'
 import { useAppDispatch } from '../store/hooks'
 import { languageChosen } from '../store/settingsSlice'
-import { CloseIcon } from './icons'
+import { CloseIcon, FlagBR, FlagUS } from './icons'
 
 /** Each language is named in itself, whatever the active language (contract ui-settings.md) */
-const OPTIONS: { value: Language; label: string }[] = [
-  { value: 'en', label: 'English' },
-  { value: 'pt-BR', label: 'Português' },
+const OPTIONS: { value: Language; label: string; Flag: typeof FlagUS }[] = [
+  { value: 'en', label: 'English', Flag: FlagUS },
+  { value: 'pt-BR', label: 'Português', Flag: FlagBR },
 ]
 
 /**
@@ -60,7 +60,7 @@ export default function SettingsDialog() {
         </div>
         <fieldset className="settings-fieldset">
           <legend className="label">{s.language}</legend>
-          {OPTIONS.map(({ value, label }) => (
+          {OPTIONS.map(({ value, label, Flag }) => (
             <label key={value} className="settings-option" lang={value}>
               <input
                 ref={value === language ? checkedRef : undefined}
@@ -70,6 +70,7 @@ export default function SettingsDialog() {
                 checked={value === language}
                 onChange={() => dispatch(languageChosen(value))}
               />
+              <Flag />
               {label}
             </label>
           ))}

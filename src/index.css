@@ -328,3 +328,10 @@ button:disabled {
   margin: 0;
   accent-color: var(--primary-text);
 }
+
+/* Flag beside each language name; a thin outline keeps white stripes visible on light backgrounds */
+.settings-option .flag {
+  flex-shrink: 0;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 15%);
+}
