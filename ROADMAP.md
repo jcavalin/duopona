@@ -57,6 +57,10 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   chosen in settings (with the France flag) or from any French device
   (`specs/015-french-language/`). The owner's review of the French text and the phone checks were
   deferred by owner decision (to be run later).
+- **016 – Wrong-answer sheet layout fix**: the title and correct answer use the full width beside
+  the icon, and "Why?" sits on its own line under the answer, the same in every language
+  (`specs/016-feedback-sheet-layout/`, mockup 04c). The phone check was deferred by owner decision
+  (to be run later).
 
 ## Ideas (not yet evaluated)
 
