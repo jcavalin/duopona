@@ -293,9 +293,13 @@
   background: var(--error);
 }
 
-.sheetText {
+/* Text column beside the icon: status text, then the "Why?" toggle under it (016 C5, mockup 04c) */
+.sheetBody {
   flex: 1;
   min-width: 0;
+}
+
+.sheetText {
   margin: 0;
   overflow-wrap: anywhere;
 }
@@ -328,10 +332,12 @@
   font-weight: 800;
 }
 
-/* "Why?" / "Hide" toggle beside the heading (010 contract C1, C2, C4; mockups 04a/04b) */
+/* "Why?" / "Hide" toggle on its own line under the answer, aligned with the text
+   (016 C5, mockup 04c; sizes and colours from 010 C4) */
 .explainToggle {
   display: inline-flex;
   flex-shrink: 0;
+  margin-top: 12px;
   align-items: center;
   justify-content: center;
   gap: 6px;
