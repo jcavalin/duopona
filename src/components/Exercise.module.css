@@ -508,6 +508,8 @@
 
 .statNext {
   font-size: 22px;
+  /* A long single word ("Sustantivos", "Preposiciones") breaks at a syllable, not mid-letter (017 M3) */
+  hyphens: auto;
 }
 
 .statCorrect {

@@ -1,6 +1,6 @@
 import { detectLanguage, deviceLanguageTags } from '../../src/i18n/language'
 
-describe('detectLanguage (014 FR-006, 015 FR-006)', () => {
+describe('detectLanguage (014, 015 and 017 FR-006)', () => {
   it.each([
     [['pt-BR'], 'pt-BR'],
     [['pt-PT'], 'pt-BR'],
@@ -12,7 +12,7 @@ describe('detectLanguage (014 FR-006, 015 FR-006)', () => {
     [['de', 'pt-BR'], 'pt-BR'],
     [['de-DE', 'pt-BR', 'en'], 'pt-BR'],
     [['en-US', 'pt-BR'], 'en'],
-    [['de', 'es'], 'en'],
+    [['de', 'it'], 'en'],
     // French (015)
     [['fr'], 'fr'],
     [['fr-FR'], 'fr'],
@@ -22,6 +22,16 @@ describe('detectLanguage (014 FR-006, 015 FR-006)', () => {
     [['en-US', 'fr'], 'en'],
     [['pt-BR', 'fr'], 'pt-BR'],
     [['fr', 'pt-BR'], 'fr'],
+    // Spanish (017)
+    [['es'], 'es'],
+    [['es-ES'], 'es'],
+    [['es-MX'], 'es'],
+    [['es-419'], 'es'],
+    [['ES-ar'], 'es'],
+    [['de', 'es-AR'], 'es'],
+    [['en-US', 'es'], 'en'],
+    [['fr', 'es'], 'fr'],
+    [['es', 'pt-BR'], 'es'],
   ] as const)('%j → %s', (tags, expected) => {
     expect(detectLanguage(tags)).toBe(expected)
   })

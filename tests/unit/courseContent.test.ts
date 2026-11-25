@@ -5,6 +5,7 @@ import { strings } from '../../src/i18n/strings'
 import type { Exercise, Lesson } from '../../src/content/types'
 import { getMeaning, vocabularies } from '../../src/content/vocabulary'
 import { frenchTypographyErrors } from '../frenchTypography'
+import { nonNeutralSpanish, spanishPunctuationErrors } from '../spanishTypography'
 import { LANGUAGES, type Language } from '../../src/i18n/language'
 
 const BANNED = ['unpa', 'tu', 'luka', 'nanpa']
@@ -233,9 +234,33 @@ const SAME_ACROSS = new Set([
 const CHAPTERS: Record<Translation, { lesson: string; dictionary: string }> = {
   'pt-BR': { lesson: 'Lição', dictionary: 'Dicionário' },
   fr: { lesson: 'Leçon', dictionary: 'Dictionnaire' },
+  es: { lesson: 'Lección', dictionary: 'Diccionario' },
 }
 
-describe.each(TRANSLATIONS)('translated course: %s (014 course-content-pt.md, 015 course-content-fr.md)', (language) => {
+/**
+ * Fields whose Spanish and Portuguese texts are the same, with the reason (017 research R7). Keys
+ * are `lessonId/field` or `vocabulary/word`. Used only between es and pt-BR, in both directions; a
+ * match with English or French is reworded instead.
+ */
+const SAME_ES_PT = new Map<string, string>([
+  ['verbs/title', '“Verbos” is the word in both'],
+  ['vocabulary/laso', '“azul / verde” is the same in both'],
+  ['colours-and-la/laso.prompt', 'the laso gloss'],
+  ['colours-and-la/walo.options[0]', 'the laso gloss as a wrong option'],
+  ['spatial-nouns/lon-sewi.options[1]', '“dentro” (inside) is the word in both'],
+  ['vocabulary/olin', '“amar / amor” is the same in both'],
+  ['cooking/olin.prompt', 'the olin gloss'],
+  ['cooking/pini.options[0]', 'the olin gloss as a wrong option'],
+  ['cooking/lape.options[1]', 'the olin gloss as a wrong option'],
+])
+
+/** Whether the field may have the same text in these two languages (rule P2b) */
+function mayShare(key: string, a: Language, b: Language): boolean {
+  if (SAME_ACROSS.has(key)) return true
+  return ((a === 'es' && b === 'pt-BR') || (a === 'pt-BR' && b === 'es')) && SAME_ES_PT.has(key)
+}
+
+describe.each(TRANSLATIONS)('translated course: %s (014 course-content-pt.md, 015 course-content-fr.md, 017 course-content-es.md)', (language) => {
   const course = courses[language]
   const others = LANGUAGES.filter((l) => l !== language)
 
@@ -271,7 +296,7 @@ describe.each(TRANSLATIONS)('translated course: %s (014 course-content-pt.md, 01
       it.each(others)('has every other text different from %s (P2b)', (other) => {
         const theirs = new Map(studyLanguageText(courses[other][index]))
         const same = studyLanguageText(lesson)
-          .filter(([field, text]) => theirs.get(field) === text && !SAME_ACROSS.has(`${en.id}/${field}`))
+          .filter(([field, text]) => theirs.get(field) === text && !mayShare(`${en.id}/${field}`, language, other))
           .map(([field]) => field)
         expect(same).toEqual([])
       })
@@ -295,10 +320,23 @@ describe.each(TRANSLATIONS)('translated course: %s (014 course-content-pt.md, 01
     expect(Object.keys(glosses)).toEqual(Object.keys(vocabularies.en))
     for (const [word, gloss] of Object.entries(glosses)) {
       expect(gloss.trim(), word).not.toBe('')
-      if (SAME_ACROSS.has(`vocabulary/${word}`)) continue
-      for (const other of others) expect(gloss, `${word} vs ${other}`).not.toBe(vocabularies[other][word])
+      for (const other of others) {
+        if (mayShare(`vocabulary/${word}`, language, other)) continue
+        expect(gloss, `${word} vs ${other}`).not.toBe(vocabularies[other][word])
+      }
     }
   })
+})
+
+it('lists only Spanish–Portuguese fields that are still the same (017 research R7)', () => {
+  const textOf = (language: Language, key: string) => {
+    const [lessonId, field] = key.split('/')
+    if (lessonId === 'vocabulary') return vocabularies[language][field]
+    const index = lessons.findIndex((l) => l.id === lessonId)
+    return new Map(studyLanguageText(courses[language][index])).get(field)
+  }
+  const stale = [...SAME_ES_PT.keys()].filter((key) => textOf('es', key) === undefined || textOf('es', key) !== textOf('pt-BR', key))
+  expect(stale).toEqual([])
 })
 
 describe('French course (015 contract course-content-fr.md)', () => {
@@ -321,5 +359,32 @@ describe('French course (015 contract course-content-fr.md)', () => {
       ),
     )
     expect(bare).toEqual([])
+  })
+})
+
+describe('Spanish course (017 contract course-content-es.md)', () => {
+  const es = courses.es
+  const texts = [
+    ...es.flatMap((lesson) => studyLanguageText(lesson).map(([field, text]): [string, string] => [`${lesson.id}/${field}`, text])),
+    ...Object.entries(vocabularies.es).map(([word, gloss]): [string, string] => [`vocabulary/${word}`, gloss]),
+  ]
+  const wordBanks = es.flatMap((lesson) =>
+    lesson.exercises.flatMap((ex) => (ex.type === 'wordBank' && ex.direction === 'tp-en' ? [{ where: `${lesson.id}/${ex.id}`, ex }] : [])),
+  )
+
+  it('opens every question and exclamation with ¿ or ¡ (S1)', () => {
+    expect(texts.flatMap(([where, text]) => spanishPunctuationErrors(text).map((e) => `${where}: ${e}`))).toEqual([])
+  })
+
+  it('never puts ¿ or ¡ on a tile alone, and joins a + el and de + el (S2)', () => {
+    const errors = wordBanks.flatMap(({ where, ex }) => [
+      ...[...ex.answer, ...ex.distractors].filter((tile) => tile === '¿' || tile === '¡').map((tile) => `${where}: bare ${tile}`),
+      ...ex.answer.slice(1).flatMap((tile, i) => (tile === 'el' && ['a', 'de'].includes(ex.answer[i]) ? [`${where}: ${ex.answer[i]} el`] : [])),
+    ])
+    expect(errors).toEqual([])
+  })
+
+  it('uses neutral Spanish, with no vosotros forms (S5)', () => {
+    expect(texts.flatMap(([where, text]) => nonNeutralSpanish(text).map((w) => `${where}: ${w}`))).toEqual([])
   })
 })

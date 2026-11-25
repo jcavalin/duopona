@@ -69,6 +69,9 @@ describe('settings (014 US3)', () => {
     const { user } = renderApp()
     await openSettings(user)
     await user.keyboard('{ArrowDown}')
+    expect(screen.getByRole('radio', { name: 'Español' })).toBeChecked()
+    expect(screen.getByText('Aprende toki pona')).toBeInTheDocument()
+    await user.keyboard('{ArrowDown}')
     expect(screen.getByRole('radio', { name: 'Français' })).toBeChecked()
     expect(screen.getByText('Apprends le toki pona')).toBeInTheDocument()
     await user.keyboard('{ArrowDown}')
@@ -76,14 +79,14 @@ describe('settings (014 US3)', () => {
     expect(screen.getByText('Aprenda Toki Pona')).toBeInTheDocument()
   })
 
-  it('lists English, Français and Português, in that order, each in its own language (015)', async () => {
+  it('lists English, Español, Français and Português, in that order, each in its own language (015, 017)', async () => {
     const { user } = renderApp()
     const dialog = await openSettings(user)
     const radios = within(dialog).getAllByRole('radio')
-    expect(radios.map((r) => r.closest('label')?.textContent)).toEqual(['English', 'Français', 'Português'])
-    expect(radios.map((r) => r.closest('label')?.getAttribute('lang'))).toEqual(['en', 'fr', 'pt-BR'])
+    expect(radios.map((r) => r.closest('label')?.textContent)).toEqual(['English', 'Español', 'Français', 'Português'])
+    expect(radios.map((r) => r.closest('label')?.getAttribute('lang'))).toEqual(['en', 'es', 'fr', 'pt-BR'])
     // Flags are decorative
-    expect(dialog.querySelectorAll('svg.flag[aria-hidden="true"]')).toHaveLength(3)
+    expect(dialog.querySelectorAll('svg.flag[aria-hidden="true"]')).toHaveLength(4)
   })
 
   it('switches the whole app to French and saves the choice (015 US3)', async () => {
@@ -96,6 +99,18 @@ describe('settings (014 US3)', () => {
     expect(screen.getByText('Apprends le toki pona')).toBeInTheDocument()
     expect(document.documentElement.lang).toBe('fr')
     expect(JSON.parse(localStorage.getItem(SETTINGS_KEY)!)).toEqual({ version: 1, language: 'fr' })
+  })
+
+  it('switches the whole app to Spanish and saves the choice (017 US3)', async () => {
+    const { user } = renderApp()
+    const dialog = await openSettings(user)
+    await user.click(within(dialog).getByRole('radio', { name: 'Español' }))
+    expect(screen.getByRole('dialog', { name: 'Configuración' })).toBeInTheDocument()
+    expect(within(dialog).getByRole('group', { name: 'Idioma' })).toBeInTheDocument()
+    expect(within(dialog).getByRole('button', { name: 'Cerrar configuración' })).toBeInTheDocument()
+    expect(screen.getByText('Aprende toki pona')).toBeInTheDocument()
+    expect(document.documentElement.lang).toBe('es')
+    expect(JSON.parse(localStorage.getItem(SETTINGS_KEY)!)).toEqual({ version: 1, language: 'es' })
   })
 
   it('keeps the choice after a reload', async () => {
@@ -120,6 +135,10 @@ describe('settings (014 US3)', () => {
     await user.click(screen.getByRole('radio', { name: 'Français' }))
     await user.click(screen.getByRole('radio', { name: 'Português' }))
     await user.click(screen.getByRole('radio', { name: 'Français' }))
+    await user.click(screen.getByRole('radio', { name: 'Español' }))
+    await user.click(screen.getByRole('radio', { name: 'Français' }))
+    await user.click(screen.getByRole('radio', { name: 'Português' }))
+    await user.click(screen.getByRole('radio', { name: 'English' }))
     expect({ ...store.getState(), settings: undefined }).toEqual(before)
   })
 

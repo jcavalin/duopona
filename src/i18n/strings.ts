@@ -253,4 +253,87 @@ const fr: Strings = {
   subtitleWeakWords: 'Mots difficiles',
 }
 
-export const strings: Record<Language, Strings> = { en, 'pt-BR': ptBR, fr }
+/**
+ * Interface text in neutral Spanish (017), addressing the learner as "tú". Questions and
+ * exclamations open with ¿ and ¡ (research R5).
+ */
+const es: Strings = {
+  // Home
+  wordmark: 'duopona',
+  streakLabel: (streak, metToday) =>
+    `Racha de ${plural(streak, 'día', 'días')}, ${metToday ? 'con práctica hoy' : 'sin práctica hoy'}`,
+  lessonsDoneLabel: (done, total) => `${done} de ${total} lecciones terminadas`,
+  courseProgress: (done, total) => `Curso · ${done} de ${total} terminadas`,
+  bannerTitle: 'Aprende toki pona',
+  bannerFollowing: 'Según',
+  bookTitle: 'Toki Pona: The Language of Good',
+  dailyGoal: 'Meta diaria',
+  sessionsToday: (done, goal) => `${done} / ${goal} sesión hoy`,
+  bestStreak: (n) => `Mejor racha: ${plural(n, 'día', 'días')}`,
+  practice: 'Practicar',
+  reviewWeakWords: 'Repasar palabras difíciles',
+  hintFinishLesson: 'Termina una lección para desbloquear la práctica.',
+  hintNoWeakWords: 'Todavía no hay palabras difíciles.',
+  startPill: 'Empezar',
+  lessonLocked: (title) => `${title}, aún bloqueada`,
+  lessonStart: (title) => `${title}, empezar`,
+  lessonCompleted: (title, correct, total) => `${title}, completada, ${correct} de ${total}`,
+  footerBasedOn: 'Curso basado en',
+  footerBy: 'de Sonja Lang',
+  // Settings
+  settings: 'Configuración',
+  closeSettings: 'Cerrar configuración',
+  language: 'Idioma',
+  // Lesson introduction
+  backToLessons: 'Volver a las lecciones',
+  sourceLabel: (chapter) => (chapter === 'Diccionario' ? 'Extra: palabras del diccionario' : `Libro: ${chapter}`),
+  exerciseCount: (n) => plural(n, 'ejercicio', 'ejercicios'),
+  newWords: 'Palabras nuevas',
+  start: 'Empezar',
+  // Exercises
+  quitLesson: 'Salir de la lección',
+  lessonProgress: 'Progreso de la lección',
+  quitPractice: 'Salir de la práctica',
+  practiceProgress: 'Progreso de la práctica',
+  chooseMeaning: 'Elige el significado',
+  chooseTokiPona: 'Elige en toki pona',
+  writeInStudyLanguage: 'Escribe esto en español',
+  writeInTokiPona: 'Escribe esto en toki pona',
+  options: 'Opciones',
+  yourAnswer: 'Tu respuesta',
+  wordBank: 'Banco de palabras',
+  tileHint: 'Toca para quitar. Arrastra o usa las flechas izquierda y derecha para mover.',
+  grammarTag: 'Gramática',
+  check: 'Comprobar',
+  // Feedback and explanations
+  correct: 'Correcto.',
+  notQuite: 'No del todo',
+  correctAnswer: 'Solución correcta:',
+  why: '¿Por qué?',
+  hide: 'Ocultar',
+  means: 'quiere decir',
+  wordMeaningSeparator: ': ',
+  fromLesson: (lesson) => `Fuente: ${lesson}`,
+  continue: 'Continuar',
+  // Leave dialog
+  leaveLessonTitle: '¿Salir de esta lección?',
+  leaveLessonMessage: 'Tu progreso en esta lección se perderá.',
+  leavePracticeTitle: '¿Salir de esta práctica?',
+  leavePracticeMessage: 'Tu progreso en esta práctica se perderá.',
+  keepLearning: 'Seguir aprendiendo',
+  leave: 'Salir',
+  // Summary
+  lessonComplete: '¡Lección completada!',
+  replayLesson: 'Repetir lección',
+  practiceComplete: '¡Práctica completada!',
+  practiseAgain: 'Practicar otra vez',
+  dailyGoalMet: 'Meta diaria cumplida',
+  statCorrect: 'Aciertos',
+  statUnlocked: 'Desbloqueada',
+  statStreak: 'Racha',
+  dayCount: (n) => plural(n, 'día', 'días'),
+  subtitlePractice: 'Práctica',
+  subtitleWeakWords: 'Palabras difíciles',
+}
+
+export const strings: Record<Language, Strings> = { en, 'pt-BR': ptBR, fr, es }
