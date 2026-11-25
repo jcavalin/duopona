@@ -1,5 +1,9 @@
 # UI Contract: Wrong-Answer Sheet with Collapsible Explanation
 
+> **Note (016)**: the toggle's position in C1/C2 (beside the heading) is superseded by
+> `specs/016-feedback-sheet-layout/contracts/ui-feedback-sheet.md` C5: the toggle sits on its own
+> line under the answer (mockup 04c). Everything else here still applies.
+
 Supersedes 008 contract F1 for the wrong-answer sheet. The right-answer sheet ("pona! Correct.")
 is unchanged. Design: mockups 04a and 04b.
 
