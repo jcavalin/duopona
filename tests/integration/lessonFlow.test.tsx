@@ -773,6 +773,18 @@ describe('collapsible explanation (feature 010)', () => {
     expect(explanation).not.toBeVisible()
   })
 
+  it('"Why?" sits in the text column under the announced text, outside it (016 C5)', async () => {
+    await missGoodWater()
+    const toggle = screen.getByRole('button', { name: 'Why?' })
+    const status = screen.getByRole('status')
+    // One column holds the status text and then the toggle, so the text gets the full width
+    expect(toggle.parentElement).toBe(status.parentElement)
+    expect(status.compareDocumentPosition(toggle) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(status).not.toContainElement(toggle)
+    // ...and the explanation card still comes after the toggle
+    expect(toggle.compareDocumentPosition(card(toggle)) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
   it('the next mistake starts collapsed again (FR-004)', async () => {
     const { user } = await missGoodWater()
     await user.click(screen.getByRole('button', { name: 'Why?' }))

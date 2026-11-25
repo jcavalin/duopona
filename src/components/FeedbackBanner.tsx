@@ -22,7 +22,8 @@ type Explanation = NonNullable<ReturnType<typeof explainMistake>>
  * Bottom sheet that replaces the Check bar after an answer (mockups 04 and 06, research R9).
  * After a wrong answer it offers the explanation of the right one (008) behind a "Why?" toggle,
  * hidden until asked for (010 contract C1–C3). The sheet unmounts between answers, so every new
- * wrong-answer sheet starts collapsed.
+ * wrong-answer sheet starts collapsed. The toggle sits on its own line under the answer, in the
+ * text column but outside the status region, so the text gets the full width (016 C5, mockup 04c).
  */
 export default function FeedbackBanner({ feedback, exerciseKey, language, onContinue }: Props) {
   const s = useStrings()
@@ -38,33 +39,35 @@ export default function FeedbackBanner({ feedback, exerciseKey, language, onCont
         <span className={styles.sheetIcon} aria-hidden="true">
           {correct ? <CheckIcon size={30} /> : <WrongIcon size={30} />}
         </span>
-        <div role="status" className={styles.sheetText}>
-          {correct ? (
-            <span className={styles.sheetTitle}>
-              <strong lang="tok">pona!</strong> {s.correct}
-            </span>
-          ) : (
-            <>
+        <div className={styles.sheetBody}>
+          <div role="status" className={styles.sheetText}>
+            {correct ? (
               <span className={styles.sheetTitle}>
-                {s.notQuite}<span className="visually-hidden">.</span>
-              </span>{' '}
-              <span className={styles.sheetLabel}>{s.correctAnswer}</span>{' '}
-              <span className={styles.sheetAnswer}>{feedback.correctAnswer}</span>
-            </>
+                <strong lang="tok">pona!</strong> {s.correct}
+              </span>
+            ) : (
+              <>
+                <span className={styles.sheetTitle}>
+                  {s.notQuite}<span className="visually-hidden">.</span>
+                </span>{' '}
+                <span className={styles.sheetLabel}>{s.correctAnswer}</span>{' '}
+                <span className={styles.sheetAnswer}>{feedback.correctAnswer}</span>
+              </>
+            )}
+          </div>
+          {hasExplanation && (
+            <button
+              type="button"
+              className={styles.explainToggle}
+              aria-expanded={open}
+              aria-controls={cardId}
+              onClick={() => setOpen((o) => !o)}
+            >
+              <span>{open ? s.hide : s.why}</span>
+              <ChevronDownIcon size={20} />
+            </button>
           )}
         </div>
-        {hasExplanation && (
-          <button
-            type="button"
-            className={styles.explainToggle}
-            aria-expanded={open}
-            aria-controls={cardId}
-            onClick={() => setOpen((o) => !o)}
-          >
-            <span>{open ? s.hide : s.why}</span>
-            <ChevronDownIcon size={20} />
-          </button>
-        )}
       </div>
       {hasExplanation && (
         <div id={cardId} className={styles.explain} hidden={!open}>
