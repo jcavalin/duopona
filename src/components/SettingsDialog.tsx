@@ -4,11 +4,12 @@ import type { Language } from '../i18n/language'
 import { useLanguage, useStrings } from '../i18n/useStrings'
 import { useAppDispatch } from '../store/hooks'
 import { languageChosen } from '../store/settingsSlice'
-import { CloseIcon, FlagBR, FlagFR, FlagUS } from './icons'
+import { CloseIcon, FlagBR, FlagES, FlagFR, FlagUS } from './icons'
 
 /** Each language is named in itself, whatever the active language (contract ui-settings.md) */
 const OPTIONS: { value: Language; label: string; Flag: typeof FlagUS }[] = [
   { value: 'en', label: 'English', Flag: FlagUS },
+  { value: 'es', label: 'Español', Flag: FlagES },
   { value: 'fr', label: 'Français', Flag: FlagFR },
   { value: 'pt-BR', label: 'Português', Flag: FlagBR },
 ]

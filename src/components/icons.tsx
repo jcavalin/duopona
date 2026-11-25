@@ -153,6 +153,17 @@ export function FlagBR(props: IconProps) {
   )
 }
 
+/** Spanish: the flag of Spain (without the coat of arms, 017 research R4) */
+export function FlagES(props: IconProps) {
+  return (
+    <Flag {...props}>
+      <rect width="30" height="5" fill="#aa151b" />
+      <rect y="5" width="30" height="10" fill="#f1bf00" />
+      <rect y="15" width="30" height="5" fill="#aa151b" />
+    </Flag>
+  )
+}
+
 /** French: the flag of France */
 export function FlagFR(props: IconProps) {
   return (

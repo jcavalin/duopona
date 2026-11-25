@@ -61,6 +61,10 @@ Ideas and planned features not yet specified. When one is picked up, start it wi
   the icon, and "Why?" sits on its own line under the answer, the same in every language
   (`specs/016-feedback-sheet-layout/`, mockup 04c). The phone check was deferred by owner decision
   (to be run later).
+- **017 – Study in Spanish**: a fourth study language in neutral Spanish, chosen in settings (with
+  the Spain flag) or from any Spanish device (`specs/017-spanish-language/`). Long words on the
+  summary's unlocked-lesson tile now hyphenate. The owner's review of the Spanish text and the
+  phone checks were deferred by owner decision (to be run later).
 
 ## Ideas (not yet evaluated)
 

@@ -1,4 +1,5 @@
 import type { Language } from '../../i18n/language'
+import { lessons as lessonsEs } from '../es/lessons'
 import { lessons as lessonsFr } from '../fr/lessons'
 import { lessons as lessonsPtBR } from '../pt-BR/lessons'
 import type { Exercise, Lesson } from '../types'
@@ -45,7 +46,7 @@ export const lessons: Lesson[] = [
  * The course in each study language (014 research R2): same lessons, ids and Toki Pona; only
  * the other text differs (contract course-content-pt.md, rule P1).
  */
-export const courses: Record<Language, Lesson[]> = { en: lessons, 'pt-BR': lessonsPtBR, fr: lessonsFr }
+export const courses: Record<Language, Lesson[]> = { en: lessons, 'pt-BR': lessonsPtBR, fr: lessonsFr, es: lessonsEs }
 
 export function getLesson(id: string, language: Language = 'en'): Lesson | undefined {
   return courses[language].find((lesson) => lesson.id === id)

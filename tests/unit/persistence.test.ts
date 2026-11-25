@@ -212,13 +212,14 @@ describe('settings storage (014 contract settings-storage.md)', () => {
     ['short code', JSON.stringify({ version: 1, language: 'pt' })],
     ['unknown language', JSON.stringify({ version: 1, language: 'de' })],
     ['a region tag instead of a study language', JSON.stringify({ version: 1, language: 'fr-FR' })],
+    ['a Spanish region tag instead of a study language (017)', JSON.stringify({ version: 1, language: 'es-ES' })],
   ])('falls back to the device language when the value is %s', (_case, raw) => {
     if (raw !== null) localStorage.setItem(SETTINGS_KEY, raw)
     expect(loadSettings('pt-BR')).toEqual(fallback)
     expect(localStorage.getItem(SETTINGS_KEY)).toBe(raw)
   })
 
-  it.each(['en', 'pt-BR', 'fr'])('loads a saved %s choice, including those saved before French existed (015 FR-008)', (language) => {
+  it.each(['en', 'pt-BR', 'fr', 'es'])('loads a saved %s choice, including those saved before French and Spanish existed (015, 017 FR-008)', (language) => {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify({ version: 1, language }))
     expect(loadSettings('en')).toEqual({ language, chosen: true })
   })
